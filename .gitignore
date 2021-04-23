@@ -3,3 +3,7 @@
 
 # NODE
 node_modules/
+
+# PARCEL 2
+.parcel-cache/
+

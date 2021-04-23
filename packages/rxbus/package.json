@@ -1,0 +1,27 @@
+{
+  "name": "rxbus",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
+  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "license": "ISC",
+  "main": "lib/rxbus.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+  },
+  "scripts": {
+    "build": "parcel build src/rxbus.ts --dist-dir lib", 
+    "test": ""
+  },
+  "bugs": {
+    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+  }
+}

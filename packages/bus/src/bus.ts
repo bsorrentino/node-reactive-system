@@ -1,5 +1,6 @@
 import assert from "assert"
-import EventEmitter from "node:events"
+import { EventEmitter } from "events"
+
 
 namespace event {
 
