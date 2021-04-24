@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "bsorrentino <bartolomeo.sorrentino@gmail.com> (http://soulsoftware-bsc.blogspot.it/)",
   "license": "ISC",
-  "dependencies": {
-    "rxjs": "^6.6.7"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "@types/node": "^12.20.10",

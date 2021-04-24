@@ -18,10 +18,13 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/rxbus.ts --dist-dir lib", 
+    "build": "parcel build src/rxbus.ts --dist-dir lib",
     "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
+  },
+  "dependencies": {
+    "rxjs": "^6.6.7"
   }
 }
