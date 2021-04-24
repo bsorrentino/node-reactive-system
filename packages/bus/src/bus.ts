@@ -1,8 +1,7 @@
 import assert from "assert"
 import { EventEmitter } from "events"
 
-
-namespace event {
+export namespace Message {
 
     interface Subscription {
         event:string | symbol
@@ -37,7 +36,7 @@ namespace event {
         }
     }
 
-    class Bus {
+    export class Bus {
     
         private _channels = new Map<string,SubjectChannel<any>>()
         
@@ -58,3 +57,5 @@ namespace event {
         }
     }
 }
+
+export const Bus = new Message.Bus()

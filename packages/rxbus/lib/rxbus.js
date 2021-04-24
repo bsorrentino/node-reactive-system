@@ -1,2 +1,2 @@
-var e;require("rxjs").Subject,(e=require("assert"))&&e.__esModule&&e.default;let r;r||(r={});
+var e,s=require("rxjs").Subject,n=(e=require("assert"))&&e.__esModule?e.default:e;let a;(a||(a={})).Bus=class{_channels=new Map;newChannel(e){n.ok(!this._channels.has(e),`Channel ${e} already exists!`);let a=new s;return this._channels.set(e,a),a}channel(e){return n.ok(this._channels.has(e),`Channel ${e} doesn't exists!`),this._channels.get(e).asObservable()}};const t=new a.Bus;exports.Bus=t;
 //# sourceMappingURL=rxbus.js.map

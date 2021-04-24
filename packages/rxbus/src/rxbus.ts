@@ -2,9 +2,9 @@ import assert from 'assert'
 
 import { Observable, Subject } from 'rxjs'
 
-namespace event {
+namespace Message {
 
-    class Bus {
+    export class Bus {
     
         private _channels = new Map<string,Subject<any>>()
 
@@ -22,3 +22,5 @@ namespace event {
         }
     }
 }
+
+export const Bus = new Message.Bus()

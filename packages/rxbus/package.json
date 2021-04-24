@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "parcel build src/rxbus.ts --dist-dir lib", 
-    "test": ""
+    "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
