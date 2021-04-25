@@ -36,7 +36,10 @@ namespace MessageBus {
                 status:{ started:false, paused:false} 
             }
             this._modules.set( module.name, result )
-        }
+            if( module.onRegister ) {
+                module.onRegister()
+            }
+       }
 
         start() {
             this._modules.forEach( m => {
@@ -59,7 +62,7 @@ namespace MessageBus {
 
 export const Bus = new MessageBus.Engine()
 
-
+/*
 export function NewChannel(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const name = `_${propertyKey}`
 
@@ -80,3 +83,4 @@ export function OnChannel(name: string) {
         console.log( target, propertyKey, descriptor )
     };
   }
+*/

@@ -19,7 +19,6 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
