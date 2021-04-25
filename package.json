@@ -9,6 +9,7 @@
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
+    "@parcel/transformer-typescript-types": "^2.0.0-beta.2",
     "@types/jest": "^26.0.22",
     "@types/node": "^12.20.10",
     "jest": "^26.6.3",

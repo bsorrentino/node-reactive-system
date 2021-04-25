@@ -1,11 +1,11 @@
 {
-  "name": "rxbus",
+  "name": "bus-module",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
   "license": "ISC",
-  "main": "lib/rxbus.js",
+  "main": "lib/bus.module.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -13,19 +13,15 @@
   "files": [
     "lib"
   ],
+  "types": "./src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/rxbus.ts --dist-dir lib",
     "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
-  },
-  "dependencies": {
-    "bus-module": "^1.0.0",
-    "rxjs": "^6.6.7"
   }
 }
