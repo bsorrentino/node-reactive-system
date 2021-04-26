@@ -1,3 +1,2 @@
-
-import { Bus } from 'rxbus' 
+import {Bus, MessageBus} from 'rxbus'
 

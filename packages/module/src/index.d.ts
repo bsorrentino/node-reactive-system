@@ -1,4 +1,4 @@
-declare module "bus-module" {
+export declare namespace MessageBus {
 
     export interface ModuleRegistrationLifecycle {
         onRegister():void

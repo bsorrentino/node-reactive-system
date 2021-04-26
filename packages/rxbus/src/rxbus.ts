@@ -1,5 +1,5 @@
 import assert from 'assert'
-import * as bus from 'bus-module'
+import {MessageBus as bus} from 'bus-module'
 
 import { Observable, Subject } from 'rxjs'
 
@@ -22,7 +22,7 @@ export namespace MessageBus {
             return this._channels.get( name )!.asObservable()
         }
     }
-    type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
+    export type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
     export class Modules {
     

@@ -1,5 +1,5 @@
 import { Bus } from '../src/rxbus'
-import * as bus from 'bus-module'
+import { MessageBus } from 'bus-module'
 import { Subject, Subscription } from 'rxjs'
 
 it( 'test bus creation', () => {
@@ -9,7 +9,7 @@ it( 'test bus creation', () => {
 })
 
 
-class MyModule implements bus.Module {
+class MyModule implements MessageBus.Module {
 
     readonly name = "MyModule"
     
