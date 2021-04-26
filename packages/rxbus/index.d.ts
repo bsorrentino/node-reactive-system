@@ -1,8 +1,6 @@
 import * as bus from 'bus-module';
 import { Observable, Subject } from 'rxjs';
-
 export declare namespace MessageBus {
-    
     class Channels {
         private _channels;
         newChannel<T>(name: string): Subject<T>;
@@ -14,12 +12,8 @@ export declare namespace MessageBus {
         start(): void;
     }
     class Engine {
-        readonly: Channels;
-        readonly: Modules;
+        readonly channels: Channels;
+        readonly modules: Modules;
     }
 }
-
-declare module 'rxbus' {
-    
-    export const Bus: MessageBus.Engine;
-}
+export declare const Bus: MessageBus.Engine;
