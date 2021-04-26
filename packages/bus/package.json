@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/bus",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "message bus based on EventEmitter",
   "keywords": [
     "bus",
@@ -10,7 +10,7 @@
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
   "license": "MIT",
   "main": "lib/bus.js",
-  "private":true,
+  "private": true,
   "directories": {
     "lib": "lib",
     "test": "__tests__"
