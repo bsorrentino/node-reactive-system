@@ -2,10 +2,5 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": { 
     },
-    "exclude": [
-      "node_modules",
-      "lib",
-      "__tests__"
-    ]
-    
-  }
+    "include": ["src/**/*.ts"]    
+}
