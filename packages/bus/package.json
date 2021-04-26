@@ -27,5 +27,8 @@
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
+  },
+  "dependencies": {
+    "bus-module": "^1.0.0"
   }
 }
