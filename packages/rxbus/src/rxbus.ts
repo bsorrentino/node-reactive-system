@@ -3,9 +3,9 @@ import * as bus from 'bus-module'
 
 import { Observable, Subject } from 'rxjs'
 
-namespace MessageBus {
+export namespace MessageBus {
 
-    class Channels {
+    export class Channels {
     
         private _channels = new Map<string,Subject<any>>()
 
@@ -24,11 +24,11 @@ namespace MessageBus {
     }
     type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
-    class Modules {
+    export class Modules {
     
         private _modules = new Map<string,ModuleInfo>()
 
-        registerModule<T>( module:bus.Module ) {
+        registerModule( module:bus.Module ) {
             assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
 
             let result:ModuleInfo = {
@@ -55,8 +55,8 @@ namespace MessageBus {
     }
 
     export class Engine {
-        channels = new Channels()
-        modules = new Modules()
+        readonly channels   = new Channels()
+        readonly modules    = new Modules()
     }
 }
 

@@ -1,6 +1,6 @@
-import { Subject } from 'rxjs/internal/Subject'
 import { Bus } from '../src/rxbus'
 import * as bus from 'bus-module'
+import { Subject, Subscription } from 'rxjs'
 
 it( 'test bus creation', () => {
 
@@ -14,7 +14,8 @@ class MyModule implements bus.Module {
     readonly name = "MyModule"
     
     private _myChannel?:Subject<string>
-    
+    private _subscription?:Subscription
+
     get myChannel() { return this._myChannel }
     
     onRegister() {
@@ -22,7 +23,16 @@ class MyModule implements bus.Module {
     }
 
     onStart() {
-        Bus.channels.channel( 'externalChannel').subscribe( { next: (v) => { console.log(v) } })
+        this._subscription = 
+            Bus.channels.channel( 'externalChannel')
+                .subscribe( { next: v => console.log(v) })
+    }
+
+    onStop() {
+        if( this._subscription) {
+            this._subscription.unsubscribe()
+            this._subscription = undefined
+        }
     }
 }
 
