@@ -5,8 +5,8 @@
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
   "license": "ISC",
-  "main": "lib/rxbus.js",
-  "types": "lib/index.d.ts",
+  "main": "./lib/rxbus.js",
+  "types": "./lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

@@ -18,12 +18,18 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/rxsample.ts --dist-dir lib"
+    "build": "parcel build src/rxsample.ts --dist-dir lib",
+    "start": "node ./lib/rxsample.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "rxbus": "^1.0.0"
+    "bus-module": "^1.0.0",
+    "rxbus": "^1.0.0",
+    "rxjs": "^6.6.7"
+  },
+  "engines": {
+    "node": ">=12.x"
   }
 }
