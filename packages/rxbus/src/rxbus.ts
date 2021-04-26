@@ -3,7 +3,7 @@ import {MessageBus as bus} from 'bus-module'
 
 import { Observable, Subject } from 'rxjs'
 
-export namespace MessageBus {
+namespace MessageBus {
 
     export class Channels {
     
@@ -20,6 +20,10 @@ export namespace MessageBus {
             assert.ok( this._channels.has( name ), `Channel ${name} doesn't exists!` )
             
             return this._channels.get( name )!.asObservable()
+        }
+
+        get channelNames():IterableIterator<string> {
+            return this._channels.keys()
         }
     }
     export type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }

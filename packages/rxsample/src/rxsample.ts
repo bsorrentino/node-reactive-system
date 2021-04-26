@@ -20,7 +20,7 @@ class MyModule implements MessageBus.Module {
     onStart() {
         this._subscription = 
             Bus.channels.channel( 'TimerModule/channel')
-                .subscribe( { next: time => console.log( 'time', time) })
+                .subscribe( { next: time => console.log( `${this.name} got time:`, time) })
     }
 
     onStop() {
@@ -33,7 +33,7 @@ class MyModule implements MessageBus.Module {
 
 class TimerModule implements MessageBus.Module {
 
-    readonly name = "TimeModule"
+    readonly name = "TimerModule"
     
     private _myChannel?:Subject<number>
 
@@ -46,7 +46,7 @@ class TimerModule implements MessageBus.Module {
 
     onStart() {
         this._subscription = interval(1000)
-            .pipe( tap( tick => console.log( 'tick', tick )) )
+            .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
             .subscribe( this._myChannel )
     }
 
@@ -61,10 +61,14 @@ class TimerModule implements MessageBus.Module {
 
 function main() {
 
+    console.log( 'start' )
+
     Bus.modules.registerModule( new MyModule() )
     Bus.modules.registerModule( new TimerModule() )
 
-
+    for( let module of Bus.channels.channelNames ) {
+        console.log( module, 'registerd' )
+    }
     Bus.modules.start()
 
 
