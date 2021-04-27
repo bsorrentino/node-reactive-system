@@ -1,7 +1,6 @@
 import { Bus } from '@soulsoftware/rxbus'
 import { MessageBus } from '@soulsoftware/bus-module'
 
-
 import fastify from 'fastify'
 import { Subject } from 'rxjs'
 

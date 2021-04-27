@@ -5,7 +5,7 @@
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
   "license": "ISC",
-  "main": "lib/module-fastify.js",
+  "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib",

@@ -3,7 +3,7 @@ import { Bus } from '@soulsoftware/rxbus'
 import { MessageBus } from '@soulsoftware/bus-module'
 import { interval, Subject, Subscription } from 'rxjs'
 import { tap } from 'rxjs/operators'
-import { FastifyModule } from '@soulsoftware/rxbus-fastify'
+//import { FastifyModule } from '@soulsoftware/rxbus-fastify'
 
 class MyModule implements MessageBus.Module {
 
@@ -64,9 +64,11 @@ function main() {
 
     console.log( 'start' )
 
+    //const httpModule = new FastifyModule()
+
     Bus.modules.registerModule( new MyModule() )
     Bus.modules.registerModule( new TimerModule() )
-    Bus.modules.registerModule( new FastifyModule() )
+    // Bus.modules.registerModule( new FastifyModule() )
 
     for( let module of Bus.channels.channelNames ) {
         console.log( module, 'registerd' )
