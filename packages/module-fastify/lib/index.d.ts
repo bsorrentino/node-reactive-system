@@ -1,11 +1,10 @@
 import { MessageBus } from "@soulsoftware/bus-module";
-import { Subject } from "rxjs";
-export class FastifyModule implements MessageBus.Module {
-    readonly name = "FastifyModule";
-    get myChannel(): Subject<any> | undefined;
+declare class FastifyModule implements MessageBus.Module {
+    readonly name = "fastify";
     onRegister(): void;
     onStart(): void;
     onStop(): void;
 }
+export const Module: FastifyModule;
 
 //# sourceMappingURL=index.d.ts.map

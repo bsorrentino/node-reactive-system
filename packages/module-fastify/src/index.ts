@@ -1,27 +1,33 @@
 import { Bus } from '@soulsoftware/rxbus'
 import { MessageBus } from '@soulsoftware/bus-module'
 
-import fastify from 'fastify'
+import Fastify from 'fastify'
 import { Subject } from 'rxjs'
 
-export class FastifyModule implements MessageBus.Module {
-    private  server = fastify()
-    readonly name = "FastifyModule"
+class FastifyModule implements MessageBus.Module {
+    private  server = Fastify( {} )
+    readonly name = "fastify"
     
     private _myChannel?:Subject<any>
-
-    get myChannel() { return this._myChannel }
 
     onRegister() {
         const channelName = `${this.name}/channel`
         this._myChannel = Bus.channels.newChannel( channelName )
 
-        this.server.get(`'${channelName}/*'`, (request, reply) => {
-            
-            this._myChannel?.next( request.query )
-            reply.status( 200 )
+        const rxp = new RegExp( `/${channelName}/([\\w]+)([?].+)?`)
+
+        this.server.get(`/${channelName}/*`, (request, reply) => {
+        
+            const cmd = rxp.exec(request.url)
+            if( cmd ) {
+                this._myChannel?.next( { 
+                    command: cmd[1],
+                    data: request.query
+                })    
+            }
+            reply.status( 200 ).send( JSON.stringify(request.query) )
         })
-          
+        
     }
 
     onStart() {
@@ -39,3 +45,5 @@ export class FastifyModule implements MessageBus.Module {
         this.server.close().then( v => console.log( 'server closed!') )
     }
 }
+
+export const Module = new FastifyModule()

@@ -3,31 +3,32 @@ import { Bus } from '@soulsoftware/rxbus'
 import { MessageBus } from '@soulsoftware/bus-module'
 import { interval, Subject, Subscription } from 'rxjs'
 import { tap } from 'rxjs/operators'
+import { Module as FastifyModule } from '@soulsoftware/rxbus-fastify'
 
-class MyModule implements MessageBus.Module {
+class TraceModule implements MessageBus.Module {
 
-    readonly name = "MyModule"
+    readonly name = "TraceModule"
     
-    private _myChannel?:Subject<string>
-    private _subscription?:Subscription
-
-    get myChannel() { return this._myChannel }
-    
-    onRegister() {
-        this._myChannel = Bus.channels.newChannel( `${this.name}/channel` )
-    }
+    private _subscriptions:Array<Subscription> = []
 
     onStart() {
-        this._subscription = 
-            Bus.channels.channel( 'TimerModule/channel')
-                .subscribe( { next: time => console.log( `${this.name} got time:`, time) })
+
+        for( let c of Bus.channels.channelNames ) {
+
+            const trace = ( data:any ) => 
+                console.log( `trace: got message from  ${c}`, data)
+
+            this._subscriptions.push( 
+                Bus.channels.channel( c ).subscribe( { next: trace }))
+
+        }
     }
 
     onStop() {
-        if( this._subscription) {
-            this._subscription.unsubscribe()
-            this._subscription = undefined
+        for( let s of this._subscriptions) {
+           s.unsubscribe() 
         }
+        this._subscriptions = []
     }
 }
 
@@ -63,9 +64,9 @@ function main() {
 
     console.log( 'start' )
 
-    Bus.modules.registerModule( new MyModule() )
+    Bus.modules.registerModule( new TraceModule() )
     Bus.modules.registerModule( new TimerModule() )
-    // Bus.modules.registerModule( new FastifyModule() )
+    Bus.modules.registerModule( FastifyModule )
 
     for( let module of Bus.channels.channelNames ) {
         console.log( module, 'registerd' )
