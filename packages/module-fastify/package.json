@@ -1,12 +1,11 @@
 {
-  "name": "@soulsoftware/rxbus",
+  "name": "@soulsoftware/module-fastify",
   "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
   "license": "ISC",
-  "main": "./lib/rxbus.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/module-fastify.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -19,18 +18,15 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/rxbus.ts --dist-dir lib",
-    "postbuild": "cp index.d.ts lib",
+    "build": "parcel build src/index.ts --dist-dir lib",
     "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
+    "fastify": "^3.15.0",
     "@soulsoftware/bus-module": "^0.0.1-alpha.0",
-    "rxjs": "^6.6.7"
-  },
-  "devDependencies": {
-    "@parcel/packager-ts": "^2.0.0-beta.2"
+    "@soulsoftware/rxbus": "^0.0.1-alpha.0"
   }
 }

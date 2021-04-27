@@ -26,8 +26,8 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "bus-module": "^1.0.0",
-    "rxbus": "^1.0.0",
+    "@soulsoftware/bus-module": "^0.0.1-alpha.0",
+    "@soulsoftware/rxbus": "^0.0.1-alpha.0",
     "rxjs": "^6.6.7"
   },
   "engines": {
