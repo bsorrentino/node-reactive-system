@@ -1,4 +1,4 @@
-import * as bus from 'bus-module';
+import * as bus from '@soulsoftware/bus-module';
 import { Observable, Subject } from 'rxjs';
 
 declare namespace MessageBus {

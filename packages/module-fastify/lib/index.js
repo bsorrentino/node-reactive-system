@@ -1,0 +1,2 @@
+var e,s=(e=require("fastify"))&&e.__esModule?e.default:e,n=require("@soulsoftware/rxbus").Bus;exports.FastifyModule=class{server=s();name="FastifyModule";get myChannel(){return this._myChannel}onRegister(){const e=`${this.name}/channel`;this._myChannel=n.channels.newChannel(e),this.server.get(`'${e}/*'`,((e,s)=>{this._myChannel?.next?.(e.query),s.status(200)}))}onStart(){this.server.listen(8080,((e,s)=>{e?console.error(e):console.log(`Server listening at ${s}`)}))}onStop(){this.server.close().then((e=>console.log("server closed!")))}};
+//# sourceMappingURL=index.js.map
