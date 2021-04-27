@@ -5,6 +5,7 @@
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
   "license": "ISC",
+  "private":true,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "directories": {
@@ -32,7 +33,6 @@
     "rxjs": "^6.6.7"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "^2.0.0-beta.2",
-    "@types/node": "^15.0.0"
+    "@parcel/packager-ts": "^2.0.0-beta.2"
   }
 }
