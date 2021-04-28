@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus",
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.5-alpha.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -23,13 +23,12 @@
     "postbuild": "cp index.d.ts lib",
     "clean": "rm -rf lib",
     "test": "jest --config ../../jest.config.js"
-  
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.0.1-alpha.0",
+    "@soulsoftware/bus-core": "^0.0.5-alpha.0",
     "rxjs": "^6.6.7"
   },
   "devDependencies": {
