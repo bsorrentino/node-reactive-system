@@ -20,5 +20,6 @@
   "scripts": {},
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
-  }
+  },
+  "gitHead": "84fff95a965302647c704bf56bc027cb2d1fdcea"
 }
