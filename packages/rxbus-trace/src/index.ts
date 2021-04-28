@@ -11,7 +11,7 @@ class TraceModule implements MessageBus.Module {
     onStart() {
         console.log( this.name, 'start' )
 
-        for( let c of Bus.channels.channelNames ) {
+        for( let c of Bus.channels.names ) {
             
             console.log( `trace: subscribe on ${c}`)
 

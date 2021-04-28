@@ -3,10 +3,11 @@ import { Observable, Subject } from "rxjs";
 declare class BusChannels {
     newChannel<T>(name: string): Subject<T>;
     channel<T>(name: string): Observable<T>;
-    get channelNames(): IterableIterator<string>;
+    get names(): IterableIterator<string>;
 }
 declare class BusModules {
     registerModule(module: MessageBus.Module): void;
+    get names(): IterableIterator<string>;
     start(): void;
 }
 declare class BusEngine {

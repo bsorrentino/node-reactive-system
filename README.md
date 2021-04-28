@@ -47,14 +47,14 @@ function main() {
     Bus.modules.registerModule( TimerModule )
     Bus.modules.registerModule( FastifyModule )
 
-    for( let module of Bus.channels.channelNames ) {
-        console.log( module, 'registerd' )
+    for( let module of Bus.modules.names ) {
+        console.log( `"${module}"`, 'registerd' )
     }
+    
     Bus.modules.start()
 
 
 }
 
 main()
-
 ```

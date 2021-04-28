@@ -20,7 +20,7 @@ class BusChannels {
         return this._channels.get( name )!.asObservable()
     }
 
-    get channelNames():IterableIterator<string> {
+    get names():IterableIterator<string> {
         return this._channels.keys()
     }
 }
@@ -42,6 +42,9 @@ class BusModules {
         if( module.onRegister ) {
             module.onRegister()
         }
+    }
+    get names():IterableIterator<string> {
+        return this._modules.keys()
     }
 
     start() {
