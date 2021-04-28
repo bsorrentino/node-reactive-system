@@ -16,7 +16,7 @@ class TimerModule implements MessageBus.Module {
     }
 
     onStart() {
-        console.log( 'timer start')
+        // console.log( 'timer start')
 
         this._subscription = interval(1000)
             .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )

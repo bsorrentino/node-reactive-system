@@ -1,70 +1,68 @@
 import assert from 'assert'
-import {MessageBus as bus} from '@soulsoftware/bus-core'
+import {MessageBus}  from '@soulsoftware/bus-core'
 
 import { Observable, Subject } from 'rxjs'
 
-namespace MessageBus {
+class BusChannels {
 
-    export class Channels {
-    
-        private _channels = new Map<string,Subject<any>>()
+    private _channels = new Map<string,Subject<any>>()
 
-        newChannel<T>( name:string ):Subject<T> {
-            assert.ok( !this._channels.has( name ), `Channel ${name} already exists!` )
-            let result = new Subject<T>()
-            this._channels.set( name, result )
-            return result
-        }
-
-        channel<T>( name:string ):Observable<T> {
-            assert.ok( this._channels.has( name ), `Channel ${name} doesn't exists!` )
-            
-            return this._channels.get( name )!.asObservable()
-        }
-
-        get channelNames():IterableIterator<string> {
-            return this._channels.keys()
-        }
-    }
-    export type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
-
-    export class Modules {
-    
-        private _modules = new Map<string,ModuleInfo>()
-
-        registerModule( module:bus.Module ) {
-            assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
-
-            let result:ModuleInfo = {
-                module:module,
-                status:{ started:false, paused:false} 
-            }
-            this._modules.set( module.name, result )
-            if( module.onRegister ) {
-                module.onRegister()
-            }
-       }
-
-        start() {
-            this._modules.forEach( m => {
-
-                if( !m.status.started ) {
-                    if( m.module.onStart ) {
-                        m.module.onStart()
-                    }
-                    m.status.started = true
-                }
-            })
-        }
+    newChannel<T>( name:string ):Subject<T> {
+        assert.ok( !this._channels.has( name ), `Channel ${name} already exists!` )
+        let result = new Subject<T>()
+        this._channels.set( name, result )
+        return result
     }
 
-    export class Engine {
-        readonly channels   = new Channels()
-        readonly modules    = new Modules()
+    channel<T>( name:string ):Observable<T> {
+        assert.ok( this._channels.has( name ), `Channel ${name} doesn't exists!` )
+        
+        return this._channels.get( name )!.asObservable()
+    }
+
+    get channelNames():IterableIterator<string> {
+        return this._channels.keys()
     }
 }
 
-export const Bus = new MessageBus.Engine()
+type ModuleInfo = { module:MessageBus.Module, status:MessageBus.ModuleStatus }
+
+class BusModules {
+
+    private _modules = new Map<string,ModuleInfo>()
+
+    registerModule( module:MessageBus.Module ) {
+        assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
+
+        let result:ModuleInfo = {
+            module:module,
+            status:{ started:false, paused:false} 
+        }
+        this._modules.set( module.name, result )
+        if( module.onRegister ) {
+            module.onRegister()
+        }
+    }
+
+    start() {
+        this._modules.forEach( m => {
+
+            if( !m.status.started ) {
+                if( m.module.onStart ) {
+                    m.module.onStart()
+                }
+                m.status.started = true
+            }
+        })
+    }
+}
+
+class BusEngine {
+    readonly channels   = new BusChannels()
+    readonly modules    = new BusModules()
+}
+
+export const Bus = new BusEngine()
 
 /*
 export function NewChannel(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
