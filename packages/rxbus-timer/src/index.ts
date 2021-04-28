@@ -12,14 +12,16 @@ class TimerModule implements MessageBus.Module {
     private _subscription?:Subscription
 
     onRegister() {
+        console.log( this.name, 'onRegister')
+
         this._myChannel = Bus.channels.newChannel( `${this.name}/channel` )
     }
 
     onStart() {
-        // console.log( 'timer start')
+        // console.log( 'timer start', this._myChannel)
 
         this._subscription = interval(1000)
-            .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
+            // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
             .subscribe( this._myChannel )
     }
 
