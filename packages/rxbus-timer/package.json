@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "parcel build src/index.ts --dist-dir lib"
+    "build": "parcel build src/index.ts --dist-dir lib --no-source-maps"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"

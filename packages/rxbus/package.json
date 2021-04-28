@@ -19,7 +19,7 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/rxbus.ts --dist-dir lib",
+    "build": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "postbuild": "cp index.d.ts lib",
     "clean": "rm -rf lib",
     "test": "jest --config ../../jest.config.js"
