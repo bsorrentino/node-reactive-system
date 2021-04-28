@@ -1,6 +1,6 @@
 {
-  "name": "@soulsoftware/bus-module",
-  "version": "0.0.4-alpha.0",
+  "name": "@soulsoftware/bus-core",
+  "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",

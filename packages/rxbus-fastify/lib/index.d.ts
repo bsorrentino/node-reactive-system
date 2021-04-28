@@ -1,4 +1,4 @@
-import { MessageBus } from "@soulsoftware/bus-module";
+import { MessageBus } from "@soulsoftware/bus-core";
 declare class FastifyModule implements MessageBus.Module {
     readonly name = "fastify";
     onRegister(): void;

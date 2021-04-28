@@ -1,10 +1,6 @@
-
+import { MessageBus } from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
-import { MessageBus } from '@soulsoftware/bus-module'
-import { interval, Subject, Subscription } from 'rxjs'
-import { tap } from 'rxjs/operators'
-import { Module as FastifyModule } from '@soulsoftware/rxbus-fastify'
-import { Module as TimerModule } from '@soulsoftware/rxbus-timer'
+import { Subscription } from 'rxjs'
 
 class TraceModule implements MessageBus.Module {
 
@@ -33,20 +29,6 @@ class TraceModule implements MessageBus.Module {
     }
 }
 
-function main() {
-
-    console.log( 'start' )
-
-    Bus.modules.registerModule( new TraceModule() )
-    Bus.modules.registerModule( TimerModule )
-    Bus.modules.registerModule( FastifyModule )
-
-    for( let module of Bus.channels.channelNames ) {
-        console.log( module, 'registerd' )
-    }
-    Bus.modules.start()
 
 
-}
-
-main()
+export const Module = new TraceModule()

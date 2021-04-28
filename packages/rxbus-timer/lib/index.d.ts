@@ -1,4 +1,4 @@
-import { MessageBus } from "@soulsoftware/bus-module";
+import { MessageBus } from "@soulsoftware/bus-core";
 declare class TimerModule implements MessageBus.Module {
     readonly name = "TimerModule";
     onRegister(): void;
