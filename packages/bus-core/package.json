@@ -9,10 +9,10 @@
     "lib": "lib",
     "test": "__tests__"
   },
+  "types": "./src/index.d.ts",
   "files": [
     "lib"
   ],
-  "types": "./src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"

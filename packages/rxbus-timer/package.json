@@ -19,6 +19,7 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
+    "clean": "rm -rf lib",
     "build": "parcel build src/index.ts --dist-dir lib"
   },
   "bugs": {

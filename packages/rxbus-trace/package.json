@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus-trace",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.4-alpha.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -19,6 +19,7 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
+    "clean": "rm -rf lib",
     "build": "parcel build src/index.ts --dist-dir lib"
   },
   "bugs": {

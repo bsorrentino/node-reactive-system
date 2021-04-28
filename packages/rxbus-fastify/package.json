@@ -21,6 +21,7 @@
   },
   "scripts": {
     "build": "parcel build src/index.ts --dist-dir lib",
+    "clean": "rm -rf lib",
     "test": "jest --config ../../jest.config.js"
   },
   "bugs": {

@@ -9,8 +9,9 @@ class TraceModule implements MessageBus.Module {
     private _subscriptions:Array<Subscription> = []
 
     onStart() {
-
         for( let c of Bus.channels.channelNames ) {
+            
+            console.log( `trace: subscribe on ${c}`)
 
             const trace = ( data:any ) => 
                 console.log( `trace: got message from  ${c}`, data)
