@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus",
-  "version": "0.0.5-alpha.0",
+  "version": "0.1.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
