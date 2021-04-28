@@ -1,5 +1,5 @@
 import { Bus } from '../src/rxbus'
-import { MessageBus } from 'bus-module'
+import { MessageBus } from '@soulsoftware/bus-core'
 import { Subject, Subscription } from 'rxjs'
 
 it( 'test bus creation', () => {

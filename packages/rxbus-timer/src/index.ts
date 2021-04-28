@@ -1,4 +1,4 @@
-import { MessageBus } from '@soulsoftware/bus-module'
+import { MessageBus } from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
 import { interval, Subject, Subscription } from 'rxjs'
 

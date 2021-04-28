@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {MessageBus as bus} from '@soulsoftware/bus-module'
+import {MessageBus as bus} from '@soulsoftware/bus-core'
 
 import { Observable, Subject } from 'rxjs'
 
