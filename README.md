@@ -7,6 +7,27 @@ Currently we are evaluating as **message bus back-bone** to use:
 * [RxJS](https://rxjs-dev.firebaseapp.com/guide/overview) 
 
 
+### Getting Started
+
+1. Ensure to have **nodejs** version `>=12.x`
+1. install base dependencies
+    ```
+    npm install
+    ```
+1. prepare lerna project
+    ```
+    npx lerna clean
+    npx lerna bootstap
+    ```
+1. build packages
+    ```
+    npx lerna run build
+    ```
+1. start sample
+    ```
+    npx lerna run start --scope=rxsample --stream
+    ```
+
 ### Samples
 
 In package `rxsample` there is an example how to work, below a code snippet extract from there
