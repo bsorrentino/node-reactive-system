@@ -10,13 +10,20 @@ class FastifyModule implements MessageBus.Module {
     
     private _myChannel?:Subject<any>
 
+    private channelName = `${this.name}/channel`
+    
+    /**
+     * 
+     */
     onRegister() {
-        const channelName = `${this.name}/channel`
-        this._myChannel = Bus.channels.newChannel( channelName )
 
-        const rxp = new RegExp( `/${channelName}/([\\w]+)([?].+)?`)
+        this.server.register( require('fastify-websocket') )
 
-        this.server.get(`/${channelName}/*`, (request, reply) => {
+        this._myChannel = Bus.channels.newChannel( this.channelName )
+
+        const rxp = new RegExp( `/${this.channelName}/([\\w]+)([?].+)?`)
+
+        this.server.get(`/${this.channelName}/*`, (request, reply) => {
         
             const cmd = rxp.exec(request.url)
             if( cmd ) {
@@ -31,6 +38,7 @@ class FastifyModule implements MessageBus.Module {
     }
 
     onStart() {
+
         this.server.listen(8080, (err, address) => {
             if (err) {
                 console.error(err)
