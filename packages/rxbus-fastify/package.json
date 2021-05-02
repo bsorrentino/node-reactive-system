@@ -32,7 +32,7 @@
     "@soulsoftware/rxbus": "^0.0.2-alpha.0",
     "fastify": "^3.15.0",
     "fastify-websocket": "^3.2.0",
-    "rxjs": "^6.6.7"
+    "rxjs": "^7.0.0"
   },
   "devDependencies": {
     "@parcel/packager-ts": "^2.0.0-beta.2",

@@ -1,4 +1,4 @@
-# Rxmq.js
+# Clone of Rxmq.js project
 
 [![Build Status](https://travis-ci.com/rxmqjs/rxmq.js.svg?branch=master)](https://travis-ci.com/rxmqjs/rxmq.js)
 [![npm](https://img.shields.io/npm/v/rxmq.svg)](https://www.npmjs.com/package/rxmq)

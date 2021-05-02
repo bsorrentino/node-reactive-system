@@ -1,5 +1,5 @@
 {
-  "name": "rxmq",
+  "name": "@soulsoftware/rxmq",
   "version": "2.0.1",
   "description": "JavaScript pub/sub library based on RxJS",
   "main": "es5/component.js",
@@ -39,7 +39,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "rxjs": "^6.5.5"
+    "rxjs": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
