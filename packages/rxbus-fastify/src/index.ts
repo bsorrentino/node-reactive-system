@@ -4,11 +4,16 @@ import * as bus  from '@soulsoftware/bus-core'
 import Fastify from 'fastify'
 import { Subject } from 'rxjs'
 
+type ChannelData = { 
+    command: string,
+    data: any
+}
+
 class FastifyModule implements bus.Module {
     private  server = Fastify( {} )
     readonly name = "fastify"
     
-    private _myChannel?:Subject<any>
+    private _myChannel?:Subject<ChannelData>
 
     private channelName = `${this.name}/channel`
     
@@ -19,7 +24,7 @@ class FastifyModule implements bus.Module {
 
         this.server.register( require('fastify-websocket') )
 
-        this._myChannel = Bus.channels.newChannel( this.channelName )
+        this._myChannel = Bus.channels.newChannel<ChannelData>( this.channelName )
 
         const rxp = new RegExp( `/${this.channelName}/([\\w]+)([?].+)?`)
 
