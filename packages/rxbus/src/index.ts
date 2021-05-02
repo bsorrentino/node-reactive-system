@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {MessageBus}  from '@soulsoftware/bus-core'
+import * as bus  from '@soulsoftware/bus-core'
 
 import { Observable, Subject } from 'rxjs'
 
@@ -25,13 +25,13 @@ class BusChannels {
     }
 }
 
-type ModuleInfo = { module:MessageBus.Module, status:MessageBus.ModuleStatus }
+type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
 class BusModules {
 
     private _modules = new Map<string,ModuleInfo>()
 
-    registerModule( module:MessageBus.Module ) {
+    registerModule( module:bus.Module ) {
         assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
 
         let result:ModuleInfo = {

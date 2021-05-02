@@ -1,4 +1,4 @@
-import { MessageBus } from "@soulsoftware/bus-core";
+import * as bus from "@soulsoftware/bus-core";
 import { Observable, Subject } from "rxjs";
 declare class BusChannels {
     newChannel<T>(name: string): Subject<T>;
@@ -6,7 +6,7 @@ declare class BusChannels {
     get names(): IterableIterator<string>;
 }
 declare class BusModules {
-    registerModule(module: MessageBus.Module): void;
+    registerModule(module: bus.Module): void;
     get names(): IterableIterator<string>;
     start(): void;
 }

@@ -1,10 +1,10 @@
 import { Bus } from '@soulsoftware/rxbus'
-import { MessageBus } from '@soulsoftware/bus-core'
+import * as bus  from '@soulsoftware/bus-core'
 
 import Fastify from 'fastify'
 import { Subject } from 'rxjs'
 
-class FastifyModule implements MessageBus.Module {
+class FastifyModule implements bus.Module {
     private  server = Fastify( {} )
     readonly name = "fastify"
     

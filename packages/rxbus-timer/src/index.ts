@@ -1,9 +1,9 @@
-import { MessageBus } from '@soulsoftware/bus-core'
+import * as bus from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
 import { interval, Subject, Subscription } from 'rxjs'
 // import { tap } from 'rxjs/operators'
 
-class TimerModule implements MessageBus.Module {
+class TimerModule implements bus.Module {
 
     readonly name = "TimerModule"
     
