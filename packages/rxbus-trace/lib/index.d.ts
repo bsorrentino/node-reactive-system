@@ -1,5 +1,5 @@
-import { MessageBus } from "@soulsoftware/bus-core";
-declare class TraceModule implements MessageBus.Module {
+import * as bus from "@soulsoftware/bus-core";
+declare class TraceModule implements bus.Module {
     readonly name = "TraceModule";
     onStart(): void;
     onStop(): void;

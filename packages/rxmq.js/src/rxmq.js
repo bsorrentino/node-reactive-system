@@ -29,6 +29,14 @@ class Rxmq {
   }
 
   /**
+   * Returns a channel names
+   */
+  //get channelNames() {
+  channelNames() {
+    return Object.keys(this.channels)
+  }
+
+  /**
    * Returns a channel for given name
    * @param  {String} name  Channel name
    * @return {Channel}      Channel object

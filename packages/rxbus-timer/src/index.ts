@@ -5,7 +5,7 @@ import { interval, Subject, Subscription } from 'rxjs'
 
 class TimerModule implements bus.Module {
 
-    readonly name = "TimerModule"
+    readonly name = "timer"
     
     private _myChannel?:Subject<number>
 
@@ -14,7 +14,9 @@ class TimerModule implements bus.Module {
     onRegister() {
         // console.log( this.name, 'onRegister' )
 
-        this._myChannel = Bus.channels.newChannel( `${this.name}/channel` )
+        this._myChannel = 
+            Bus.channels.channel<number>( `${this.name}/channel` )
+                .subject( 'tick')
     }
 
     onStart() {

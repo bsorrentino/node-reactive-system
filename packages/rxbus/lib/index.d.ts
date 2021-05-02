@@ -1,9 +1,9 @@
 import * as bus from "@soulsoftware/bus-core";
-import { Observable, Subject } from "rxjs";
+import { Channel, RequestResponseChannel } from "@soulsoftware/rxmq";
 declare class BusChannels {
-    newChannel<T>(name: string): Subject<T>;
-    channel<T>(name: string): Observable<T>;
-    get names(): IterableIterator<string>;
+    channel<T>(name: string): Channel<T>;
+    requestChannel<T, R>(name: string): RequestResponseChannel<T, R>;
+    get names(): string[];
 }
 declare class BusModules {
     registerModule(module: bus.Module): void;

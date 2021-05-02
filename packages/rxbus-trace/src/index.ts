@@ -1,8 +1,8 @@
-import { MessageBus } from '@soulsoftware/bus-core'
+import * as bus from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
 import { Subscription } from 'rxjs'
 
-class TraceModule implements MessageBus.Module {
+class TraceModule implements bus.Module {
 
     readonly name = "TraceModule"
     
@@ -19,7 +19,7 @@ class TraceModule implements MessageBus.Module {
                 console.log( `trace: got message from  ${c}`, data)
 
             this._subscriptions.push( 
-                Bus.channels.channel( c ).subscribe( { next: trace }))
+                Bus.channels.channel( c ).observe( "*" ).subscribe( { next: trace }))
 
         }
     }
