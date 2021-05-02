@@ -1,28 +1,28 @@
-import { MessageBus } from '@soulsoftware/bus-core'
+import * as bus from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
 import { interval, Subject, Subscription } from 'rxjs'
 // import { tap } from 'rxjs/operators'
 
-class TimerModule implements MessageBus.Module {
+export const Subjects = { 
+    Tick: 'tick'
+}
 
-    readonly name = "TimerModule"
-    
-    private _myChannel?:Subject<number>
+class TimerModule implements bus.Module {
+
+    readonly name = 'timer'
 
     private _subscription?:Subscription
 
-    onRegister() {
-        // console.log( this.name, 'onRegister' )
-
-        this._myChannel = Bus.channels.newChannel( `${this.name}/channel` )
+    onRegister() {            
     }
 
     onStart() {
         // console.log( this.name, 'start' )
-
+        const subject = Bus.channels.channel<number>( this.name )
+                                .subject( Subjects.Tick )
         this._subscription = interval(1000)
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
-            .subscribe( this._myChannel )
+            .subscribe( subject )
     }
 
     onStop() {

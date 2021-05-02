@@ -1,37 +1,29 @@
 import assert from 'assert'
-import {MessageBus}  from '@soulsoftware/bus-core'
-
-import { Observable, Subject } from 'rxjs'
+import * as bus  from '@soulsoftware/bus-core'
+import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
 
 class BusChannels {
 
-    private _channels = new Map<string,Subject<any>>()
-
-    newChannel<T>( name:string ):Subject<T> {
-        assert.ok( !this._channels.has( name ), `Channel ${name} already exists!` )
-        let result = new Subject<T>()
-        this._channels.set( name, result )
-        return result
+    channel<T>( name:string ):Channel<T> {
+        return Rxmq.channel(name) as Channel<T>
     }
 
-    channel<T>( name:string ):Observable<T> {
-        assert.ok( this._channels.has( name ), `Channel ${name} doesn't exists!` )
-        
-        return this._channels.get( name )!.asObservable()
+    requestChannel<T, R>( name:string ):RequestResponseChannel<T, R> {
+        return Rxmq.channel(name) as RequestResponseChannel<T, R>
     }
 
-    get names():IterableIterator<string> {
-        return this._channels.keys()
+    get names():string[] {
+        return Rxmq.channelNames()
     }
 }
 
-type ModuleInfo = { module:MessageBus.Module, status:MessageBus.ModuleStatus }
+type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
 class BusModules {
 
     private _modules = new Map<string,ModuleInfo>()
 
-    registerModule( module:MessageBus.Module ) {
+    registerModule( module:bus.Module ) {
         assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
 
         let result:ModuleInfo = {

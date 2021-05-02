@@ -1,6 +1,9 @@
-import { MessageBus } from "@soulsoftware/bus-core";
-declare class TimerModule implements MessageBus.Module {
-    readonly name = "TimerModule";
+import * as bus from "@soulsoftware/bus-core";
+export const Subjects: {
+    Tick: string;
+};
+declare class TimerModule implements bus.Module {
+    readonly name = "timer";
     onRegister(): void;
     onStart(): void;
     onStop(): void;
