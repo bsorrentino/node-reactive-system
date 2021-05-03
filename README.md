@@ -35,9 +35,16 @@ In package `rxbus-sample` there is an example how to work, below a code snippet 
 ```typescript
 
 import { Bus } from '@soulsoftware/rxbus'
-import { Module as FastifyModule, Subjects as FastifySubjects } from '@soulsoftware/rxbus-fastify'
-import { Module as TimerModule, Subjects as TimeSubjects } from '@soulsoftware/rxbus-timer'
 import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
+import { 
+    Module as FastifyModule, 
+    Subjects as FastifySubjects,
+    Config as FastifyConfig
+} from '@soulsoftware/rxbus-fastify'
+import { 
+    Module as TimerModule, 
+    Subjects as TimerSubjects
+} from '@soulsoftware/rxbus-timer'
 
 /**
  * Route message from Timer to WebSocket
@@ -51,14 +58,14 @@ function routeTimerToWS() {
     // function to listen on a WS channel  
     const ws_observe = () => 
         Bus.channels.channel<number>( TimerModule.name )
-            .observe( TimeSubjects.Tick )
+            .observe( TimerSubjects.Tick )
             .subscribe( tick => 
                 Bus.channels.channel( ws_route_name  )
                     .subject( FastifySubjects.WSMessage )
                         .next( tick ))
 
     // Request register a new WS route                 
-    Bus.channels.requestChannel( FastifyModule.name )
+    Bus.channels.request( FastifyModule.name )
         .request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
         .subscribe( { 
             next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
@@ -69,14 +76,17 @@ function routeTimerToWS() {
 
 }
 
-
 function main() {
 
     console.log( 'start' )
 
-    Bus.modules.registerModule( TraceModule )
-    Bus.modules.registerModule( TimerModule )
-    Bus.modules.registerModule( FastifyModule )
+    Bus.modules.register( TraceModule )
+    Bus.modules.register( TimerModule )
+    Bus.modules.register<FastifyConfig>( FastifyModule, 
+        { 
+            port:8888,
+            requestTimeout: 10000
+        })
 
     for( let module of Bus.modules.names ) {
         console.log( `"${module}"`, 'registerd' )
