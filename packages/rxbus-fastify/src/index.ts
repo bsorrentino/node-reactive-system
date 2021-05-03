@@ -53,7 +53,10 @@ class FastifyModule implements bus.Module<Config> {
     private  server = Fastify( {} )
     readonly name = "fastify"
 
-    private config?:Config
+    private config:Config = {
+        port: 3000,
+        requestTimeout: 5000
+    }
 
     private setupWebSocketChannel<M>( module:string ) {
         const channelName = module
@@ -77,8 +80,7 @@ class FastifyModule implements bus.Module<Config> {
      * 
      */
     onRegister( config?:Config ) {
-
-        this.config = config
+        if( config ) this.config = config
     
         const httpChannel = Bus.channels.request<RequestData,ResponseData>( this.name )
 
@@ -89,7 +91,7 @@ class FastifyModule implements bus.Module<Config> {
             const cmd = rxp.exec(request.url)
             if( cmd ) {
                 httpChannel.request( { topic: cmd[1], data:request } )
-                    .pipe( timeout( config?.requestTimeout || 5000) )
+                    .pipe( timeout( this.config.requestTimeout || 5000) )
                     .subscribe({ 
                         next: data => reply.send(data),
                         error: err => reply.code(500).send(err),
@@ -122,7 +124,7 @@ class FastifyModule implements bus.Module<Config> {
 
     onStart() {
         
-        this.server.listen( this.config?.port || 3000, (err, address) => {
+        this.server.listen( this.config.port || 3000, (err, address) => {
             if (err) {
                 console.error(err)
                 Bus.channels.channel(this.name)
