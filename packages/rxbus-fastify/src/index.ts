@@ -4,7 +4,6 @@ import 'fastify-websocket'
 import '@soulsoftware/rxmq'
 
 import Fastify from 'fastify'
-import { firstValueFrom, Subject } from 'rxjs'
 import { timeout } from 'rxjs/operators'
 
 type RequestData = any  
