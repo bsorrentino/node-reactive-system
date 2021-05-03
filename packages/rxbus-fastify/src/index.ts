@@ -12,6 +12,13 @@ type ServerInfo = {
     address:string
 }
 
+/**
+ *  WSSend      = 'ws.send'
+ *  WSMessage   = 'ws.message'
+ *  WSAdd       = 'ws.add'
+ *  ServerStart = 'server.start'
+ *  ServerClose = 'server.close'
+ */
 export const Subjects = { 
     WSSend:'ws.send',
     WSMessage:'ws.message',
@@ -20,6 +27,9 @@ export const Subjects = {
     ServerClose:'server.close'
 }
 
+/**
+ * Module to manage HTTP and WebSocket channels
+ */
 class FastifyModule implements bus.Module {
     private  server = Fastify( {} )
     readonly name = "fastify"
@@ -27,7 +37,7 @@ class FastifyModule implements bus.Module {
     private setupWebSocketChannel<M>( module:string ) {
         const channelName = module
         
-        const channel = Bus.channels.channel(channelName)
+        const channel           = Bus.channels.channel(channelName)
         const messageSubject    = channel.subject( Subjects.WSMessage )
         const messageObserver   = messageSubject.asObservable() // channel.observe( Subjects.WSMessage )
 
