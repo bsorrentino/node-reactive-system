@@ -3,24 +3,45 @@ import { Bus } from '@soulsoftware/rxbus'
 import { interval, Subject, Subscription } from 'rxjs'
 // import { tap } from 'rxjs/operators'
 
+/**
+ * Configuration parameters
+ */
+ export interface Config extends bus.ModuleConfiguration {
+    /**
+     * The interval size in milliseconds.
+     * 
+     * default 1000
+     */
+    period:number
+
+}
+
+/**
+ *  Tick    = 'tick'
+ */
 export const Subjects = { 
     Tick: 'tick'
 }
 
-class TimerModule implements bus.Module {
+class TimerModule implements bus.Module<Config> {
 
     readonly name = 'timer'
 
+    private config:Config = {
+        period:1000
+    }
+
     private _subscription?:Subscription
 
-    onRegister() {            
+    onRegister( config?:Config ) {  
+        if( config ) this.config = config
     }
 
     onStart() {
-        // console.log( this.name, 'start' )
+
         const subject = Bus.channels.channel<number>( this.name )
                                 .subject( Subjects.Tick )
-        this._subscription = interval(1000)
+        this._subscription = interval( this.config.period )
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
             .subscribe( subject )
     }

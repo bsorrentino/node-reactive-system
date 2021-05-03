@@ -1,6 +1,27 @@
 import * as bus from "@soulsoftware/bus-core";
 /**
- * WSSend:'ws.send'
+ * Configuration parameters
+ */
+export interface Config extends bus.ModuleConfiguration {
+    /**
+     * server port
+     *
+     * default 3000
+     */
+    port: number;
+    /**
+     * request timeout in ms
+     *
+     * default 5000
+     */
+    requestTimeout: number;
+}
+/**
+ *  WSSend      = 'ws.send'
+ *  WSMessage   = 'ws.message'
+ *  WSAdd       = 'ws.add'
+ *  ServerStart = 'server.start'
+ *  ServerClose = 'server.close'
  */
 export const Subjects: {
     WSSend: string;
@@ -9,12 +30,15 @@ export const Subjects: {
     ServerStart: string;
     ServerClose: string;
 };
-declare class FastifyModule implements bus.Module {
+/**
+ * Module to manage HTTP and WebSocket channels
+ */
+declare class FastifyModule implements bus.Module<Config> {
     readonly name = "fastify";
     /**
      *
      */
-    onRegister(): void;
+    onRegister(config?: Config): void;
     onStart(): void;
     onStop(): void;
 }
