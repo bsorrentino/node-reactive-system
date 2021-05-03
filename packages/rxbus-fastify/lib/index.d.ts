@@ -1,4 +1,7 @@
 import * as bus from "@soulsoftware/bus-core";
+/**
+ * WSSend:'ws.send'
+ */
 export const Subjects: {
     WSSend: string;
     WSMessage: string;

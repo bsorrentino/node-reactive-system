@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus-fastify",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -28,9 +28,9 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.1.1",
-    "@soulsoftware/rxbus": "^0.1.1",
-    "@soulsoftware/rxmq": "^2.0.1",
+    "@soulsoftware/bus-core": "^0.2.1",
+    "@soulsoftware/rxbus": "^0.2.1",
+    "@soulsoftware/rxmq": "^0.2.1",
     "fastify": "^3.15.0",
     "fastify-websocket": "^3.2.0",
     "rxjs": "^7.0.0"
@@ -42,5 +42,5 @@
   "engines": {
     "node": ">=12.x"
   },
-  "gitHead": "84fff95a965302647c704bf56bc027cb2d1fdcea"
+  "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"
 }

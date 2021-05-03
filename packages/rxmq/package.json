@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxmq",
-  "version": "2.0.1",
+  "version": "0.2.1",
   "description": "JavaScript pub/sub library based on RxJS",
   "main": "es5/component.js",
   "es6": "index.js",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rxmqjs/rxmq.js"
+    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "babel": {
     "env": {
@@ -65,5 +65,6 @@
     "tape": "^5.0.1",
     "typescript": "^3.9.3"
   },
-  "types": "./ts/rxmq.d.ts"
+  "types": "./ts/rxmq.d.ts",
+  "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"
 }
