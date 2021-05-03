@@ -1,5 +1,11 @@
-export interface ModuleRegistrationLifecycle {
-    onRegister():void
+
+
+export interface ModuleConfiguration {
+    [name as string]:any
+}
+
+export interface ModuleRegistrationLifecycle<CFG extends ModuleConfiguration> {
+    onRegister( config?:CFG ):void
     onUnregister():void
 }
 
@@ -19,11 +25,12 @@ export interface ModuleStatus {
 }
 
 export interface ModuleProperties {
-    readonly name:string
+    name:string
 }
 
-export type Module =    ModuleProperties & 
+export type Module<CFG extends ModuleConfiguration = ModuleConfiguration> =    
+                        Readonly<ModuleProperties> & 
                         Partial<ModuleLifecycle> & 
-                        Partial<ModuleRegistrationLifecycle> & 
+                        Partial<ModuleRegistrationLifecycle<CFG> & 
                         Partial<ModulePauseResumeLifecycle> 
     

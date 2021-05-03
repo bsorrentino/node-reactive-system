@@ -8,7 +8,7 @@ class BusChannels {
         return Rxmq.channel(name) as Channel<T>
     }
 
-    requestChannel<T, R>( name:string ):RequestResponseChannel<T, R> {
+    request<T, R>( name:string ):RequestResponseChannel<T, R> {
         return Rxmq.channel(name) as RequestResponseChannel<T, R>
     }
 
@@ -23,7 +23,7 @@ class BusModules {
 
     private _modules = new Map<string,ModuleInfo>()
 
-    registerModule( module:bus.Module ) {
+    register<C extends bus.ModuleConfiguration>( module:bus.Module<C>, config?:C  ) {
         assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
 
         let result:ModuleInfo = {
@@ -32,7 +32,7 @@ class BusModules {
         }
         this._modules.set( module.name, result )
         if( module.onRegister ) {
-            module.onRegister()
+            module.onRegister( config )
         }
     }
     get names():IterableIterator<string> {

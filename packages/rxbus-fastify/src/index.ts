@@ -13,6 +13,25 @@ type ServerInfo = {
 }
 
 /**
+ * Configuration parameters
+ */
+export interface Config extends bus.ModuleConfiguration {
+    /**
+     * server port
+     * 
+     * default 3000
+     */
+    port:number
+
+    /**
+     * request timeout in ms
+     * 
+     * default 5000
+     */
+    requestTimeout:number
+}
+
+/**
  *  WSSend      = 'ws.send'
  *  WSMessage   = 'ws.message'
  *  WSAdd       = 'ws.add'
@@ -30,9 +49,11 @@ export const Subjects = {
 /**
  * Module to manage HTTP and WebSocket channels
  */
-class FastifyModule implements bus.Module {
+class FastifyModule implements bus.Module<Config> {
     private  server = Fastify( {} )
     readonly name = "fastify"
+
+    private config?:Config
 
     private setupWebSocketChannel<M>( module:string ) {
         const channelName = module
@@ -55,9 +76,11 @@ class FastifyModule implements bus.Module {
     /**
      * 
      */
-    onRegister() {
-        
-        const httpChannel = Bus.channels.requestChannel<RequestData,ResponseData>( this.name )
+    onRegister( config?:Config ) {
+
+        this.config = config
+    
+        const httpChannel = Bus.channels.request<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -66,7 +89,7 @@ class FastifyModule implements bus.Module {
             const cmd = rxp.exec(request.url)
             if( cmd ) {
                 httpChannel.request( { topic: cmd[1], data:request } )
-                    .pipe( timeout(5000) )
+                    .pipe( timeout( config?.requestTimeout || 5000) )
                     .subscribe({ 
                         next: data => reply.send(data),
                         error: err => reply.code(500).send(err),
@@ -87,7 +110,7 @@ class FastifyModule implements bus.Module {
         //
         // Listen for adding Web Socket channel
         //
-        Bus.channels.requestChannel<string,any>( this.name )
+        Bus.channels.request<string,any>( this.name )
                                 .observe( Subjects.WSAdd)
                                 .subscribe( ({data,replySubject}) => {
                                     console.log( 'request add channel ', data )
@@ -98,17 +121,17 @@ class FastifyModule implements bus.Module {
     }
 
     onStart() {
-        const channelName = this.name
         
-
-        this.server.listen(8080, (err, address) => {
+        this.server.listen( this.config?.port || 3000, (err, address) => {
             if (err) {
                 console.error(err)
-                Bus.channels.channel(channelName).subject(Subjects.ServerStart).error( err )
+                Bus.channels.channel(this.name)
+                    .subject(Subjects.ServerStart).error( err )
             }
             else {
                 console.log(`Server listening at ${address}`)
-                Bus.channels.channel<ServerInfo>(channelName).subject(Subjects.ServerStart).next( { address:address })
+                Bus.channels.channel<ServerInfo>(this.name)
+                    .subject(Subjects.ServerStart).next( { address:address })
             }
           })    
     }
@@ -116,7 +139,8 @@ class FastifyModule implements bus.Module {
     onStop() {
         this.server.close().then( v => { 
             console.log( 'server closed!');
-            Bus.channels.channel(this.name).subject(Subjects.ServerClose).complete() 
+            Bus.channels.channel(this.name)
+                .subject(Subjects.ServerClose).complete() 
         })
     }
 }
