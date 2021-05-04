@@ -82,7 +82,7 @@ class FastifyModule implements bus.Module<Config> {
     onRegister( config?:Config ) {
         if( config ) this.config = config
     
-        const httpChannel = Bus.channels.request<RequestData,ResponseData>( this.name )
+        const httpChannel = Bus.channels.rchannel<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -112,7 +112,7 @@ class FastifyModule implements bus.Module<Config> {
         //
         // Listen for adding Web Socket channel
         //
-        Bus.channels.request<string,any>( this.name )
+        Bus.channels.rchannel<string,any>( this.name )
                                 .observe( Subjects.WSAdd)
                                 .subscribe( ({data,replySubject}) => {
                                     console.log( 'request add channel ', data )

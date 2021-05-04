@@ -406,7 +406,6 @@
         var subj = this.utils.findSubjectByName(this.subjects, topic);
 
         if (!subj) {
-          //return Observable.never();
           return rxjs.NEVER;
         } // create reply subject
 

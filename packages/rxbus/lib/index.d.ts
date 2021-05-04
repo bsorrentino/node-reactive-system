@@ -2,7 +2,7 @@ import * as bus from "@soulsoftware/bus-core";
 import { Channel, RequestResponseChannel } from "@soulsoftware/rxmq";
 declare class BusChannels {
     channel<T>(name: string): Channel<T>;
-    request<T, R>(name: string): RequestResponseChannel<T, R>;
+    rchannel<T, R>(name: string): RequestResponseChannel<T, R>;
     get names(): string[];
 }
 declare class BusModules {

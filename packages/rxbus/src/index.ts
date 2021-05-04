@@ -8,7 +8,7 @@ class BusChannels {
         return Rxmq.channel(name) as Channel<T>
     }
 
-    request<T, R>( name:string ):RequestResponseChannel<T, R> {
+    rchannel<T, R>( name:string ):RequestResponseChannel<T, R> {
         return Rxmq.channel(name) as RequestResponseChannel<T, R>
     }
 
