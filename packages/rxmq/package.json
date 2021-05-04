@@ -5,6 +5,7 @@
   "main": "es5/component.js",
   "es6": "index.js",
   "scripts": {
+    "clean": "rm -rf es5",
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/tape/bin/tape ./test",
     "build": "NODE_ENV=production rollup -c",
     "test": "babel-node ./node_modules/tape/bin/tape ./test | tap-dot && npm run test-typings",
