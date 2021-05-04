@@ -17,7 +17,19 @@ class BusChannels {
         return Rxmq.channel(name) as RequestResponseChannel<T, R>
     }
 
-    workerChannel<IN,OUT>( name:string, worker:Worker ):WorkerChannel<IN,OUT> {
+    workerChannel<OUT>( name:string, worker:Worker ):Observable<OUT> {
+        const chOut = this.channel<OUT>(name)
+
+        const worker_message_out = chOut.subject('worker.message.out')
+
+        worker.on('message', e =>  worker_message_out.next( e.data) )
+        worker.on('error', e =>  worker_message_out.error( e ) )
+        worker.on('exit', () =>  worker_message_out.complete() )
+      
+        return worker_message_out.asObservable()
+    }
+
+    workerIOChannel<IN,OUT>( name:string, worker:Worker ):WorkerChannel<IN,OUT> {
         const chIn = this.channel<IN>(name)
         const chOut = this.channel<OUT>(name)
 
