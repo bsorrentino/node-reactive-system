@@ -1,6 +1,11 @@
 import assert from 'assert'
+import { Worker } from 'worker_threads'
 import * as bus  from '@soulsoftware/bus-core'
 import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
+import { Observable, Subject } from 'rxjs'
+
+
+type WorkerChannel<IN,OUT> = { in:Subject<IN>, out:Observable<OUT> }
 
 class BusChannels {
 
@@ -8,10 +13,29 @@ class BusChannels {
         return Rxmq.channel(name) as Channel<T>
     }
 
-    rchannel<T, R>( name:string ):RequestResponseChannel<T, R> {
+    replyChannel<T, R>( name:string ):RequestResponseChannel<T, R> {
         return Rxmq.channel(name) as RequestResponseChannel<T, R>
     }
 
+    workerChannel<IN,OUT>( name:string, worker:Worker ):WorkerChannel<IN,OUT> {
+        const chIn = this.channel<IN>(name)
+        const chOut = this.channel<OUT>(name)
+
+        const worker_message_out = chOut.subject('worker.message.out')
+        const worker_message_in = chIn.subject('worker.message.in')
+
+        worker.on('message', e =>  worker_message_out.next( e.data) )
+        worker.on('error', e =>  worker_message_out.error( e ) )
+        worker.on('exit', () =>  worker_message_out.complete() )
+      
+        worker_message_in.subscribe( value => worker.postMessage(value) )
+      
+        return {
+            in: worker_message_in,
+            out: worker_message_out.asObservable()
+        }
+    }
+    
     get names():string[] {
         return Rxmq.channelNames()
     }

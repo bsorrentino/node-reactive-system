@@ -32,7 +32,7 @@ function routeTimerToWS() {
                         .next( tick ))
 
     // Request register a new WS route                 
-    Bus.channels.rchannel( FastifyModule.name )
+    Bus.channels.replyChannel( FastifyModule.name )
         .request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
         .subscribe( { 
             next: v => console.log( `next: ${FastifySubjects.WSAdd}`),

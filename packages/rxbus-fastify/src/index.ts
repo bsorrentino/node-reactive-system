@@ -33,14 +33,16 @@ export interface Config extends bus.ModuleConfiguration {
 
 /**
  *  WSSend      = 'ws.send'
- *  WSMessage   = 'ws.message'
+ *  WSMessage   = 'ws.message.out'
+ *  WSMessageIn = 'ws.message.in',
  *  WSAdd       = 'ws.add'
  *  ServerStart = 'server.start'
  *  ServerClose = 'server.close'
  */
 export const Subjects = { 
     WSSend:'ws.send',
-    WSMessage:'ws.message',
+    WSMessage:'ws.message.out',
+    WSMessageIn:'ws.message.in',
     WSAdd:'ws.add',
     ServerStart:'server.start',
     ServerClose:'server.close'
@@ -62,8 +64,8 @@ class FastifyModule implements bus.Module<Config> {
         const channelName = module
         
         const channel           = Bus.channels.channel(channelName)
-        const messageSubject    = channel.subject( Subjects.WSMessage )
-        const messageObserver   = messageSubject.asObservable() // channel.observe( Subjects.WSMessage )
+        const messageSubject    = channel.subject( Subjects.WSMessageIn )
+        const messageObserver   = channel.observe( Subjects.WSMessage )
 
         this.server.get( `/${this.name}/channel/${channelName}/*`, { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
             connection.socket.on( 'message', (message:M) => messageSubject.next( message ) )
@@ -82,7 +84,7 @@ class FastifyModule implements bus.Module<Config> {
     onRegister( config?:Config ) {
         if( config ) this.config = config
     
-        const httpChannel = Bus.channels.rchannel<RequestData,ResponseData>( this.name )
+        const httpChannel = Bus.channels.replyChannel<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -112,7 +114,7 @@ class FastifyModule implements bus.Module<Config> {
         //
         // Listen for adding Web Socket channel
         //
-        Bus.channels.rchannel<string,any>( this.name )
+        Bus.channels.replyChannel<string,any>( this.name )
                                 .observe( Subjects.WSAdd)
                                 .subscribe( ({data,replySubject}) => {
                                     console.log( 'request add channel ', data )
