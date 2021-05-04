@@ -9,6 +9,12 @@ type WorkerChannel<IN,OUT> = { in:Subject<IN>, out:Observable<OUT> }
 
 class BusChannels {
 
+    private uniqueId( prefix = '' ) {
+        const dateString = Date.now().toString(36);
+        const randomness = Math.random().toString(36).substr(2);
+        return prefix + dateString + randomness;
+    }
+
     channel<T>( name:string ):Channel<T> {
         return Rxmq.channel(name) as Channel<T>
     }
@@ -17,8 +23,9 @@ class BusChannels {
         return Rxmq.channel(name) as RequestResponseChannel<T, R>
     }
 
-    workerChannel<OUT>( name:string, worker:Worker ):Observable<OUT> {
-        const chOut = this.channel<OUT>(name)
+    workerChannel<OUT>( worker:Worker ):Observable<OUT> {
+
+        const chOut = this.channel<OUT>( this.uniqueId('worker_') )
 
         const worker_message_out = chOut.subject('worker.message.out')
 
@@ -29,9 +36,10 @@ class BusChannels {
         return worker_message_out.asObservable()
     }
 
-    workerIOChannel<IN,OUT>( name:string, worker:Worker ):WorkerChannel<IN,OUT> {
-        const chIn = this.channel<IN>(name)
-        const chOut = this.channel<OUT>(name)
+    workerIOChannel<IN,OUT>( worker:Worker ):WorkerChannel<IN,OUT> {
+        const uniqueId = this.uniqueId('worker_') 
+        const chIn = this.channel<IN>(uniqueId)
+        const chOut = this.channel<OUT>(uniqueId)
 
         const worker_message_out = chOut.subject('worker.message.out')
         const worker_message_in = chIn.subject('worker.message.in')

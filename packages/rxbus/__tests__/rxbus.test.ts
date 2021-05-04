@@ -1,5 +1,5 @@
-import { Bus } from '../src/rxbus'
-import { MessageBus } from '@soulsoftware/bus-core'
+import { Bus } from '../src/index'
+import * as bus from '@soulsoftware/bus-core'
 import { Subject, Subscription } from 'rxjs'
 
 it( 'test bus creation', () => {
@@ -9,30 +9,17 @@ it( 'test bus creation', () => {
 })
 
 
-class MyModule implements MessageBus.Module {
+class MyModule implements bus.Module {
 
     readonly name = "MyModule"
     
-    private _myChannel?:Subject<string>
-    private _subscription?:Subscription
-
-    get myChannel() { return this._myChannel }
-    
     onRegister() {
-        this._myChannel = Bus.channels.newChannel( 'mychannel' )
     }
 
     onStart() {
-        this._subscription = 
-            Bus.channels.channel( 'externalChannel')
-                .subscribe( { next: v => console.log(v) })
     }
 
     onStop() {
-        if( this._subscription) {
-            this._subscription.unsubscribe()
-            this._subscription = undefined
-        }
     }
 }
 
@@ -40,14 +27,17 @@ it( 'test channel decorator creation', () => {
 
     const m = new MyModule()
 
-    expect( m.myChannel ).toBeUndefined()
+    Bus.modules.register( m )
 
-    Bus.modules.registerModule( m )
+    const channelUniqueId = [
+        Symbol('worker'),
+        Symbol('worker'),
+    ]
+    expect( channelUniqueId[0] ).not.toBeNull()
+    expect( channelUniqueId[1] ).not.toBeNull()
 
-    expect( m.myChannel ).not.toBeUndefined()
-
-    const call1 = m.myChannel 
-    expect( m.myChannel ).toStrictEqual( call1 )
+    expect( channelUniqueId[0] ).not.toEqual( channelUniqueId[1] )
+    expect( channelUniqueId[0].toString() ).toEqual( channelUniqueId[1].toString() )
 
 })
 

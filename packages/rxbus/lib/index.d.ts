@@ -3,13 +3,14 @@ import * as bus from "@soulsoftware/bus-core";
 import { Channel, RequestResponseChannel } from "@soulsoftware/rxmq";
 import { Observable, Subject } from "rxjs";
 type WorkerChannel<IN, OUT> = {
-    in: Observable<IN>;
-    out: Subject<OUT>;
+    in: Subject<IN>;
+    out: Observable<OUT>;
 };
 declare class BusChannels {
     channel<T>(name: string): Channel<T>;
     replyChannel<T, R>(name: string): RequestResponseChannel<T, R>;
-    workerChannel<IN, OUT>(name: string, worker: Worker): WorkerChannel<IN, OUT>;
+    workerChannel<OUT>(worker: Worker): Observable<OUT>;
+    workerIOChannel<IN, OUT>(name: string, worker: Worker): WorkerChannel<IN, OUT>;
     get names(): string[];
 }
 declare class BusModules {
