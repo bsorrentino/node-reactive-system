@@ -6,20 +6,16 @@ type WorkerChannel<IN, OUT> = {
     in: Subject<IN>;
     out: Observable<OUT>;
 };
-declare class BusChannels {
-    channel<T>(name: string): Channel<T>;
-    replyChannel<T, R>(name: string): RequestResponseChannel<T, R>;
-    workerChannel<OUT>(worker: Worker): Observable<OUT>;
-    workerIOChannel<IN, OUT>(name: string, worker: Worker): WorkerChannel<IN, OUT>;
-    get names(): string[];
-}
 declare class BusModules {
     register<C extends bus.ModuleConfiguration>(module: bus.Module<C>, config?: C): void;
     get names(): IterableIterator<string>;
     start(): void;
 }
 declare class BusEngine {
-    readonly channels: BusChannels;
     readonly modules: BusModules;
+    channel<T>(name: string): Channel<T>;
+    replyChannel<T, R>(name: string): RequestResponseChannel<T, R>;
+    workerChannel<IN, OUT>(worker: Worker): WorkerChannel<IN, OUT>;
+    get channelNames(): string[];
 }
 export const Bus: BusEngine;

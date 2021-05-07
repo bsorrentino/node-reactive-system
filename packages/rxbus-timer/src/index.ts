@@ -39,7 +39,7 @@ class TimerModule implements bus.Module<Config> {
 
     onStart() {
 
-        const subject = Bus.channels.channel<number>( this.name )
+        const subject = Bus.channel<number>( this.name )
                                 .subject( Subjects.Tick )
         this._subscription = interval( this.config.period )
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )

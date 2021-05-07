@@ -24,15 +24,15 @@ function routeTimerToWS() {
 
     // function to listen on a WS channel  
     const ws_observe = () => 
-        Bus.channels.channel<number>( TimerModule.name )
+        Bus.channel<number>( TimerModule.name )
             .observe( TimerSubjects.Tick )
             .subscribe( tick => 
-                Bus.channels.channel( ws_route_name  )
+                Bus.channel( ws_route_name  )
                     .subject( FastifySubjects.WSMessage )
                         .next( tick ))
 
     // Request register a new WS route                 
-    Bus.channels.replyChannel( FastifyModule.name )
+    Bus.replyChannel( FastifyModule.name )
         .request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
         .subscribe( { 
             next: v => console.log( `next: ${FastifySubjects.WSAdd}`),

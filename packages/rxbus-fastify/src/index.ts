@@ -63,7 +63,7 @@ class FastifyModule implements bus.Module<Config> {
     private setupWebSocketChannel<M>( module:string ) {
         const channelName = module
         
-        const channel           = Bus.channels.channel(channelName)
+        const channel           = Bus.channel(channelName)
         const messageSubject    = channel.subject( Subjects.WSMessageIn )
         const messageObserver   = channel.observe( Subjects.WSMessage )
 
@@ -84,7 +84,7 @@ class FastifyModule implements bus.Module<Config> {
     onRegister( config?:Config ) {
         if( config ) this.config = config
     
-        const httpChannel = Bus.channels.replyChannel<RequestData,ResponseData>( this.name )
+        const httpChannel = Bus.replyChannel<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -114,7 +114,7 @@ class FastifyModule implements bus.Module<Config> {
         //
         // Listen for adding Web Socket channel
         //
-        Bus.channels.replyChannel<string,any>( this.name )
+        Bus.replyChannel<string,any>( this.name )
                                 .observe( Subjects.WSAdd)
                                 .subscribe( ({data,replySubject}) => {
                                     console.log( 'request add channel ', data )
@@ -129,12 +129,12 @@ class FastifyModule implements bus.Module<Config> {
         this.server.listen( this.config.port || 3000, (err, address) => {
             if (err) {
                 console.error(err)
-                Bus.channels.channel(this.name)
+                Bus.channel(this.name)
                     .subject(Subjects.ServerStart).error( err )
             }
             else {
                 console.log(`Server listening at ${address}`)
-                Bus.channels.channel<ServerInfo>(this.name)
+                Bus.channel<ServerInfo>(this.name)
                     .subject(Subjects.ServerStart).next( { address:address })
             }
           })    
@@ -143,7 +143,7 @@ class FastifyModule implements bus.Module<Config> {
     onStop() {
         this.server.close().then( v => { 
             console.log( 'server closed!');
-            Bus.channels.channel(this.name)
+            Bus.channel(this.name)
                 .subject(Subjects.ServerClose).complete() 
         })
     }
