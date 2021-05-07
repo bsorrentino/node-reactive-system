@@ -18,7 +18,8 @@ export interface Config extends bus.ModuleConfiguration {
 }
 /**
  *  WSSend      = 'ws.send'
- *  WSMessage   = 'ws.message'
+ *  WSMessage   = 'ws.message.out'
+ *  WSMessageIn = 'ws.message.in',
  *  WSAdd       = 'ws.add'
  *  ServerStart = 'server.start'
  *  ServerClose = 'server.close'
@@ -26,6 +27,7 @@ export interface Config extends bus.ModuleConfiguration {
 export const Subjects: {
     WSSend: string;
     WSMessage: string;
+    WSMessageIn: string;
     WSAdd: string;
     ServerStart: string;
     ServerClose: string;

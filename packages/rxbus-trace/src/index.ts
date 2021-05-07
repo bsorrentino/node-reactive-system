@@ -11,7 +11,7 @@ class TraceModule implements bus.Module {
     onStart() {
         console.log( this.name, 'start' )
 
-        for( let c of Bus.channels.names ) {
+        for( let c of Bus.channelNames ) {
             
             console.log( `trace: subscribe on ${c}`)
 
@@ -19,7 +19,7 @@ class TraceModule implements bus.Module {
                 console.log( `trace: got message from  ${c}`, data)
 
             this._subscriptions.push( 
-                Bus.channels.channel( c ).observe( "*" ).subscribe( { next: trace }))
+                Bus.channel( c ).observe( "*" ).subscribe( { next: trace }))
 
         }
     }

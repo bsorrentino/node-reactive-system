@@ -1,21 +1,10 @@
 import assert from 'assert'
+import { Worker } from 'worker_threads'
 import * as bus  from '@soulsoftware/bus-core'
 import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
+import { Observable, Subject } from 'rxjs'
 
-class BusChannels {
-
-    channel<T>( name:string ):Channel<T> {
-        return Rxmq.channel(name) as Channel<T>
-    }
-
-    request<T, R>( name:string ):RequestResponseChannel<T, R> {
-        return Rxmq.channel(name) as RequestResponseChannel<T, R>
-    }
-
-    get names():string[] {
-        return Rxmq.channelNames()
-    }
-}
+type WorkerChannel<IN,OUT> = { in:Subject<IN>, out:Observable<OUT> }
 
 type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
@@ -53,8 +42,48 @@ class BusModules {
 }
 
 class BusEngine {
-    readonly channels   = new BusChannels()
     readonly modules    = new BusModules()
+
+    // private uniqueId( prefix = '' ) {
+    //     const dateString = Date.now().toString(36);
+    //     const randomness = Math.random().toString(36).substr(2);
+    //     return `${prefix}${dateString}${randomness}`
+    // }
+
+    channel<T>( name:string ):Channel<T> {
+        return Rxmq.channel(name) as Channel<T>
+    }
+
+    replyChannel<T, R>( name:string ):RequestResponseChannel<T, R> {
+        return Rxmq.channel(name) as RequestResponseChannel<T, R>
+    }
+
+    workerChannel<IN,OUT>( worker:Worker ):WorkerChannel<IN,OUT> {
+
+        const uniqueId = `worker${worker.threadId}` 
+
+        const chIn = this.channel<IN>(uniqueId)
+        const chOut = this.channel<OUT>(uniqueId)
+
+        const worker_message_out    = chOut.subject('worker.message.out')
+        const worker_message_in     = chIn.subject('worker.message.in')
+
+        worker.on('message', value =>  worker_message_out.next( value ) )
+        worker.on('error', err =>  worker_message_out.error( err ) )
+        worker.on('exit', () =>  worker_message_out.complete() )
+      
+        worker_message_in.subscribe( value => worker.postMessage(value) )
+      
+        return {
+            in: worker_message_in,
+            out: worker_message_out.asObservable()
+        }
+    }
+    
+    get channelNames():string[] {
+        return Rxmq.channelNames()
+    }
+
 }
 
 export const Bus = new BusEngine()

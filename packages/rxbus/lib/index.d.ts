@@ -1,17 +1,21 @@
+import { Worker } from "worker_threads";
 import * as bus from "@soulsoftware/bus-core";
 import { Channel, RequestResponseChannel } from "@soulsoftware/rxmq";
-declare class BusChannels {
-    channel<T>(name: string): Channel<T>;
-    request<T, R>(name: string): RequestResponseChannel<T, R>;
-    get names(): string[];
-}
+import { Observable, Subject } from "rxjs";
+type WorkerChannel<IN, OUT> = {
+    in: Subject<IN>;
+    out: Observable<OUT>;
+};
 declare class BusModules {
     register<C extends bus.ModuleConfiguration>(module: bus.Module<C>, config?: C): void;
     get names(): IterableIterator<string>;
     start(): void;
 }
 declare class BusEngine {
-    readonly channels: BusChannels;
     readonly modules: BusModules;
+    channel<T>(name: string): Channel<T>;
+    replyChannel<T, R>(name: string): RequestResponseChannel<T, R>;
+    workerChannel<IN, OUT>(worker: Worker): WorkerChannel<IN, OUT>;
+    get channelNames(): string[];
 }
 export const Bus: BusEngine;

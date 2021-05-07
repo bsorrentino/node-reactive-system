@@ -1,4 +1,4 @@
-import { AsyncSubject, Observable, NEVER } from 'rxjs';
+import { AsyncSubject, NEVER } from 'rxjs';
 import { filter, mergeAll } from 'rxjs/operators';
 import { EndlessReplaySubject, EndlessSubject } from './rx/index';
 import { compareTopics, findSubjectByName } from './utils/index';
@@ -110,7 +110,6 @@ class Channel {
   request({ topic, data, Subject = AsyncSubject }) {
     const subj = this.utils.findSubjectByName(this.subjects, topic);
     if (!subj) {
-      //return Observable.never();
       return NEVER;
     }
 
