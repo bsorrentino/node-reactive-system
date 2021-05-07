@@ -25,10 +25,14 @@ class EndlessSubject extends Subject {
   error(error) {
     this.thrownError = error;
     // dispatch to all observers
-    this.observers.forEach(os => {
-      // dispatch directly to destination
-      os.destination._error.call(os.destination._context, error);
-    });
+    // eslint-disable-next-line prettier/prettier
+    this.observers.forEach( os => os.error( error ) );
+
+    // THERE IS AN ERROR ON ORIGINAL CODE BELOW
+    // this.observers.forEach(os => {
+    //   // dispatch directly to destination
+    //   os.destination._error.call(os.destination._context, error);
+    // });
   }
 }
 

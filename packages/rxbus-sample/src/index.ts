@@ -1,3 +1,6 @@
+import {Worker} from 'worker_threads'
+import path from 'path'
+import {filter} from 'rxjs/operators'
 
 import { Bus } from '@soulsoftware/rxbus'
 import { 
@@ -39,10 +42,38 @@ function routeTimerToWS() {
             error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
             complete: ws_observe 
         })
-
-
 }
 
+function runWorkerThread( ) {
+
+    const workerPath = './lib/worker.js'
+
+    try {
+        const worker_thread = new Worker( workerPath, {} )
+
+        console.log( 'worker thread id', worker_thread.threadId  )
+
+        const ch$ = Bus.workerChannel<number,number>( worker_thread ) 
+
+        ch$.out.subscribe({ 
+            next: result => console.log( 'worker thread result ', result ),
+            error: err => console.error( 'worker error', err),
+        })
+    
+        Bus.channel<number>( TimerModule.name )
+            .observe( TimerSubjects.Tick )
+                .pipe( filter( tick => tick%10 == 0 ) )
+                .subscribe({
+                    next: tick => { console.log( 'send tick to worker', tick ); ch$.in.next( tick ) },
+                    error: err => console.error( 'worker error', err),
+                })
+        
+    }
+    catch( e ) {
+        console.error( 'error creating worker thread', e)
+    }
+
+}
 
 function main() {
 
@@ -52,8 +83,8 @@ function main() {
     Bus.modules.register( TimerModule )
     Bus.modules.register<FastifyConfig>( FastifyModule, 
         { 
-            port:8888,
-            requestTimeout: 10000
+            port:8888, 
+            requestTimeout:5000
         })
 
     for( let module of Bus.modules.names ) {
@@ -63,6 +94,8 @@ function main() {
     routeTimerToWS()
     
     Bus.modules.start()
+
+    runWorkerThread()
 }
 
 main()

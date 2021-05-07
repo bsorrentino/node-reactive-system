@@ -44,11 +44,11 @@ class BusModules {
 class BusEngine {
     readonly modules    = new BusModules()
 
-    private uniqueId( prefix = '' ) {
-        const dateString = Date.now().toString(36);
-        const randomness = Math.random().toString(36).substr(2);
-        return `${prefix}${dateString}${randomness}`
-    }
+    // private uniqueId( prefix = '' ) {
+    //     const dateString = Date.now().toString(36);
+    //     const randomness = Math.random().toString(36).substr(2);
+    //     return `${prefix}${dateString}${randomness}`
+    // }
 
     channel<T>( name:string ):Channel<T> {
         return Rxmq.channel(name) as Channel<T>
@@ -59,7 +59,8 @@ class BusEngine {
     }
 
     workerChannel<IN,OUT>( worker:Worker ):WorkerChannel<IN,OUT> {
-        const uniqueId = this.uniqueId('worker_') 
+
+        const uniqueId = `worker${worker.threadId}` 
 
         const chIn = this.channel<IN>(uniqueId)
         const chOut = this.channel<OUT>(uniqueId)
@@ -67,8 +68,8 @@ class BusEngine {
         const worker_message_out    = chOut.subject('worker.message.out')
         const worker_message_in     = chIn.subject('worker.message.in')
 
-        worker.on('message', e =>  worker_message_out.next( e.data) )
-        worker.on('error', e =>  worker_message_out.error( e ) )
+        worker.on('message', value =>  worker_message_out.next( value ) )
+        worker.on('error', err =>  worker_message_out.error( err ) )
         worker.on('exit', () =>  worker_message_out.complete() )
       
         worker_message_in.subscribe( value => worker.postMessage(value) )

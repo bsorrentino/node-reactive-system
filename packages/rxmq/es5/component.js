@@ -144,11 +144,15 @@
       key: "error",
       value: function error(_error) {
         this.thrownError = _error; // dispatch to all observers
+        // eslint-disable-next-line prettier/prettier
 
         this.observers.forEach(function (os) {
-          // dispatch directly to destination
-          os.destination._error.call(os.destination._context, _error);
-        });
+          return os.error(_error);
+        }); // THERE IS AN ERROR ON ORIGINAL CODE BELOW
+        // this.observers.forEach(os => {
+        //   // dispatch directly to destination
+        //   os.destination._error.call(os.destination._context, error);
+        // });
       }
     }]);
 

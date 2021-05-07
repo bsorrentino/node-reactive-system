@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "parcel build src/index.ts --dist-dir lib --no-source-maps",
+    "build:worker": "tsc src/worker.ts --outDir lib",
     "clean": "rm -rf lib",
     "start": "node ./lib/index.js"
   },
