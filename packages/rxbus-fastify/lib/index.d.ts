@@ -17,12 +17,12 @@ export interface Config extends bus.ModuleConfiguration {
     requestTimeout: number;
 }
 /**
- *  WSSend      = 'ws.send'
- *  WSMessage   = 'ws.message.out'
- *  WSMessageIn = 'ws.message.in',
- *  WSAdd       = 'ws.add'
- *  ServerStart = 'server.start'
- *  ServerClose = 'server.close'
+ *  WSSend      = 'ws_send'
+ *  WSMessage   = 'ws_message_out'
+ *  WSMessageIn = 'ws_message_in',
+ *  WSAdd       = 'ws_add'
+ *  ServerStart = 'server_start'
+ *  ServerClose = 'server_close'
  */
 export const Subjects: {
     WSSend: string;
@@ -36,7 +36,7 @@ export const Subjects: {
  * Module to manage HTTP and WebSocket channels
  */
 declare class FastifyModule implements bus.Module<Config> {
-    readonly name = "fastify";
+    readonly name = "FASTIFY";
     /**
      *
      */

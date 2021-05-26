@@ -13,8 +13,10 @@ async function stall(stallTime = 5000) {
 
 parentPort?.on( 'message', async input => {
 
-    await stall( getRandomInt(30) * 1000 )
+
+    const waitTime = (getRandomInt(Math.ceil(input.data%30))+1) * 1000 
+    await stall( waitTime )
     // console.log( 'worker result:', input  )
 
-    parentPort?.postMessage( input )
+    parentPort?.postMessage( { input:input.data, waitTime:waitTime } )
 })

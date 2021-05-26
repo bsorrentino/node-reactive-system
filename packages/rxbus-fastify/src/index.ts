@@ -32,20 +32,20 @@ export interface Config extends bus.ModuleConfiguration {
 }
 
 /**
- *  WSSend      = 'ws.send'
- *  WSMessage   = 'ws.message.out'
- *  WSMessageIn = 'ws.message.in',
- *  WSAdd       = 'ws.add'
- *  ServerStart = 'server.start'
- *  ServerClose = 'server.close'
+ *  WSSend      = 'ws_send'
+ *  WSMessage   = 'ws_message_out'
+ *  WSMessageIn = 'ws_message_in',
+ *  WSAdd       = 'ws_add'
+ *  ServerStart = 'server_start'
+ *  ServerClose = 'server_close'
  */
 export const Subjects = { 
-    WSSend:'ws.send',
-    WSMessage:'ws.message.out',
-    WSMessageIn:'ws.message.in',
-    WSAdd:'ws.add',
-    ServerStart:'server.start',
-    ServerClose:'server.close'
+    WSSend:'WS_SEND',
+    WSMessage:'WS_MESSAGE_OUT',
+    WSMessageIn:'WS_MESSAGE_IN',
+    WSAdd:'WS_ADD',
+    ServerStart:'SERVER_START',
+    ServerClose:'SERVER_CLOSE'
 }
 
 /**
@@ -53,7 +53,7 @@ export const Subjects = {
  */
 class FastifyModule implements bus.Module<Config> {
     private  server = Fastify( {} )
-    readonly name = "fastify"
+    readonly name = "FASTIFY"
 
     private config:Config = {
         port: 3000,

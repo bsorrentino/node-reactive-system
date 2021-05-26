@@ -20,20 +20,13 @@ class Rxmq {
      * @private
      */
     this.channels = {};
-    /**
-     * Holds channel plugins definitions
-     * @type {Object}
-     * @private
-     */
-    this.channelPlugins = [];
   }
 
   /**
    * Returns a channel names
    */
-  //get channelNames() {
   channelNames() {
-    return Object.keys(this.channels)
+    return Object.keys(this.channels);
   }
 
   /**
@@ -45,47 +38,10 @@ class Rxmq {
    */
   channel(name = 'defaultRxmqChannel') {
     if (!this.channels[name]) {
-      this.channels[name] = new Channel(this.channelPlugins);
+      this.channels[name] = new Channel();
     }
 
     return this.channels[name];
-  }
-
-  /**
-   * Register new Rxmq plugin
-   * @param  {Object} plugin      Plugin object
-   * @return {void}
-   * @example
-   * import myPlugin from 'my-plugin';
-   * rxmq.registerPlugin(myPlugin);
-   */
-  registerPlugin(plugin) {
-    for (const prop in plugin) {
-      if (!this.hasOwnProperty(prop)) {
-        /**
-         * Hide from esdoc
-         * @private
-         */
-        this[prop] = plugin[prop];
-      }
-    }
-  }
-
-  /**
-   * Register new Channel plugin
-   * @param  {Object} plugin      Channel plugin object
-   * @return {void}
-   * @example
-   * import myChannelPlugin from 'my-channel-plugin';
-   * rxmq.registerChannelPlugin(myChannelPlugin);
-   */
-  registerChannelPlugin(plugin) {
-    this.channelPlugins.push(plugin);
-    for (const name in this.channels) {
-      if (this.channels.hasOwnProperty(name)) {
-        this.channels[name].registerPlugin(plugin);
-      }
-    }
   }
 }
 

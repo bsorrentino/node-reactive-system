@@ -3,6 +3,8 @@ import { filter, mergeAll } from 'rxjs/operators';
 import { EndlessReplaySubject, EndlessSubject } from './rx/index';
 import { compareTopics, findSubjectByName } from './utils/index';
 
+// const channelName = Symbol('channel.name');
+// const channelData = Symbol('channel.data');
 /**
  * Rxmq channel class
  */
@@ -11,10 +13,9 @@ class Channel {
    * Represents a new Rxmq channel.
    * Normally you wouldn't need to instantiate it directly, you'd just work with existing instance.
    * @constructor
-   * @param  {Array}   plugins  Array of plugins for new channel
    * @return {void}
    */
-  constructor(plugins = []) {
+  constructor() {
     /**
      * Internal set of utilities
      * @type {Object}
@@ -43,9 +44,6 @@ class Channel {
      * @private
      */
     this.channelStream = this.channelBus;
-
-    // inject plugins
-    plugins.map(this.registerPlugin.bind(this));
   }
 
   /**
@@ -59,7 +57,31 @@ class Channel {
   subject(name, { Subject = EndlessSubject } = {}) {
     let s = this.utils.findSubjectByName(this.subjects, name);
     if (!s) {
-      s = new Subject();
+      console.log('add proxy for ', name);
+      s = new Proxy(new Subject(), {
+        get(target, propKey, receiver) {
+          if (propKey === 'next') {
+            const origMethod = target[propKey];
+            return function (...args) {
+              const params = [];
+              if (
+                typeof args[0] === 'string' ||
+                typeof args[0] === 'number' ||
+                typeof args[0] === 'boolean' ||
+                args[0] instanceof Date
+              ) {
+                params.push({ channel: name, data: args[0] });
+              } else {
+                params.push({ channel: name, ...args[0] });
+              }
+              const result = origMethod.apply(this, params);
+              // console.log(name, propKey, JSON.stringify(params), JSON.stringify(result));
+              return result;
+            };
+          } else return Reflect.get(...arguments);
+        },
+      });
+      // s = new Subject();
       s.name = name;
       this.subjects.push(s);
       this.channelBus.next(s);
@@ -117,23 +139,6 @@ class Channel {
     const replySubject = new Subject();
     subj.next({ replySubject, data });
     return replySubject;
-  }
-
-  /**
-   * Channel plugin registration
-   * @param  {Object} plugin Plugin object to apply
-   * @return {void}
-   */
-  registerPlugin(plugin) {
-    for (const prop in plugin) {
-      if (!this.hasOwnProperty(prop)) {
-        /**
-         * Hide from esdoc
-         * @private
-         */
-        this[prop] = plugin[prop];
-      }
-    }
   }
 }
 

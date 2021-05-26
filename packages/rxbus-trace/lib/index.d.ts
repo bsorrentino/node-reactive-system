@@ -1,6 +1,6 @@
 import * as bus from "@soulsoftware/bus-core";
 declare class TraceModule implements bus.Module {
-    readonly name = "TraceModule";
+    readonly name = "TRACE";
     onStart(): void;
     onStop(): void;
 }

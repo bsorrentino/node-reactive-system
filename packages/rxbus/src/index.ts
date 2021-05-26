@@ -60,18 +60,16 @@ class BusEngine {
 
     workerChannel<IN,OUT>( worker:Worker ):WorkerChannel<IN,OUT> {
 
-        const uniqueId = `worker${worker.threadId}` 
+        const uniqueId = `WORKER${worker.threadId}` 
 
-        const chIn = this.channel<IN>(uniqueId)
-        const chOut = this.channel<OUT>(uniqueId)
+        const ch = this.channel<IN|OUT>(uniqueId)
 
-        const worker_message_out    = chOut.subject('worker.message.out')
-        const worker_message_in     = chIn.subject('worker.message.in')
-
+        const worker_message_out    = ch.subject('WORKER_OUT') as Subject<OUT>
         worker.on('message', value =>  worker_message_out.next( value ) )
         worker.on('error', err =>  worker_message_out.error( err ) )
         worker.on('exit', () =>  worker_message_out.complete() )
-      
+
+        const worker_message_in     = ch.subject('WORKER_IN') as Subject<IN>      
         worker_message_in.subscribe( value => worker.postMessage(value) )
       
         return {

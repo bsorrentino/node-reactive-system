@@ -1,53 +1,53 @@
 import * as bus from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
-import { interval, Subject, Subscription } from 'rxjs'
+import { interval, Subscription } from 'rxjs'
 // import { tap } from 'rxjs/operators'
 
 /**
  * Configuration parameters
  */
- export interface Config extends bus.ModuleConfiguration {
+export interface Config extends bus.ModuleConfiguration {
     /**
      * The interval size in milliseconds.
      * 
      * default 1000
      */
-    period:number
+    period: number
 
 }
 
 /**
- *  Tick    = 'tick'
+ *  Tick    = 'TICK'
  */
-export const Subjects = { 
-    Tick: 'tick'
+export const Subjects = {
+    Tick: 'TICK'
 }
 
 class TimerModule implements bus.Module<Config> {
 
-    readonly name = 'timer'
+    readonly name = 'TIMER'
 
-    private config:Config = {
-        period:1000
+    private config: Config = {
+        period: 1000
     }
 
-    private _subscription?:Subscription
+    private _subscription?: Subscription
 
-    onRegister( config?:Config ) {  
-        if( config ) this.config = config
+    onRegister(config?: Config) {
+        if (config) this.config = config
     }
 
     onStart() {
 
-        const subject = Bus.channel<number>( this.name )
-                                .subject( Subjects.Tick )
-        this._subscription = interval( this.config.period )
+        const subject = Bus.channel<number>(this.name)
+            .subject(Subjects.Tick)
+        this._subscription = interval(this.config.period)
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
-            .subscribe( subject )
+            .subscribe(subject)
     }
 
     onStop() {
-        if( this._subscription ) {
+        if (this._subscription) {
             this._subscription.unsubscribe()
             this._subscription = undefined
         }
