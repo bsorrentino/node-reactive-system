@@ -62,9 +62,9 @@ function runWorkerThread( ) {
     
         Bus.channel<number>( TimerModule.name )
             .observe( TimerSubjects.Tick )
-                .pipe( filter( tick => tick%10 == 0 ) )
+                .pipe( filter( ({ data }) => data%10 == 0 ) )
                 .subscribe({
-                    next: tick => { console.log( 'send tick to worker', tick ); ch$.in.next( tick ) },
+                    next: ({ data }) => { console.log( 'send tick to worker', data ); ch$.in.next( data ) },
                     error: err => console.error( 'worker error', err),
                 })
         
@@ -92,10 +92,10 @@ function main() {
     }
 
     routeTimerToWS()
-    
-    Bus.modules.start()
 
     runWorkerThread()
+    
+    Bus.modules.start()
 }
 
 main()

@@ -15,8 +15,10 @@ declare interface BaseChannel {
   new (): this
 }
 
+export type ChannelEvent<T> = { channel:string, data:T }
+
 declare interface Channel<T> extends BaseChannel {
-  observe(topic: String): Observable<T>
+  observe(topic: String): Observable<ChannelEvent<T>>
   subject(topic: String, subject?: EndlessSubject<T>): Subject<T>
 }
 

@@ -1,6 +1,9 @@
 import * as bus from '@soulsoftware/bus-core'
 import { Bus } from '@soulsoftware/rxbus'
+import { ChannelEvent } from '@soulsoftware/rxmq'
 import { Subscription } from 'rxjs'
+
+type TraceFunction<T = any> = ( event:ChannelEvent<T> ) => void 
 
 class TraceModule implements bus.Module {
 
@@ -15,11 +18,11 @@ class TraceModule implements bus.Module {
             
             console.log( `trace: subscribe on ${c}`)
 
-            const trace = ( data:any ) => 
-                console.log( `trace: got message from  ${c}`, data)
+            const trace:TraceFunction = ( { channel, data } ) => 
+                console.log( `trace: got message from '${c}' on channel '${channel}' ==>`, data)
 
             this._subscriptions.push( 
-                Bus.channel( c ).observe( "*" ).subscribe( { next: trace }))
+                Bus.channel<any>( c ).observe( "*" ).subscribe( { next: trace }))
 
         }
     }

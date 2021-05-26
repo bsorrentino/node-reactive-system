@@ -26,6 +26,55 @@
     return Constructor;
   }
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
+  }
+
   function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
@@ -283,6 +332,7 @@
    * Rxmq channel class
    */
 
+
   var Channel = /*#__PURE__*/function () {
     /**
      * Represents a new Rxmq channel.
@@ -344,7 +394,32 @@
         var s = this.utils.findSubjectByName(this.subjects, name);
 
         if (!s) {
-          s = new Subject();
+          s = new Proxy(new Subject(), {
+            get: function get(target, propKey, receiver) {
+              if (propKey === 'next') {
+                var origMethod = target[propKey];
+                return function () {
+                  var params = [];
+
+                  if (typeof (arguments.length <= 0 ? undefined : arguments[0]) === 'string' || typeof (arguments.length <= 0 ? undefined : arguments[0]) === 'number' || typeof (arguments.length <= 0 ? undefined : arguments[0]) === 'boolean' || (arguments.length <= 0 ? undefined : arguments[0]) instanceof Date) {
+                    params.push({
+                      channel: name,
+                      data: arguments.length <= 0 ? undefined : arguments[0]
+                    });
+                  } else {
+                    params.push(_objectSpread2({
+                      channel: name
+                    }, arguments.length <= 0 ? undefined : arguments[0]));
+                  }
+
+                  var result = origMethod.apply(this, params); // console.log(name, propKey, JSON.stringify(params), JSON.stringify(result));
+
+                  return result;
+                };
+              } else return Reflect.get.apply(Reflect, arguments);
+            }
+          }); // s = new Subject();
+
           s.name = name;
           this.subjects.push(s);
           this.channelBus.next(s);
