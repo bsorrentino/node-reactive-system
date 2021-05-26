@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@soulsoftware/bus-core": "^0.4.0",
-    "@soulsoftware/rxmq": "^0.4.0",
+    "@soulsoftware/rxmq": "^0.4.1",
     "rxjs": "^7.0.0"
   },
   "devDependencies": {

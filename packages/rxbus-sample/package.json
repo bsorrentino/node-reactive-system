@@ -1,6 +1,6 @@
 {
   "name": "rxbus-sample",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -29,10 +29,10 @@
   },
   "dependencies": {
     "@soulsoftware/bus-core": "^0.4.0",
-    "@soulsoftware/rxbus": "^0.4.0",
-    "@soulsoftware/rxbus-fastify": "^0.4.0",
-    "@soulsoftware/rxbus-timer": "^0.4.0",
-    "@soulsoftware/rxbus-trace": "^0.4.0",
+    "@soulsoftware/rxbus": "^0.4.1",
+    "@soulsoftware/rxbus-fastify": "^0.4.1",
+    "@soulsoftware/rxbus-timer": "^0.4.1",
+    "@soulsoftware/rxbus-trace": "^0.4.1",
     "fastify": "^3.15.0",
     "rxjs": "^7.0.0"
   },
