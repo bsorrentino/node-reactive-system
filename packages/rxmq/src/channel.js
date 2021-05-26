@@ -5,24 +5,6 @@ import { compareTopics, findSubjectByName } from './utils/index';
 
 // const channelName = Symbol('channel.name');
 // const channelData = Symbol('channel.data');
-
-// eslint-disable-next-line camelcase
-function _subject_proxy_handler(subjectName) {
-  return {
-    get: function (target, propKey, receiver) {
-      if (propKey === 'next') {
-        const origMethod = target[propKey];
-        return function (...args) {
-          const params = { name: subjectName, ...args[0] };
-          const result = origMethod.apply(this, params);
-          console.log(subjectName, propKey, JSON.stringify(params), JSON.stringify(result));
-          return result;
-        };
-      } else return Reflect.get(...arguments);
-    },
-  };
-}
-
 /**
  * Rxmq channel class
  */
@@ -62,7 +44,6 @@ class Channel {
      * @private
      */
     this.channelStream = this.channelBus;
-
   }
 
   /**
@@ -76,6 +57,7 @@ class Channel {
   subject(name, { Subject = EndlessSubject } = {}) {
     let s = this.utils.findSubjectByName(this.subjects, name);
     if (!s) {
+      console.log('add proxy for ', name);
       s = new Proxy(new Subject(), {
         get(target, propKey, receiver) {
           if (propKey === 'next') {

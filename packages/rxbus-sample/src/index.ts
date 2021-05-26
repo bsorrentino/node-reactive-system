@@ -23,7 +23,7 @@ import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
  */
 function routeTimerToWS() {
     
-    const ws_route_name = 'ws.main'
+    const ws_route_name = 'WS_MAIN'
 
     // function to listen on a WS channel  
     const ws_observe = () => 

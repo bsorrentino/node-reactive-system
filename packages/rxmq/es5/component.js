@@ -328,10 +328,11 @@
     return res[0];
   };
 
+  // const channelData = Symbol('channel.data');
+
   /**
    * Rxmq channel class
    */
-
 
   var Channel = /*#__PURE__*/function () {
     /**
@@ -394,6 +395,7 @@
         var s = this.utils.findSubjectByName(this.subjects, name);
 
         if (!s) {
+          console.log('add proxy for ', name);
           s = new Proxy(new Subject(), {
             get: function get(target, propKey, receiver) {
               if (propKey === 'next') {
