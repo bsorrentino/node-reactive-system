@@ -18,5 +18,5 @@ parentPort?.on( 'message', async input => {
     await stall( waitTime )
     // console.log( 'worker result:', input  )
 
-    parentPort?.postMessage( { input:input.data, waitTime:waitTime } )
+    parentPort?.postMessage( { data: {input:input.data, waitTime:waitTime} } )
 })

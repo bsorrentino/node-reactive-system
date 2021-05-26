@@ -22,8 +22,10 @@ declare interface Channel<T> extends BaseChannel {
   subject(topic: String, subject?: EndlessSubject<T>): Subject<T>
 }
 
+export type ReqResChannelEvent<Req, Res> = ChannelEvent<Req> & { replySubject: Subject<Res> }
+
 declare interface RequestResponseChannel<Req, Res> extends BaseChannel {
-  observe(topic: String): Observable<{data: Req; replySubject: Subject<Res>}>
+  observe(topic: String): Observable<ReqResChannelEvent<Req, Res>>
   request<S extends Subject<Res>>(options: RequestOptions<Req, S, Res>): Subject<Res>
   subject(topic: String, subject?: EndlessSubject<Res>): Subject<Res>
 }

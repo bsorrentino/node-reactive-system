@@ -66,7 +66,7 @@ worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ?
             case 1:
                 _a.sent();
                 // console.log( 'worker result:', input  )
-                worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage({ input: input.data, waitTime: waitTime });
+                worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage({ data: { input: input.data, waitTime: waitTime } });
                 return [2 /*return*/];
         }
     });
