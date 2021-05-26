@@ -11,10 +11,9 @@ class Channel {
    * Represents a new Rxmq channel.
    * Normally you wouldn't need to instantiate it directly, you'd just work with existing instance.
    * @constructor
-   * @param  {Array}   plugins  Array of plugins for new channel
    * @return {void}
    */
-  constructor(plugins = []) {
+  constructor() {
     /**
      * Internal set of utilities
      * @type {Object}
@@ -43,9 +42,6 @@ class Channel {
      * @private
      */
     this.channelStream = this.channelBus;
-
-    // inject plugins
-    plugins.map(this.registerPlugin.bind(this));
   }
 
   /**
@@ -117,23 +113,6 @@ class Channel {
     const replySubject = new Subject();
     subj.next({ replySubject, data });
     return replySubject;
-  }
-
-  /**
-   * Channel plugin registration
-   * @param  {Object} plugin Plugin object to apply
-   * @return {void}
-   */
-  registerPlugin(plugin) {
-    for (const prop in plugin) {
-      if (!this.hasOwnProperty(prop)) {
-        /**
-         * Hide from esdoc
-         * @private
-         */
-        this[prop] = plugin[prop];
-      }
-    }
   }
 }
 

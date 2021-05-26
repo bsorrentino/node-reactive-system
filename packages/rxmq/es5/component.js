@@ -288,12 +288,9 @@
      * Represents a new Rxmq channel.
      * Normally you wouldn't need to instantiate it directly, you'd just work with existing instance.
      * @constructor
-     * @param  {Array}   plugins  Array of plugins for new channel
      * @return {void}
      */
     function Channel() {
-      var plugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
       _classCallCheck(this, Channel);
 
       /**
@@ -325,9 +322,7 @@
        * @private
        */
 
-      this.channelStream = this.channelBus; // inject plugins
-
-      plugins.map(this.registerPlugin.bind(this));
+      this.channelStream = this.channelBus;
     }
     /**
      * Returns EndlessSubject representing given topic
@@ -421,25 +416,6 @@
         });
         return replySubject;
       }
-      /**
-       * Channel plugin registration
-       * @param  {Object} plugin Plugin object to apply
-       * @return {void}
-       */
-
-    }, {
-      key: "registerPlugin",
-      value: function registerPlugin(plugin) {
-        for (var prop in plugin) {
-          if (!this.hasOwnProperty(prop)) {
-            /**
-             * Hide from esdoc
-             * @private
-             */
-            this[prop] = plugin[prop];
-          }
-        }
-      }
     }]);
 
     return Channel;
@@ -468,18 +444,10 @@
        * @private
        */
       this.channels = {};
-      /**
-       * Holds channel plugins definitions
-       * @type {Object}
-       * @private
-       */
-
-      this.channelPlugins = [];
     }
     /**
      * Returns a channel names
      */
-    //get channelNames() {
 
 
     _createClass(Rxmq, [{
@@ -501,52 +469,10 @@
         var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'defaultRxmqChannel';
 
         if (!this.channels[name]) {
-          this.channels[name] = new Channel(this.channelPlugins);
+          this.channels[name] = new Channel();
         }
 
         return this.channels[name];
-      }
-      /**
-       * Register new Rxmq plugin
-       * @param  {Object} plugin      Plugin object
-       * @return {void}
-       * @example
-       * import myPlugin from 'my-plugin';
-       * rxmq.registerPlugin(myPlugin);
-       */
-
-    }, {
-      key: "registerPlugin",
-      value: function registerPlugin(plugin) {
-        for (var prop in plugin) {
-          if (!this.hasOwnProperty(prop)) {
-            /**
-             * Hide from esdoc
-             * @private
-             */
-            this[prop] = plugin[prop];
-          }
-        }
-      }
-      /**
-       * Register new Channel plugin
-       * @param  {Object} plugin      Channel plugin object
-       * @return {void}
-       * @example
-       * import myChannelPlugin from 'my-channel-plugin';
-       * rxmq.registerChannelPlugin(myChannelPlugin);
-       */
-
-    }, {
-      key: "registerChannelPlugin",
-      value: function registerChannelPlugin(plugin) {
-        this.channelPlugins.push(plugin);
-
-        for (var name in this.channels) {
-          if (this.channels.hasOwnProperty(name)) {
-            this.channels[name].registerPlugin(plugin);
-          }
-        }
       }
     }]);
 

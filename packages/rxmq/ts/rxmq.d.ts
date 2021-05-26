@@ -11,9 +11,6 @@ declare namespace Rxmq {
 
   function channelNames(): string[];
 
-  function registerPlugin(plugin: RxmqPlugin): void;
-
-  function registerChannelPlugin(plugin: RxmqPlugin): void;
 }
 
 export {Channel, RequestResponseChannel, EndlessSubject, EndlessReplaySubject};
