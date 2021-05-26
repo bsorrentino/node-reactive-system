@@ -55,15 +55,18 @@ function stall(stallTime) {
     });
 }
 worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.on('message', function (input) { return __awaiter(void 0, void 0, void 0, function () {
+    var waitTime;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, stall(getRandomInt(30) * 1000)
-                // console.log( 'worker result:', input  )
-            ];
+            case 0:
+                waitTime = (getRandomInt(Math.ceil(input.data % 30)) + 1) * 1000;
+                return [4 /*yield*/, stall(waitTime)
+                    // console.log( 'worker result:', input  )
+                ];
             case 1:
                 _a.sent();
                 // console.log( 'worker result:', input  )
-                worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage(input);
+                worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage({ input: input.data, waitTime: waitTime });
                 return [2 /*return*/];
         }
     });

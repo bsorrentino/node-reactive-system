@@ -28,6 +28,7 @@
   "dependencies": {
     "@soulsoftware/bus-core": "^0.2.2",
     "@soulsoftware/rxbus": "^0.2.2",
+    "@soulsoftware/rxmq": "^0.2.2",
     "rxjs": "^7.0.0"
   },
   "devDependencies": {

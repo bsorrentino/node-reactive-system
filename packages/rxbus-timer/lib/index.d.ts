@@ -11,13 +11,13 @@ export interface Config extends bus.ModuleConfiguration {
     period: number;
 }
 /**
- *  Tick    = 'tick'
+ *  Tick    = 'TICK'
  */
 export const Subjects: {
     Tick: string;
 };
 declare class TimerModule implements bus.Module<Config> {
-    readonly name = "timer";
+    readonly name = "TIMER";
     onRegister(config?: Config): void;
     onStart(): void;
     onStop(): void;

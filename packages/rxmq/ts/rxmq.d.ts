@@ -1,4 +1,4 @@
-import {Channel, RequestResponseChannel} from './channel';
+import {Channel, RequestResponseChannel,ChannelEvent} from './channel';
 import EndlessSubject from './endlessSubject';
 import EndlessReplaySubject from './endlessReplaySubject';
 
@@ -11,10 +11,7 @@ declare namespace Rxmq {
 
   function channelNames(): string[];
 
-  function registerPlugin(plugin: RxmqPlugin): void;
-
-  function registerChannelPlugin(plugin: RxmqPlugin): void;
 }
 
-export {Channel, RequestResponseChannel, EndlessSubject, EndlessReplaySubject};
+export {Channel, RequestResponseChannel, EndlessSubject, EndlessReplaySubject, ChannelEvent};
 export default Rxmq;
