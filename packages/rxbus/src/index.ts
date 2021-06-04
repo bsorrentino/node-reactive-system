@@ -4,7 +4,7 @@ import * as bus  from '@soulsoftware/bus-core'
 import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
 import { Observable, Subject } from 'rxjs'
 
-type WorkerChannel<IN,OUT> = { in:Subject<IN>, out:Observable<OUT> }
+type WorkerChannel<IN,OUT> = { subject:Subject<IN>, observable:Observable<OUT> }
 
 type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
@@ -73,8 +73,8 @@ class BusEngine {
         worker_message_in.subscribe( value => worker.postMessage(value) )
       
         return {
-            in: worker_message_in,
-            out: worker_message_out.asObservable()
+            subject: worker_message_in,
+            observable: worker_message_out.asObservable()
         }
     }
     

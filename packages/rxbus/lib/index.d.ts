@@ -3,8 +3,8 @@ import * as bus from "@soulsoftware/bus-core";
 import { Channel, RequestResponseChannel } from "@soulsoftware/rxmq";
 import { Observable, Subject } from "rxjs";
 type WorkerChannel<IN, OUT> = {
-    in: Subject<IN>;
-    out: Observable<OUT>;
+    subject: Subject<IN>;
+    observable: Observable<OUT>;
 };
 declare class BusModules {
     register<C extends bus.ModuleConfiguration>(module: bus.Module<C>, config?: C): void;

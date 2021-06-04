@@ -53,20 +53,23 @@ function runWorkerThread( ) {
 
         console.log( 'worker thread id', worker_thread.threadId  )
 
-        const ch$ = Bus.workerChannel<number,number>( worker_thread ) 
+        const worker_channel$ = Bus.workerChannel<number,number>( worker_thread ) 
 
-        ch$.out.subscribe({ 
+        const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
+
+        worker_channel$.observable.subscribe({ 
             next: result => console.log( 'worker thread result ', result ),
             error: err => console.error( 'worker error', err),
         })
     
-        Bus.channel<number>( TimerModule.name )
-            .observe( TimerSubjects.Tick )
-                .pipe( filter( ({ data }) => data%10 == 0 ) )
-                .subscribe({
-                    next: ({ data }) => { console.log( 'send tick to worker', data ); ch$.in.next( data ) },
-                    error: err => console.error( 'worker error', err),
-                })
+        tick_observer$.pipe( filter( ({ data }) => data%10 == 0 ) )
+            .subscribe({
+                next: ({ data }) => { 
+                    console.log( 'send tick to worker', data )
+                    worker_channel$.subject.next( data ) 
+                },
+                error: err => console.error( 'worker error', err),
+            })
         
     }
     catch( e ) {
