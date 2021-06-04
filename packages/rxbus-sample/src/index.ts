@@ -15,6 +15,7 @@ import {
 } from '@soulsoftware/rxbus-timer'
 
 import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
+import { firstValueFrom } from 'rxjs'
 
 /**
  * Route message from Timer to WebSocket
@@ -32,15 +33,20 @@ function routeTimerToWS() {
     const ws_add_route_req$ = Bus.replyChannel( FastifyModule.name ).request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
 
     // function to listen on a WS channel  
-    const ws_observe = () => 
-        tick_observer$.subscribe( tick => ws_event_subject$.next( tick ))
+    const ws_start_observe = () => 
+        tick_observer$.subscribe( tick => ws_event_subject$.next( tick.data ))
 
-    // Request register a new WS route                 
-    ws_add_route_req$.subscribe( { 
-            next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
-            error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
-            complete: ws_observe 
-        })
+    // Request register a new WS route  
+    
+    firstValueFrom( ws_add_route_req$ )
+        .then( ws_start_observe )
+        .catch( e => console.error(e) )
+    
+    // ws_add_route_req$.subscribe( { 
+    //         next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
+    //         error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
+    //         complete: ws_observe 
+    //     })
 }
 
 function runWorkerThread( ) {
