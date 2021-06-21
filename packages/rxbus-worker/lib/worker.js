@@ -30,6 +30,7 @@ var WorkerModule = /** @class */ (function () {
             });
         }
         else {
+            var noop_1 = function () { };
             var entryName_1 = 'long for time';
             worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.on('message', function (input) {
                 var obs = new perf_hooks_1.PerformanceObserver(function (list) {
@@ -40,9 +41,13 @@ var WorkerModule = /** @class */ (function () {
                 obs.observe({ entryTypes: ['measure'] });
                 perf_hooks_1.performance.mark('A');
                 for (var i = 0; i < 1000 * 1000 * 1000; ++i)
-                    ;
+                    noop_1();
                 perf_hooks_1.performance.mark('B');
                 perf_hooks_1.performance.measure(entryName_1, 'A', 'B');
+                obs.disconnect();
+            });
+            worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.on('close', function () {
+                // send close message
             });
         }
     };

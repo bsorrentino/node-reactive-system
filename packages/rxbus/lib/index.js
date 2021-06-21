@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bus = void 0;
-var assert = require("assert");
-var rxmq_1 = require("@soulsoftware/rxmq");
-var BusModules = /** @class */ (function () {
-    function BusModules() {
+const rxmq_1 = require("@soulsoftware/rxmq");
+const assert = require("assert");
+class BusModules {
+    constructor() {
         this._modules = new Map();
     }
-    BusModules.prototype.register = function (module, config) {
-        assert.ok(!this._modules.has(module.name), "Module " + module.name + " already exists!");
-        var result = {
+    register(module, config) {
+        assert.ok(!this._modules.has(module.name), `Module ${module.name} already exists!`);
+        let result = {
             module: module,
             status: { started: false, paused: false }
         };
@@ -17,16 +17,12 @@ var BusModules = /** @class */ (function () {
         if (module.onRegister) {
             module.onRegister(config);
         }
-    };
-    Object.defineProperty(BusModules.prototype, "names", {
-        get: function () {
-            return this._modules.keys();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BusModules.prototype.start = function () {
-        this._modules.forEach(function (m) {
+    }
+    get names() {
+        return this._modules.keys();
+    }
+    start() {
+        this._modules.forEach(m => {
             if (!m.status.started) {
                 if (m.module.onStart) {
                     m.module.onStart();
@@ -34,11 +30,10 @@ var BusModules = /** @class */ (function () {
                 m.status.started = true;
             }
         });
-    };
-    return BusModules;
-}());
-var BusEngine = /** @class */ (function () {
-    function BusEngine() {
+    }
+}
+class BusEngine {
+    constructor() {
         this.modules = new BusModules();
     }
     // private uniqueId( prefix = '' ) {
@@ -46,35 +41,30 @@ var BusEngine = /** @class */ (function () {
     //     const randomness = Math.random().toString(36).substr(2);
     //     return `${prefix}${dateString}${randomness}`
     // }
-    BusEngine.prototype.channel = function (name) {
+    channel(name) {
         return rxmq_1.default.channel(name);
-    };
-    BusEngine.prototype.replyChannel = function (name) {
+    }
+    replyChannel(name) {
         return rxmq_1.default.channel(name);
-    };
-    BusEngine.prototype.workerChannel = function (worker) {
-        var uniqueId = "WORKER" + worker.threadId;
-        var ch = this.channel(uniqueId);
-        var worker_message_out = ch.subject('WORKER_OUT');
-        worker.on('message', function (value) { return worker_message_out.next(value); });
-        worker.on('error', function (err) { return worker_message_out.error(err); });
-        worker.on('exit', function () { return worker_message_out.complete(); });
-        var worker_message_in = ch.subject('WORKER_IN');
-        worker_message_in.subscribe(function (value) { return worker.postMessage(value); });
+    }
+    workerChannel(worker) {
+        const uniqueId = `WORKER${worker.threadId}`;
+        const ch = this.channel(uniqueId);
+        const worker_message_out = ch.subject('WORKER_OUT');
+        worker.on('message', value => worker_message_out.next(value));
+        worker.on('error', err => worker_message_out.error(err));
+        worker.on('exit', () => worker_message_out.complete());
+        const worker_message_in = ch.subject('WORKER_IN');
+        worker_message_in.subscribe(value => worker.postMessage(value));
         return {
             subject: worker_message_in,
             observable: worker_message_out.asObservable()
         };
-    };
-    Object.defineProperty(BusEngine.prototype, "channelNames", {
-        get: function () {
-            return rxmq_1.default.channelNames();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return BusEngine;
-}());
+    }
+    get channelNames() {
+        return rxmq_1.default.channelNames();
+    }
+}
 exports.Bus = new BusEngine();
 /*
 export function NewChannel(target: any, propertyKey: string, descriptor: PropertyDescriptor) {

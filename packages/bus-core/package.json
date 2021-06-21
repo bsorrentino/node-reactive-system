@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
-  "types": "./lib/bus-core.d.ts",
+  "types": "./lib/index.d.ts",
   "license": "ISC",
   "directories": {
     "lib": "lib",

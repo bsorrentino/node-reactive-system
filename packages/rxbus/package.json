@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "tsc src/*.ts --target es5 --declaration --outDir ./lib",
+    "build": "tsc src/*.ts --target es6 --module commonjs --declaration --outDir ./lib",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "test": "jest --config ../../jest.config.js"
   },

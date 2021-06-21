@@ -1,8 +1,8 @@
-import assert = require('assert')
 import { Worker } from 'worker_threads'
 import * as bus  from '@soulsoftware/bus-core'
 import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
 import { Observable, Subject } from 'rxjs'
+import assert = require('assert')
 
 type WorkerChannel<IN,OUT> = { subject:Subject<IN>, observable:Observable<OUT> }
 

@@ -47,6 +47,8 @@ class WorkerModule implements bus.Module<Config> {
         }
         else {
             
+            const noop = () => {} 
+
             const entryName = 'long for time'
 
             parentPort?.on( 'message', input => {
@@ -62,12 +64,20 @@ class WorkerModule implements bus.Module<Config> {
                 obs.observe( { entryTypes: ['measure'] })
 
                 performance.mark('A')
-                for( let i = 0 ; i < 1000 * 1000 * 1000 ; ++i) ;
+                
+                for( let i = 0 ; i < 1000 * 1000 * 1000 ; ++i) 
+                    noop();
+
                 performance.mark('B')
                 performance.measure( entryName, 'A', 'B')
 
-                
+                obs.disconnect()
             })
+
+            parentPort?.on( 'close', () => {
+                // send close message
+            })
+
         }
     }
 
