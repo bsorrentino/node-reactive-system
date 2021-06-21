@@ -1,7 +1,9 @@
-import * as bus from "@soulsoftware/bus-core";
+import * as bus from '@soulsoftware/bus-core';
 declare class TraceModule implements bus.Module {
     readonly name = "TRACE";
+    private _subscriptions;
     onStart(): void;
     onStop(): void;
 }
-export const Module: TraceModule;
+export declare const Module: TraceModule;
+export {};

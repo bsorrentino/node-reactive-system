@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert = require('assert')
 import { Worker } from 'worker_threads'
 import * as bus  from '@soulsoftware/bus-core'
 import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'

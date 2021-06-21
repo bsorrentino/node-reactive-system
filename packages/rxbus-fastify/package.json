@@ -20,8 +20,9 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "clean": "rm -rf lib",
+    "build": "tsc src/*.ts --declaration --outDir ./lib",
+    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
