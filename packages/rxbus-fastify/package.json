@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus-fastify",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -20,23 +20,23 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
-    "build": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "clean": "rm -rf lib",
+    "build": "tsc src/*.ts --declaration --outDir ./lib",
+    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "test": "jest --config ../../jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.4.0",
-    "@soulsoftware/rxbus": "^0.4.1",
-    "@soulsoftware/rxmq": "^0.4.1",
+    "@soulsoftware/bus-core": "^0.5.0",
+    "@soulsoftware/rxbus": "^0.5.0",
+    "@soulsoftware/rxmq": "^0.5.0",
     "fastify": "^3.15.0",
     "fastify-websocket": "^3.2.0",
     "rxjs": "^7.0.0"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "^2.0.0-beta.2",
     "@types/node": "12.20.10"
   },
   "engines": {

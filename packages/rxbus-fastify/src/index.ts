@@ -119,6 +119,7 @@ class FastifyModule implements bus.Module<Config> {
                                 .subscribe( ({data,replySubject}) => {
                                     console.log( 'request add channel ', data )
                                     this.setupWebSocketChannel( data )
+                                    replySubject.next( true )
                                     replySubject.complete()
                                 })
         

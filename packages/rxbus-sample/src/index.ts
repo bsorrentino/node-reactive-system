@@ -1,5 +1,3 @@
-import {Worker} from 'worker_threads'
-import path from 'path'
 import {filter} from 'rxjs/operators'
 
 import { Bus } from '@soulsoftware/rxbus'
@@ -15,6 +13,9 @@ import {
 } from '@soulsoftware/rxbus-timer'
 
 import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
+import { Module as WorkerModule, Subjects as WorkerSubjects } from '@soulsoftware/rxbus-worker'
+
+import { firstValueFrom } from 'rxjs'
 
 /**
  * Route message from Timer to WebSocket
@@ -25,54 +26,44 @@ function routeTimerToWS() {
     
     const ws_route_name = 'WS_MAIN'
 
-    // function to listen on a WS channel  
-    const ws_observe = () => 
-        Bus.channel<number>( TimerModule.name )
-            .observe( TimerSubjects.Tick )
-            .subscribe( tick => 
-                Bus.channel( ws_route_name  )
-                    .subject( FastifySubjects.WSMessage )
-                        .next( tick ))
+    const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
 
-    // Request register a new WS route                 
-    Bus.replyChannel( FastifyModule.name )
-        .request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
-        .subscribe( { 
-            next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
-            error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
-            complete: ws_observe 
-        })
+    const ws_event_subject$ = Bus.channel( ws_route_name  ).subject( FastifySubjects.WSMessage )
+
+    const ws_add_route_req$ = Bus.replyChannel( FastifyModule.name ).request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
+
+    // function to listen on a WS channel  
+    const ws_start_observe = () => 
+        tick_observer$.subscribe( tick => ws_event_subject$.next( tick.data ))
+
+    // Request register a new WS route  
+    
+    firstValueFrom( ws_add_route_req$ )
+        .then( ws_start_observe )
+        .catch( e => console.error(e) )
+    
+    // ws_add_route_req$.subscribe( { 
+    //         next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
+    //         error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
+    //         complete: ws_observe 
+    //     })
 }
 
-function runWorkerThread( ) {
+function runWorkerModule( ) {
 
-    const workerPath = './lib/worker.js'
+    const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
 
-    try {
-        const worker_thread = new Worker( workerPath, {} )
+    const worker_subject$ = Bus.channel(WorkerModule.name).subject(WorkerSubjects.Run)
 
-        console.log( 'worker thread id', worker_thread.threadId  )
-
-        const ch$ = Bus.workerChannel<number,number>( worker_thread ) 
-
-        ch$.out.subscribe({ 
-            next: result => console.log( 'worker thread result ', result ),
+    tick_observer$.pipe( filter( ({ data }) => data%10 == 0 ) )
+        .subscribe({
+            next: ({ data }) => { 
+                console.log( 'send tick to worker', data )
+                worker_subject$.next( data ) 
+            },
             error: err => console.error( 'worker error', err),
         })
-    
-        Bus.channel<number>( TimerModule.name )
-            .observe( TimerSubjects.Tick )
-                .pipe( filter( ({ data }) => data%10 == 0 ) )
-                .subscribe({
-                    next: ({ data }) => { console.log( 'send tick to worker', data ); ch$.in.next( data ) },
-                    error: err => console.error( 'worker error', err),
-                })
         
-    }
-    catch( e ) {
-        console.error( 'error creating worker thread', e)
-    }
-
 }
 
 function main() {
@@ -81,6 +72,7 @@ function main() {
 
     Bus.modules.register( TraceModule )
     Bus.modules.register( TimerModule )
+    Bus.modules.register( WorkerModule )
     Bus.modules.register<FastifyConfig>( FastifyModule, 
         { 
             port:8888, 
@@ -93,7 +85,7 @@ function main() {
 
     routeTimerToWS()
 
-    runWorkerThread()
+    runWorkerModule()
     
     Bus.modules.start()
 }

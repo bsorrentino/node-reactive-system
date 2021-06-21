@@ -1,4 +1,4 @@
-import * as bus from "@soulsoftware/bus-core";
+import * as bus from '@soulsoftware/bus-core';
 /**
  * Configuration parameters
  */
@@ -13,13 +13,16 @@ export interface Config extends bus.ModuleConfiguration {
 /**
  *  Tick    = 'TICK'
  */
-export const Subjects: {
+export declare const Subjects: {
     Tick: string;
 };
 declare class TimerModule implements bus.Module<Config> {
     readonly name = "TIMER";
+    private config;
+    private _subscription?;
     onRegister(config?: Config): void;
     onStart(): void;
     onStop(): void;
 }
-export const Module: TimerModule;
+export declare const Module: TimerModule;
+export {};
