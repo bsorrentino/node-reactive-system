@@ -1,4 +1,6 @@
-import * as bus from "@soulsoftware/bus-core";
+import * as bus from '@soulsoftware/bus-core';
+import 'fastify-websocket';
+import '@soulsoftware/rxmq';
 /**
  * Configuration parameters
  */
@@ -24,7 +26,7 @@ export interface Config extends bus.ModuleConfiguration {
  *  ServerStart = 'server_start'
  *  ServerClose = 'server_close'
  */
-export const Subjects: {
+export declare const Subjects: {
     WSSend: string;
     WSMessage: string;
     WSMessageIn: string;
@@ -36,7 +38,10 @@ export const Subjects: {
  * Module to manage HTTP and WebSocket channels
  */
 declare class FastifyModule implements bus.Module<Config> {
+    private server;
     readonly name = "FASTIFY";
+    private config;
+    private setupWebSocketChannel;
     /**
      *
      */
@@ -44,4 +49,5 @@ declare class FastifyModule implements bus.Module<Config> {
     onStart(): void;
     onStop(): void;
 }
-export const Module: FastifyModule;
+export declare const Module: FastifyModule;
+export {};

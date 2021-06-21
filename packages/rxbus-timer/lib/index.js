@@ -1,1 +1,38 @@
-var s=require("rxjs").interval,i=require("@soulsoftware/rxbus").Bus;const t={Tick:"TICK"};exports.Subjects=t;const e=new class{name="TIMER";config={period:1e3};onRegister(s){s&&(this.config=s)}onStart(){const e=i.channel(this.name).subject(t.Tick);this._subscription=s(this.config.period).subscribe(e)}onStop(){this._subscription&&(this._subscription.unsubscribe(),this._subscription=void 0)}};exports.Module=e;
+"use strict";
+exports.__esModule = true;
+exports.Module = exports.Subjects = void 0;
+var rxbus_1 = require("@soulsoftware/rxbus");
+var rxjs_1 = require("rxjs");
+/**
+ *  Tick    = 'TICK'
+ */
+exports.Subjects = {
+    Tick: 'TICK'
+};
+var TimerModule = /** @class */ (function () {
+    function TimerModule() {
+        this.name = 'TIMER';
+        this.config = {
+            period: 1000
+        };
+    }
+    TimerModule.prototype.onRegister = function (config) {
+        if (config)
+            this.config = config;
+    };
+    TimerModule.prototype.onStart = function () {
+        var subject = rxbus_1.Bus.channel(this.name)
+            .subject(exports.Subjects.Tick);
+        this._subscription = rxjs_1.interval(this.config.period)
+            // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
+            .subscribe(subject);
+    };
+    TimerModule.prototype.onStop = function () {
+        if (this._subscription) {
+            this._subscription.unsubscribe();
+            this._subscription = undefined;
+        }
+    };
+    return TimerModule;
+}());
+exports.Module = new TimerModule();

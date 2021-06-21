@@ -1,5 +1,3 @@
-import {Worker} from 'worker_threads'
-import path from 'path'
 import {filter} from 'rxjs/operators'
 
 import { Bus } from '@soulsoftware/rxbus'
@@ -15,6 +13,8 @@ import {
 } from '@soulsoftware/rxbus-timer'
 
 import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
+import { Module as WorkerModule, Subjects as WorkerSubjects } from '@soulsoftware/rxbus-worker'
+
 import { firstValueFrom } from 'rxjs'
 
 /**
@@ -49,38 +49,21 @@ function routeTimerToWS() {
     //     })
 }
 
-function runWorkerThread( ) {
+function runWorkerModule( ) {
 
-    const workerPath = './lib/worker.js'
+    const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
 
-    try {
-        const worker_thread = new Worker( workerPath, {} )
+    const worker_subject$ = Bus.channel(WorkerModule.name).subject(WorkerSubjects.Run)
 
-        console.log( 'worker thread id', worker_thread.threadId  )
-
-        const worker_channel$ = Bus.workerChannel<number,number>( worker_thread ) 
-
-        const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
-
-        worker_channel$.observable.subscribe({ 
-            next: result => console.log( 'worker thread result ', result ),
+    tick_observer$.pipe( filter( ({ data }) => data%10 == 0 ) )
+        .subscribe({
+            next: ({ data }) => { 
+                console.log( 'send tick to worker', data )
+                worker_subject$.next( data ) 
+            },
             error: err => console.error( 'worker error', err),
         })
-    
-        tick_observer$.pipe( filter( ({ data }) => data%10 == 0 ) )
-            .subscribe({
-                next: ({ data }) => { 
-                    console.log( 'send tick to worker', data )
-                    worker_channel$.subject.next( data ) 
-                },
-                error: err => console.error( 'worker error', err),
-            })
         
-    }
-    catch( e ) {
-        console.error( 'error creating worker thread', e)
-    }
-
 }
 
 function main() {
@@ -89,6 +72,7 @@ function main() {
 
     Bus.modules.register( TraceModule )
     Bus.modules.register( TimerModule )
+    Bus.modules.register( WorkerModule )
     Bus.modules.register<FastifyConfig>( FastifyModule, 
         { 
             port:8888, 
@@ -101,7 +85,7 @@ function main() {
 
     routeTimerToWS()
 
-    runWorkerThread()
+    runWorkerModule()
     
     Bus.modules.start()
 }

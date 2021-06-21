@@ -1,7 +1,6 @@
 
 
-export interface ModuleConfiguration {
-    [name as string]:any
+export interface ModuleConfiguration extends Record<string,any> {
 }
 
 export interface ModuleRegistrationLifecycle<CFG extends ModuleConfiguration> {
@@ -32,5 +31,4 @@ export type Module<CFG extends ModuleConfiguration = ModuleConfiguration> =
                         Readonly<ModuleProperties> & 
                         Partial<ModuleLifecycle> & 
                         Partial<ModuleRegistrationLifecycle<CFG> & 
-                        Partial<ModulePauseResumeLifecycle> 
-    
+                        Partial<ModulePauseResumeLifecycle>>
