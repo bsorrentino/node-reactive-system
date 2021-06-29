@@ -1,4 +1,4 @@
-import { Bus } from '@soulsoftware/rxbus'
+import { Bus, rxbus } from '@soulsoftware/rxbus'
 import * as bus  from '@soulsoftware/bus-core'
 import 'fastify-websocket'
 import '@soulsoftware/rxmq'
@@ -63,14 +63,13 @@ class FastifyModule implements bus.Module<Config> {
     private setupWebSocketChannel<M>( module:string ) {
         const channelName = module
         
-        const channel           = Bus.channel(channelName)
-        const messageSubject    = channel.subject( Subjects.WSMessageIn )
-        const messageObserver   = channel.observe( Subjects.WSMessage )
+        const messageSubject$    = rxbus.subject<M>( channelName, Subjects.WSMessageIn )
+        const messageObserver$   = rxbus.observe<any>( channelName, Subjects.WSMessage )
 
         this.server.get( `/${this.name}/channel/${channelName}/*`, { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
-            connection.socket.on( 'message', (message:M) => messageSubject.next( message ) )
+            connection.socket.on( 'message', (message:M) => messageSubject$.next( message ) )
 
-            messageObserver.subscribe( (message:any) => {
+            messageObserver$.subscribe( message => {
                 console.log( 'ws send', message )
                 connection.socket.send( message )
             })
@@ -84,7 +83,7 @@ class FastifyModule implements bus.Module<Config> {
     onRegister( config?:Config ) {
         if( config ) this.config = config
     
-        const httpChannel = Bus.replyChannel<RequestData,ResponseData>( this.name )
+        const httpChannel$ = Bus.replyChannel<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -92,7 +91,7 @@ class FastifyModule implements bus.Module<Config> {
             
             const cmd = rxp.exec(request.url)
             if( cmd ) {
-                httpChannel.request( { topic: cmd[1], data:request } )
+                httpChannel$.request( { topic: cmd[1], data:request } )
                     .pipe( timeout( this.config.requestTimeout || 5000) )
                     .subscribe({ 
                         next: data => reply.send(data),
@@ -114,14 +113,13 @@ class FastifyModule implements bus.Module<Config> {
         //
         // Listen for adding Web Socket channel
         //
-        Bus.replyChannel<string,any>( this.name )
-                                .observe( Subjects.WSAdd)
-                                .subscribe( ({data,replySubject}) => {
-                                    console.log( 'request add channel ', data )
-                                    this.setupWebSocketChannel( data )
-                                    replySubject.next( true )
-                                    replySubject.complete()
-                                })
+        rxbus.observeAndReply<string,boolean>(this.name,Subjects.WSAdd)
+                .subscribe( ({data,replySubject}) => {
+                    console.log( 'request add channel ', data )
+                    this.setupWebSocketChannel( data )
+                    replySubject.next( true )
+                    replySubject.complete()
+                })
         
     }
 
@@ -130,13 +128,13 @@ class FastifyModule implements bus.Module<Config> {
         this.server.listen( this.config.port || 3000, (err, address) => {
             if (err) {
                 console.error(err)
-                Bus.channel(this.name)
-                    .subject(Subjects.ServerStart).error( err )
+                rxbus.subject(this.name, Subjects.ServerStart)
+                        .error( err )
             }
             else {
                 console.log(`Server listening at ${address}`)
-                Bus.channel<ServerInfo>(this.name)
-                    .subject(Subjects.ServerStart).next( { address:address })
+                rxbus.subject<ServerInfo>(this.name, Subjects.ServerStart)
+                        .next( { address:address })
             }
           })    
     }
@@ -144,8 +142,8 @@ class FastifyModule implements bus.Module<Config> {
     onStop() {
         this.server.close().then( v => { 
             console.log( 'server closed!');
-            Bus.channel(this.name)
-                .subject(Subjects.ServerClose).complete() 
+            rxbus.subject(this.name, Subjects.ServerClose)
+                    .complete() 
         })
     }
 }

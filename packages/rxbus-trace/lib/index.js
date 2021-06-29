@@ -44,7 +44,7 @@ var TraceModule = /** @class */ (function () {
                 var channel = _a.channel, data = _a.data;
                 return console.log(Reverse, "trace: got message from '" + c + "' on channel '" + channel + "' ==> ", data, Reset);
             };
-            this_1._subscriptions.push(rxbus_1.Bus.channel(c).observe("*").subscribe({ next: trace }));
+            this_1._subscriptions.push(rxbus_1.rxbus.observe(c, "*").subscribe({ next: trace }));
         };
         var this_1 = this;
         for (var _i = 0, _a = rxbus_1.Bus.channelNames; _i < _a.length; _i++) {

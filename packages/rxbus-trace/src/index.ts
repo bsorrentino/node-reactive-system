@@ -1,5 +1,5 @@
 import * as bus from '@soulsoftware/bus-core'
-import { Bus } from '@soulsoftware/rxbus'
+import { Bus, rxbus } from '@soulsoftware/rxbus'
 import { ChannelEvent } from '@soulsoftware/rxmq'
 import { Subscription } from 'rxjs'
 
@@ -52,7 +52,7 @@ class TraceModule implements bus.Module {
                 console.log( Reverse, `trace: got message from '${c}' on channel '${channel}' ==> `, data, Reset)
 
             this._subscriptions.push( 
-                Bus.channel<any>( c ).observe( "*" ).subscribe( { next: trace }))
+                rxbus.observe<any>( c, "*" ).subscribe( { next: trace }))
 
         }
     }

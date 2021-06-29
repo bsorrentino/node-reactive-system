@@ -1,5 +1,5 @@
 import * as bus from '@soulsoftware/bus-core'
-import { Bus } from '@soulsoftware/rxbus'
+import { rxbus } from '@soulsoftware/rxbus'
 import { interval, Subscription } from 'rxjs'
 // import { tap } from 'rxjs/operators'
 
@@ -39,11 +39,11 @@ class TimerModule implements bus.Module<Config> {
 
     onStart() {
 
-        const subject = Bus.channel<number>(this.name)
-            .subject(Subjects.Tick)
+        const emitter$ = rxbus.subject<number>(this.name, Subjects.Tick)
+
         this._subscription = interval(this.config.period)
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
-            .subscribe(subject)
+            .subscribe(emitter$)
     }
 
     onStop() {

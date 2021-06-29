@@ -17,7 +17,6 @@ var rxbus_fastify_1 = require("@soulsoftware/rxbus-fastify");
 var rxbus_timer_1 = require("@soulsoftware/rxbus-timer");
 var rxbus_trace_1 = require("@soulsoftware/rxbus-trace");
 var rxbus_worker_1 = require("@soulsoftware/rxbus-worker");
-var rxjs_1 = require("rxjs");
 /**
  * Route message from Timer to WebSocket
  *
@@ -25,26 +24,16 @@ var rxjs_1 = require("rxjs");
  */
 function routeTimerToWS() {
     var ws_route_name = 'WS_MAIN';
-    var tick_observer$ = rxbus_1.Bus.channel(rxbus_timer_1.Module.name).observe(rxbus_timer_1.Subjects.Tick);
-    var ws_event_subject$ = rxbus_1.Bus.channel(ws_route_name).subject(rxbus_fastify_1.Subjects.WSMessage);
-    var ws_add_route_req$ = rxbus_1.Bus.replyChannel(rxbus_fastify_1.Module.name).request({ topic: rxbus_fastify_1.Subjects.WSAdd, data: ws_route_name });
-    // function to listen on a WS channel  
-    var ws_start_observe = function () {
-        return tick_observer$.subscribe(function (tick) { return ws_event_subject$.next(tick.data); });
-    };
+    var tick_observer$ = rxbus_1.rxbus.observe(rxbus_timer_1.Module.name, rxbus_timer_1.Subjects.Tick);
+    var ws_event_subject$ = rxbus_1.rxbus.subject(ws_route_name, rxbus_fastify_1.Subjects.WSMessage);
     // Request register a new WS route  
-    rxjs_1.firstValueFrom(ws_add_route_req$)
-        .then(ws_start_observe)["catch"](function (e) { return console.error(e); });
-    // ws_add_route_req$.subscribe( { 
-    //         next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
-    //         error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
-    //         complete: ws_observe 
-    //     })
+    rxbus_1.rxbus.request(rxbus_fastify_1.Module.name, { topic: rxbus_fastify_1.Subjects.WSAdd, data: ws_route_name })
+        .then(function () { return tick_observer$.subscribe(function (tick) { return ws_event_subject$.next(tick.data); }); })["catch"](function (e) { return console.error(e); });
 }
 function runWorkerModule() {
-    var tick_observer$ = rxbus_1.Bus.channel(rxbus_timer_1.Module.name).observe(rxbus_timer_1.Subjects.Tick);
-    var worker_subject$ = rxbus_1.Bus.channel(rxbus_worker_1.Module.name).subject(rxbus_worker_1.Subjects.Run);
-    tick_observer$.pipe(operators_1.filter(function (_a) {
+    var worker_subject$ = rxbus_1.rxbus.subject(rxbus_worker_1.Module.name, rxbus_worker_1.Subjects.Run);
+    rxbus_1.rxbus.observe(rxbus_timer_1.Module.name, rxbus_timer_1.Subjects.Tick)
+        .pipe(operators_1.filter(function (_a) {
         var data = _a.data;
         return data % 10 == 0;
     }))

@@ -21,11 +21,10 @@ var TimerModule = /** @class */ (function () {
             this.config = config;
     };
     TimerModule.prototype.onStart = function () {
-        var subject = rxbus_1.Bus.channel(this.name)
-            .subject(exports.Subjects.Tick);
+        var emitter$ = rxbus_1.rxbus.subject(this.name, exports.Subjects.Tick);
         this._subscription = rxjs_1.interval(this.config.period)
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
-            .subscribe(subject);
+            .subscribe(emitter$);
     };
     TimerModule.prototype.onStop = function () {
         if (this._subscription) {
