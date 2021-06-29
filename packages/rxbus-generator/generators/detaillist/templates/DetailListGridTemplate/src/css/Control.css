@@ -1,0 +1,33 @@
+#detailList {
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+#detailList .ms-DetailsHeader {
+    padding-top: 0px;
+}
+
+#detailList .ms-DetailsHeader-cellName {
+    color: #6E6F77;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#detailList .detailList-cell {
+    font-size: 15px;
+    color: #333;
+}
+
+.detailList-footer {
+    display: inline-block;
+    padding: 10px;
+}
+
+.footer-item {
+    float: left;
+    color: #6E6F77;
+    font-size: 12px;
+    font-weight: normal;
+    padding-left: 10px;
+}
+

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+  <control
+    namespace="<%= PCF.Namespace %>" 
+    constructor="<%= PCF.Constructor %>"
+    version="<%= PCF.Version %>"
+    display-name-key="<%= PCF.Name %>"
+    description-key="A Office Fluent UI Custom Control"
+    control-type="standard">
+  </control>
+</manifest>
