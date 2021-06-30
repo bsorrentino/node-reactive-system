@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bus = void 0;
+exports.Bus = exports.BusEngine = exports.BusModules = void 0;
 const rxmq_1 = require("@soulsoftware/rxmq");
 const assert = require("assert");
 class BusModules {
@@ -32,6 +32,7 @@ class BusModules {
         });
     }
 }
+exports.BusModules = BusModules;
 class BusEngine {
     constructor() {
         this.modules = new BusModules();
@@ -65,4 +66,5 @@ class BusEngine {
         return rxmq_1.default.channelNames();
     }
 }
+exports.BusEngine = BusEngine;
 exports.Bus = new BusEngine();
