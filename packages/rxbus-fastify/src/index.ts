@@ -113,7 +113,7 @@ class FastifyModule implements bus.Module<Config> {
         //
         // Listen for adding Web Socket channel
         //
-        rxbus.observeAndReply<string,boolean>(this.name,Subjects.WSAdd)
+        rxbus.reply<string,boolean>(this.name,Subjects.WSAdd)
                 .subscribe( ({data,replySubject}) => {
                     console.log( 'request add channel ', data )
                     this.setupWebSocketChannel( data )

@@ -123,7 +123,7 @@ var FastifyModule = /** @class */ (function () {
         //
         // Listen for adding Web Socket channel
         //
-        rxbus_1.rxbus.observeAndReply(this.name, exports.Subjects.WSAdd)
+        rxbus_1.rxbus.reply(this.name, exports.Subjects.WSAdd)
             .subscribe(function (_a) {
             var data = _a.data, replySubject = _a.replySubject;
             console.log('request add channel ', data);
