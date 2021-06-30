@@ -2,8 +2,17 @@ import { Bus } from './bus'
 import {  RequestOptions } from '@soulsoftware/rxmq'
 import { firstValueFrom } from 'rxjs'
 
+/**
+ * Namespace that contains **utilities functions**
+ */
 export namespace rxbus {
 
+    /**
+     * Observe for a data coming from **Topic** belong to a **Channel**
+     * @param name - Channel Id
+     * @param topic - Topic Id
+     * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
+     */
     export const observe = <T>( name:string, topic:string) => 
                                         Bus.channel<T>( name ).observe( topic )
 

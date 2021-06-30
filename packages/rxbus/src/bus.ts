@@ -4,11 +4,15 @@ import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
 import { Observable, Subject } from 'rxjs'
 import assert = require('assert')
 
-type WorkerChannel<IN,OUT> = { subject:Subject<IN>, observable:Observable<OUT> }
+/**
+ * Worker Channel
+ * 
+ */
+export type WorkerChannel<IN,OUT> = { subject:Subject<IN>, observable:Observable<OUT> }
 
-type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
+export type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
 
-class BusModules {
+export class BusModules {
 
     private _modules = new Map<string,ModuleInfo>()
 
@@ -41,7 +45,7 @@ class BusModules {
     }
 }
 
-class BusEngine {
+export class BusEngine {
     readonly modules    = new BusModules()
 
     // private uniqueId( prefix = '' ) {
