@@ -1,4 +1,4 @@
-import {Channel, RequestResponseChannel,ChannelEvent,ReqResChannelEvent} from './channel';
+import {Channel, RequestResponseChannel,ChannelEvent,ReqResChannelEvent,RequestOptions} from './channel';
 import EndlessSubject from './endlessSubject';
 import EndlessReplaySubject from './endlessReplaySubject';
 
@@ -13,5 +13,5 @@ declare namespace Rxmq {
 
 }
 
-export {Channel, RequestResponseChannel, EndlessSubject, EndlessReplaySubject, ChannelEvent,ReqResChannelEvent};
+export {Channel, RequestResponseChannel, EndlessSubject, EndlessReplaySubject, ChannelEvent,ReqResChannelEvent,RequestOptions};
 export default Rxmq;

@@ -4,6 +4,7 @@
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "private": true,
   "main": "./lib/worker.js",
   "types": "./lib/worker.d.ts",
   "license": "ISC",

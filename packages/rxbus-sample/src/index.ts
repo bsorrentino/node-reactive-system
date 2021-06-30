@@ -1,6 +1,6 @@
 import {filter} from 'rxjs/operators'
 
-import { Bus } from '@soulsoftware/rxbus'
+import { Bus, rxbus } from '@soulsoftware/rxbus'
 import { 
     Module as FastifyModule, 
     Subjects as FastifySubjects,
@@ -15,7 +15,6 @@ import {
 import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
 import { Module as WorkerModule, Subjects as WorkerSubjects } from '@soulsoftware/rxbus-worker'
 
-import { firstValueFrom } from 'rxjs'
 
 /**
  * Route message from Timer to WebSocket
@@ -26,44 +25,32 @@ function routeTimerToWS() {
     
     const ws_route_name = 'WS_MAIN'
 
-    const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
+    const tick_observer$ = rxbus.observe( TimerModule.name, TimerSubjects.Tick )
 
-    const ws_event_subject$ = Bus.channel( ws_route_name  ).subject( FastifySubjects.WSMessage )
-
-    const ws_add_route_req$ = Bus.replyChannel( FastifyModule.name ).request( { topic: FastifySubjects.WSAdd, data:ws_route_name } )
-
-    // function to listen on a WS channel  
-    const ws_start_observe = () => 
-        tick_observer$.subscribe( tick => ws_event_subject$.next( tick.data ))
+    const ws_event_subject$ = rxbus.subject( ws_route_name, FastifySubjects.WSMessage )
 
     // Request register a new WS route  
-    
-    firstValueFrom( ws_add_route_req$ )
-        .then( ws_start_observe )
+
+    rxbus.request<string,any>( FastifyModule.name, { topic: FastifySubjects.WSAdd, data:ws_route_name } )
+        .then( () => tick_observer$.subscribe( tick => ws_event_subject$.next( tick.data )) )
         .catch( e => console.error(e) )
     
-    // ws_add_route_req$.subscribe( { 
-    //         next: v => console.log( `next: ${FastifySubjects.WSAdd}`),
-    //         error: e => console.error( `error: ${FastifySubjects.WSAdd}`, e),
-    //         complete: ws_observe 
-    //     })
 }
 
 function runWorkerModule( ) {
 
-    const tick_observer$ = Bus.channel<number>( TimerModule.name ).observe( TimerSubjects.Tick )
+    const worker_subject$ = rxbus.subject<number>(WorkerModule.name, WorkerSubjects.Run)
 
-    const worker_subject$ = Bus.channel(WorkerModule.name).subject(WorkerSubjects.Run)
-
-    tick_observer$.pipe( filter( ({ data }) => data%10 == 0 ) )
-        .subscribe({
-            next: ({ data }) => { 
-                console.log( 'send tick to worker', data )
-                worker_subject$.next( data ) 
-            },
-            error: err => console.error( 'worker error', err),
-        })
-        
+    rxbus.observe<number>( TimerModule.name, TimerSubjects.Tick )
+            .pipe( filter( ({ data }) => data%10 == 0 ) )
+            .subscribe({
+                next: ({ data }) => { 
+                    console.log( 'send tick to worker', data )
+                    worker_subject$.next( data ) 
+                },
+                error: err => console.error( 'worker error', err),
+            })
+            
 }
 
 function main() {

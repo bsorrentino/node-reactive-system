@@ -1,110 +1,31 @@
-import { Worker } from 'worker_threads'
-import * as bus  from '@soulsoftware/bus-core'
-import Rxmq, { Channel, RequestResponseChannel } from '@soulsoftware/rxmq'
-import { Observable, Subject } from 'rxjs'
-import assert = require('assert')
+import { Bus } from './bus'
+import {  RequestOptions } from '@soulsoftware/rxmq'
+import { firstValueFrom } from 'rxjs'
 
-type WorkerChannel<IN,OUT> = { subject:Subject<IN>, observable:Observable<OUT> }
+/**
+ * Namespace that contains **utilities functions**
+ */
+export namespace rxbus {
 
-type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
+    /**
+     * Observe for a data coming from **Topic** belong to a **Channel**
+     * @param name - Channel Id
+     * @param topic - Topic Id
+     * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
+     */
+    export const observe = <T>( name:string, topic:string) => 
+                                        Bus.channel<T>( name ).observe( topic )
 
-class BusModules {
-
-    private _modules = new Map<string,ModuleInfo>()
-
-    register<C extends bus.ModuleConfiguration>( module:bus.Module<C>, config?:C  ) {
-        assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
-
-        let result:ModuleInfo = {
-            module:module,
-            status:{ started:false, paused:false} 
-        }
-        this._modules.set( module.name, result )
-        if( module.onRegister ) {
-            module.onRegister( config )
-        }
-    }
-    get names():IterableIterator<string> {
-        return this._modules.keys()
-    }
-
-    start() {
-        this._modules.forEach( m => {
-
-            if( !m.status.started ) {
-                if( m.module.onStart ) {
-                    m.module.onStart()
-                }
-                m.status.started = true
-            }
-        })
-    }
-}
-
-class BusEngine {
-    readonly modules    = new BusModules()
-
-    // private uniqueId( prefix = '' ) {
-    //     const dateString = Date.now().toString(36);
-    //     const randomness = Math.random().toString(36).substr(2);
-    //     return `${prefix}${dateString}${randomness}`
-    // }
-
-    channel<T>( name:string ):Channel<T> {
-        return Rxmq.channel(name) as Channel<T>
-    }
-
-    replyChannel<T, R>( name:string ):RequestResponseChannel<T, R> {
-        return Rxmq.channel(name) as RequestResponseChannel<T, R>
-    }
-
-    workerChannel<IN,OUT>( worker:Worker ):WorkerChannel<IN,OUT> {
-
-        const uniqueId = `WORKER${worker.threadId}` 
-
-        const ch = this.channel<IN|OUT>(uniqueId)
-
-        const worker_message_out    = ch.subject('WORKER_OUT') as Subject<OUT>
-        worker.on('message', value =>  worker_message_out.next( value ) )
-        worker.on('error', err =>  worker_message_out.error( err ) )
-        worker.on('exit', () =>  worker_message_out.complete() )
-
-        const worker_message_in     = ch.subject('WORKER_IN') as Subject<IN>      
-        worker_message_in.subscribe( value => worker.postMessage(value) )
-      
-        return {
-            subject: worker_message_in,
-            observable: worker_message_out.asObservable()
-        }
-    }
+    export const observeAndReply = <T,R>( name:string, topic:string) => 
+                                            Bus.replyChannel<T,R>( name ).observe( topic )
+                                            
+    export const subject = <T>( name:string, topic:string) => 
+                                        Bus.channel<T>( name  ).subject( topic )
     
-    get channelNames():string[] {
-        return Rxmq.channelNames()
-    }
-
+    export const request = <T, R> ( name:string, options:Omit<RequestOptions<T,any,R>, "Subject">) => 
+                                            firstValueFrom(Bus.replyChannel<T,R>( name ).request( options ))
+        
 }
 
-export const Bus = new BusEngine()
+export * from './bus'
 
-/*
-export function NewChannel(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-    const name = `_${propertyKey}`
-
-    Object.defineProperty( target, `_${propertyKey}`, {
-        writable: false,
-        value: new Subject<unknown>()
-    })
-
-    descriptor.get = () => target[name]
-    
-}
-
-export function OnChannel(name: string) {
-
-    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-
-        Bus.channel( name ).subscribe( { next: descriptor.value } )
-        console.log( target, propertyKey, descriptor )
-    };
-  }
-*/

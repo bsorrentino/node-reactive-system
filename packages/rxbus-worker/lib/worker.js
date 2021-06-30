@@ -25,7 +25,7 @@ var WorkerModule = /** @class */ (function () {
             worker_channel$_1.observable.subscribe({
                 next: (function (v) { return console.log(v); })
             });
-            rxbus_1.Bus.channel(this.name).observe(exports.Subjects.Run).subscribe({
+            rxbus_1.rxbus.observe(this.name, exports.Subjects.Run).subscribe({
                 next: (function (v) { return worker_channel$_1.subject.next(v.data); })
             });
         }
