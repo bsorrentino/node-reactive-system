@@ -72,7 +72,6 @@
     "entryPoints": [
       "packages/bus-core/lib/index.d.ts",
       "packages/rxbus/src/index.ts",
-      "packages/rxbus/src/bus.ts",
       "packages/rxmq/ts/channel.d.ts"
     ],
     "out": "docs"
