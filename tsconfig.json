@@ -74,7 +74,8 @@
       "packages/rxbus/src/index.ts",
       "packages/rxmq/ts/channel.d.ts"
     ],
-    "out": "docs"
+    "out": "docs",
+    "excludePrivate": true
   }
   
 }
