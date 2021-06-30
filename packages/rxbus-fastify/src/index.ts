@@ -1,4 +1,4 @@
-import { Bus, rxbus } from '@soulsoftware/rxbus'
+import { rxbus } from '@soulsoftware/rxbus'
 import * as bus  from '@soulsoftware/bus-core'
 import 'fastify-websocket'
 import '@soulsoftware/rxmq'
@@ -83,7 +83,7 @@ class FastifyModule implements bus.Module<Config> {
     onRegister( config?:Config ) {
         if( config ) this.config = config
     
-        const httpChannel$ = Bus.replyChannel<RequestData,ResponseData>( this.name )
+        const { request: httpRequest } = rxbus.replyChannel<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -91,7 +91,7 @@ class FastifyModule implements bus.Module<Config> {
             
             const cmd = rxp.exec(request.url)
             if( cmd ) {
-                httpChannel$.request( { topic: cmd[1], data:request } )
+                httpRequest( { topic: cmd[1], data:request } )
                     .pipe( timeout( this.config.requestTimeout || 5000) )
                     .subscribe({ 
                         next: data => reply.send(data),
@@ -113,7 +113,7 @@ class FastifyModule implements bus.Module<Config> {
         //
         // Listen for adding Web Socket channel
         //
-        rxbus.observeAndReply<string,boolean>(this.name,Subjects.WSAdd)
+        rxbus.reply<string,boolean>(this.name,Subjects.WSAdd)
                 .subscribe( ({data,replySubject}) => {
                     console.log( 'request add channel ', data )
                     this.setupWebSocketChannel( data )

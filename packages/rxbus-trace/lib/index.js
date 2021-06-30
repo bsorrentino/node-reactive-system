@@ -47,7 +47,7 @@ var TraceModule = /** @class */ (function () {
             this_1._subscriptions.push(rxbus_1.rxbus.observe(c, "*").subscribe({ next: trace }));
         };
         var this_1 = this;
-        for (var _i = 0, _a = rxbus_1.Bus.channelNames; _i < _a.length; _i++) {
+        for (var _i = 0, _a = rxbus_1.rxbus.channelNames(); _i < _a.length; _i++) {
             var c = _a[_i];
             _loop_1(c);
         }

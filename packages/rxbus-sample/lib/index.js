@@ -49,15 +49,15 @@ function runWorkerModule() {
 function main() {
     var e_1, _a;
     console.log('start');
-    rxbus_1.Bus.modules.register(rxbus_trace_1.Module);
-    rxbus_1.Bus.modules.register(rxbus_timer_1.Module);
-    rxbus_1.Bus.modules.register(rxbus_worker_1.Module);
-    rxbus_1.Bus.modules.register(rxbus_fastify_1.Module, {
+    rxbus_1.rxbus.modules.register(rxbus_trace_1.Module);
+    rxbus_1.rxbus.modules.register(rxbus_timer_1.Module);
+    rxbus_1.rxbus.modules.register(rxbus_worker_1.Module);
+    rxbus_1.rxbus.modules.register(rxbus_fastify_1.Module, {
         port: 8888,
         requestTimeout: 5000
     });
     try {
-        for (var _b = __values(rxbus_1.Bus.modules.names), _c = _b.next(); !_c.done; _c = _b.next()) {
+        for (var _b = __values(rxbus_1.rxbus.modules.names), _c = _b.next(); !_c.done; _c = _b.next()) {
             var module_1 = _c.value;
             console.log("\"" + module_1 + "\"", 'registerd');
         }
@@ -71,6 +71,6 @@ function main() {
     }
     routeTimerToWS();
     runWorkerModule();
-    rxbus_1.Bus.modules.start();
+    rxbus_1.rxbus.modules.start();
 }
 main();

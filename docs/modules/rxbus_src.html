@@ -70,50 +70,83 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>References</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="rxbus_src.html#bus" class="tsd-kind-icon">Bus</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="rxbus_src.html#busengine" class="tsd-kind-icon">Bus<wbr>Engine</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="rxbus_src.html#busmodules" class="tsd-kind-icon">Bus<wbr>Modules</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="rxbus_src.html#moduleinfo" class="tsd-kind-icon">Module<wbr>Info</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="rxbus_src.html#workerchannel" class="tsd-kind-icon">Worker<wbr>Channel</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Namespaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-namespace tsd-parent-kind-module"><a href="rxbus_src.rxbus.html" class="tsd-kind-icon">rxbus</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="rxbus_src.html#moduleinfo" class="tsd-kind-icon">Module<wbr>Info</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="rxbus_src.html#workerchannel" class="tsd-kind-icon">Worker<wbr>Channel</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>References</h2>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
-					<a name="bus" class="tsd-anchor"></a>
-					<h3>Bus</h3>
-					Re-exports <a href="rxbus_src_bus.html#bus">Bus</a>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
-					<a name="busengine" class="tsd-anchor"></a>
-					<h3>Bus<wbr>Engine</h3>
-					Re-exports <a href="../classes/rxbus_src_bus.busengine.html">BusEngine</a>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
-					<a name="busmodules" class="tsd-anchor"></a>
-					<h3>Bus<wbr>Modules</h3>
-					Re-exports <a href="../classes/rxbus_src_bus.busmodules.html">BusModules</a>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="moduleinfo" class="tsd-anchor"></a>
 					<h3>Module<wbr>Info</h3>
-					Re-exports <a href="rxbus_src_bus.html#moduleinfo">ModuleInfo</a>
+					<div class="tsd-signature tsd-kind-icon">Module<wbr>Info<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>module<span class="tsd-signature-symbol">: </span><a href="bus_core_lib.html#module" class="tsd-signature-type" data-tsd-kind="Type alias">Module</a><span class="tsd-signature-symbol">; </span>status<span class="tsd-signature-symbol">: </span><a href="../interfaces/bus_core_lib.modulestatus.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleStatus</a><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/339c1c6/packages/rxbus/src/index.ts#L15">rxbus/src/index.ts:15</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Module information</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>module<span class="tsd-signature-symbol">: </span><a href="bus_core_lib.html#module" class="tsd-signature-type" data-tsd-kind="Type alias">Module</a></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>status<span class="tsd-signature-symbol">: </span><a href="../interfaces/bus_core_lib.modulestatus.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleStatus</a></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="workerchannel" class="tsd-anchor"></a>
 					<h3>Worker<wbr>Channel</h3>
-					Re-exports <a href="rxbus_src_bus.html#workerchannel">WorkerChannel</a>
+					<div class="tsd-signature tsd-kind-icon">Worker<wbr>Channel&lt;IN, OUT&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>observable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">OUT</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>subject<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Subject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IN</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/339c1c6/packages/rxbus/src/index.ts#L10">rxbus/src/index.ts:10</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Worker Channel</p>
+						</div>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>IN</h4>
+						</li>
+						<li>
+							<h4>OUT</h4>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>observable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">OUT</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>subject<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Subject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IN</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -130,28 +163,16 @@
 						<a href="rxbus_src.html">rxbus/src</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="rxbus_src_bus.html">rxbus/src/bus</a>
-					</li>
-					<li class=" tsd-kind-module">
 						<a href="rxmq_ts_channel.html">rxmq/ts/channel</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="rxbus_src.html#bus" class="tsd-kind-icon">Bus</a>
-					</li>
-					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="rxbus_src.html#busengine" class="tsd-kind-icon">Bus<wbr>Engine</a>
-					</li>
-					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="rxbus_src.html#busmodules" class="tsd-kind-icon">Bus<wbr>Modules</a>
-					</li>
-					<li class=" tsd-kind-reference tsd-parent-kind-module">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="rxbus_src.html#moduleinfo" class="tsd-kind-icon">Module<wbr>Info</a>
 					</li>
-					<li class=" tsd-kind-reference tsd-parent-kind-module">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="rxbus_src.html#workerchannel" class="tsd-kind-icon">Worker<wbr>Channel</a>
 					</li>
 				</ul>
@@ -165,16 +186,12 @@
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 			</ul>
 		</div>
 	</div>

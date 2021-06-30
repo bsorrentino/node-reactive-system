@@ -1,12 +1,5 @@
-import { Bus } from '../src/index'
+import { rxbus } from '../src/index'
 import * as bus from '@soulsoftware/bus-core'
-import { Subject, Subscription } from 'rxjs'
-
-it( 'test bus creation', () => {
-
-    expect( Bus ).not.toBeNull()
-
-})
 
 
 class MyModule implements bus.Module {
@@ -27,7 +20,7 @@ it( 'test channel decorator creation', () => {
 
     const m = new MyModule()
 
-    Bus.modules.register( m )
+    rxbus.modules.register( m )
 
     const channelUniqueId = [
         Symbol('worker'),
