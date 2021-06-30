@@ -21,12 +21,12 @@ var WorkerModule = /** @class */ (function () {
             console.log('Thread Worker file:', __filename);
             // this._worker = new Worker( './node_modules/@soulsoftware/rxbus-worker/lib/worker.js', {})
             this._worker = new worker_threads_1.Worker(__filename, {});
-            var worker_channel$_1 = rxbus_1.Bus.workerChannel(this._worker);
-            worker_channel$_1.observable.subscribe({
+            var _a = rxbus_1.rxbus.workerChannel(this._worker), observable = _a.observable, subject_1 = _a.subject;
+            observable.subscribe({
                 next: (function (v) { return console.log(v); })
             });
             rxbus_1.rxbus.observe(this.name, exports.Subjects.Run).subscribe({
-                next: (function (v) { return worker_channel$_1.subject.next(v.data); })
+                next: (function (v) { return subject_1.next(v.data); })
             });
         }
         else {

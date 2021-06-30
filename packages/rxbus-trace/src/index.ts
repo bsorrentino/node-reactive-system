@@ -1,5 +1,5 @@
 import * as bus from '@soulsoftware/bus-core'
-import { Bus, rxbus } from '@soulsoftware/rxbus'
+import { rxbus } from '@soulsoftware/rxbus'
 import { ChannelEvent } from '@soulsoftware/rxmq'
 import { Subscription } from 'rxjs'
 
@@ -44,7 +44,7 @@ class TraceModule implements bus.Module {
     onStart() {
         console.log( this.name, 'start' )
 
-        for( let c of Bus.channelNames ) {
+        for( let c of rxbus.channelNames() ) {
             
             console.log( `trace: subscribe on ${c}`)
 

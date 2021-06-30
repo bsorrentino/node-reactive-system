@@ -1,6 +1,6 @@
 import {filter} from 'rxjs/operators'
 
-import { Bus, rxbus } from '@soulsoftware/rxbus'
+import { rxbus } from '@soulsoftware/rxbus'
 import { 
     Module as FastifyModule, 
     Subjects as FastifySubjects,
@@ -57,16 +57,16 @@ function main() {
 
     console.log( 'start' )
 
-    Bus.modules.register( TraceModule )
-    Bus.modules.register( TimerModule )
-    Bus.modules.register( WorkerModule )
-    Bus.modules.register<FastifyConfig>( FastifyModule, 
+    rxbus.modules.register( TraceModule )
+    rxbus.modules.register( TimerModule )
+    rxbus.modules.register( WorkerModule )
+    rxbus.modules.register<FastifyConfig>( FastifyModule, 
         { 
             port:8888, 
             requestTimeout:5000
         })
 
-    for( let module of Bus.modules.names ) {
+    for( let module of rxbus.modules.names ) {
         console.log( `"${module}"`, 'registerd' )
     }
 
@@ -74,7 +74,7 @@ function main() {
 
     runWorkerModule()
     
-    Bus.modules.start()
+    rxbus.modules.start()
 }
 
 main()
