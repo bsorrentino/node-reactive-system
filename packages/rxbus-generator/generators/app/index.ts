@@ -23,20 +23,17 @@ export default class MainGenerator extends yo<Options> {
       {
         type: 'list',
         name: 'subgen',
-        message: 'Which kind of template dow you want?',
+        message: 'Which kind of template do you want?',
         choices: [
           {
             name: 'Generic',
-            disabled: 'Unavailable at this time',
+            value: '@soulsoftware/rxbus-generator:generic',
+            // disabled: 'Unavailable at this time',
           },
           { 
-            name: 'Detail List (Grid View)',
-            value: '@soulsoftware/pcf-fluentui:detaillist'
-          },
-          { 
-            name: 'Text Field',
-            value: '@soulsoftware/pcf-fluentui:textfield'
-          },
+            name: 'Worker',
+            value: '@soulsoftware/rxbus-generator:worker'
+          }
         ]
       }
     ];

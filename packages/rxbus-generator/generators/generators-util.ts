@@ -102,29 +102,29 @@ export const componentPrompts:YO.Questions = [
 
     
 
-    export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions> extends YO<T> {
+export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions> extends YO<T> {
 
-              
-        copyTemplateFromRoot( config:ComponentConfig ) {
-            const isEmpty = ( value:string ) => (value===undefined || value===null || value.trim().length === 0)
+            
+    copyTemplateFromRoot( config:ComponentConfig ) {
+        const isEmpty = ( value:string ) => (value===undefined || value===null || value.trim().length === 0)
 
-            assert.ok( config.PCF, 'PCF configuration is not set' )
-            assert.ok( !isEmpty(config.PCF.Constructor) , 'PCF.Constructor not set!' )
+        assert.ok( config.PCF, 'PCF configuration is not set' )
+        assert.ok( !isEmpty(config.PCF.Constructor) , 'PCF.Constructor not set!' )
 
-            const root = this.sourceRoot()
-            this.sourceRoot( path.join( root, '..', '..', 'app', 'templates' ) )
-        
-            const solutionTpl = path.join('Solution', 'Other', 'Solution.xml')
-            this.fs.copyTpl( 
-            this.templatePath( solutionTpl ),
-            this.destinationPath( path.join(config.PCF.Name, solutionTpl) ), config )
-        
-            // const manifestTpl = path.join('src', 'ControlManifest.Input.xml')
-            // this.fs.copyTpl( 
-            // this.templatePath( manifestTpl ),
-            // this.destinationPath( path.join(config.PCF.Name, manifestTpl) ), config )
-        
-            this.sourceRoot( root )
-        
-        }
+        const root = this.sourceRoot()
+        this.sourceRoot( path.join( root, '..', '..', 'app', 'templates' ) )
+    
+        const solutionTpl = path.join('Solution', 'Other', 'Solution.xml')
+        this.fs.copyTpl( 
+        this.templatePath( solutionTpl ),
+        this.destinationPath( path.join(config.PCF.Name, solutionTpl) ), config )
+    
+        // const manifestTpl = path.join('src', 'ControlManifest.Input.xml')
+        // this.fs.copyTpl( 
+        // this.templatePath( manifestTpl ),
+        // this.destinationPath( path.join(config.PCF.Name, manifestTpl) ), config )
+    
+        this.sourceRoot( root )
+    
     }
+}
