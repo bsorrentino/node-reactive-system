@@ -34,23 +34,23 @@ export default class TextFieldTemplateGenerator extends util.CommonGenerator<Opt
    */
   public writing() {
 
-    const pcfconfig = this._config.PCF!
+    const config = this._config.Module!
 
-    pcfconfig.Constructor = "TextFieldTemplate"
-    this.fs.copyTpl( 
-      this.templatePath(),
-      this.destinationPath(pcfconfig.Name),
-      this._config
-    );
+    // pcfconfig.Constructor = "TextFieldTemplate"
+    // this.fs.copyTpl( 
+    //   this.templatePath(),
+    //   this.destinationPath(pcfconfig.Name),
+    //   this._config
+    // );
 
-    super.copyTemplateFromRoot( this._config )
+    // super.copyTemplateFromRoot( this._config )
       
   }
 
   public install() {
-    const pcfconfig = this._config.PCF!
+    const config = this._config.Module!
 
-    this.destinationRoot( pcfconfig.Name )
+    this.destinationRoot( config.Name )
     this.installDependencies({ npm: true, bower: false });
   
   }

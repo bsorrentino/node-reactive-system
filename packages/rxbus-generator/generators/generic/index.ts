@@ -34,24 +34,24 @@ export default class DetailListGenerator extends util.CommonGenerator<Options> {
    */
   public writing() {
 
-    const pcfconfig = this._config.PCF!
+    const config = this._config.Module!
 
-    pcfconfig.Constructor = "DetailListGridTemplate"
+    // pcfconfig.Constructor = "DetailListGridTemplate"
 
-    this.fs.copyTpl( 
-      this.templatePath( 'DetailListGridTemplate'),
-      this.destinationPath(pcfconfig.Name),
-      this._config
-    );
+    // this.fs.copyTpl( 
+    //   this.templatePath( 'DetailListGridTemplate'),
+    //   this.destinationPath(pcfconfig.Name),
+    //   this._config
+    // );
 
-    super.copyTemplateFromRoot( this._config )
+    // super.copyTemplateFromRoot( this._config )
       
   }
 
   public install() {
-    const pcfconfig = this._config.PCF!
+    const config = this._config.Module!
 
-    this.destinationRoot( pcfconfig.Name )
+    this.destinationRoot( config.Name )
     this.installDependencies({ npm: true, bower: false });
   
   }

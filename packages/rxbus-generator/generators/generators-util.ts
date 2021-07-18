@@ -62,7 +62,7 @@ export const componentPrompts:YO.Questions = [
 export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions> extends YO<T> {
 
             
-    // copyTemplateFromRoot( config:ModuleConfig ) {
+    copyTemplateFromRoot( config:ModuleConfig ) {
 
     //     assert.ok( config.Module, 'Module configuration is not set' )
 
@@ -76,5 +76,5 @@ export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions
     
     //     this.sourceRoot( root )
     
-    // }
+    }
 }

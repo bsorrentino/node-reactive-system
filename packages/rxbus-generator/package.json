@@ -18,6 +18,7 @@
     "url": "git+https://github.com/soulsoftware/node-message-bus.git"
   },
   "scripts": {
+    "build": "tsc --project ."
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
