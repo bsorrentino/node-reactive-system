@@ -6,6 +6,8 @@
   "scripts": {
     "build": "lerna run build",
     "start":"lerna run start --scope=rxbus-sample --stream",
+    "clean":"lerna clean -y",
+    "bootstrap": "lerna bootstrap",
     "doc":"typedoc"
   },
   "keywords": [],

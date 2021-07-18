@@ -7,11 +7,11 @@ import * as path from 'path'
 type Options = YO.GeneratorOptions
 
 
-type Config = util.ComponentConfig
+type Config = util.ModuleConfig
 
 export default class TextFieldTemplateGenerator extends util.CommonGenerator<Options> {
 
-  private _config:util.ComponentConfig = {}
+  private _config:util.ModuleConfig = {}
 
   constructor(args: string|string[], options: Options) {
 		super(args, options)
