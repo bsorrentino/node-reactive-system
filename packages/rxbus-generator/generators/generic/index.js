@@ -28,7 +28,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const util = __importStar(require("../generators-util"));
+const util = __importStar(require("../generator-utils"));
 class DetailListGenerator extends util.CommonGenerator {
     constructor(args, options) {
         super(args, options);
@@ -49,18 +49,12 @@ class DetailListGenerator extends util.CommonGenerator {
      */
     writing() {
         const config = this._config.Module;
-        // pcfconfig.Constructor = "DetailListGridTemplate"
-        // this.fs.copyTpl( 
-        //   this.templatePath( 'DetailListGridTemplate'),
-        //   this.destinationPath(pcfconfig.Name),
-        //   this._config
-        // );
-        // super.copyTemplateFromRoot( this._config )
+        this.fs.copyTpl(this.templatePath(), this.destinationPath(config.Name), this._config);
     }
     install() {
         const config = this._config.Module;
         this.destinationRoot(config.Name);
-        this.installDependencies({ npm: true, bower: false });
+        // this.installDependencies({ npm: true, bower: false });
     }
     end() {
     }

@@ -1,0 +1,33 @@
+{
+  "name": "@soulsoftware/rxbus-<%=Module.Name%>",
+  "version": "<%= Module.Version %>",
+  "description": "<%= Module.Description %>",
+  "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
+  "homepage": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "license": "MIT",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "tsc --project ."
+  },
+  "bugs": {
+    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+  },
+  "dependencies": {
+    "@soulsoftware/bus-core": "*",
+    "@soulsoftware/rxbus": "*",
+    "rxjs": "^7.0.0"
+  }
+}

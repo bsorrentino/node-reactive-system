@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import yosay from 'yosay'
 import yo = require('yeoman-generator')
-import * as util from '../generators-util' 
+import * as util from '../generator-utils' 
 import * as path from 'path'
 
 type Options = yo.GeneratorOptions
@@ -36,15 +36,12 @@ export default class DetailListGenerator extends util.CommonGenerator<Options> {
 
     const config = this._config.Module!
 
-    // pcfconfig.Constructor = "DetailListGridTemplate"
+    this.fs.copyTpl( 
+      this.templatePath(),
+      this.destinationPath(config.Name),
+      this._config
+    );
 
-    // this.fs.copyTpl( 
-    //   this.templatePath( 'DetailListGridTemplate'),
-    //   this.destinationPath(pcfconfig.Name),
-    //   this._config
-    // );
-
-    // super.copyTemplateFromRoot( this._config )
       
   }
 
@@ -52,7 +49,7 @@ export default class DetailListGenerator extends util.CommonGenerator<Options> {
     const config = this._config.Module!
 
     this.destinationRoot( config.Name )
-    this.installDependencies({ npm: true, bower: false });
+    // this.installDependencies({ npm: true, bower: false });
   
   }
 

@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import yosay from 'yosay'
 import YO = require('yeoman-generator')
-import * as util from '../generators-util' 
+import * as util from '../generator-utils' 
 import * as path from 'path'
 
 type Options = YO.GeneratorOptions

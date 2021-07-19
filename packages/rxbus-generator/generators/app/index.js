@@ -27,20 +27,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const util = __importStar(require("../generators-util"));
-class TextFieldTemplateGenerator extends util.CommonGenerator {
+const chalk_1 = __importDefault(require("chalk"));
+const yosay_1 = __importDefault(require("yosay"));
+const yo = require("yeoman-generator");
+const util = __importStar(require("../generator-utils"));
+class MainGenerator extends yo {
     constructor(args, options) {
         super(args, options);
-        this._config = {};
+        this.log(yosay_1.default(`Welcome to the ${chalk_1.default.red(util.GENERATOR_NAME)}!`));
     }
     prompting() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Have Yeoman greet the user.
-            const prompts = util.componentPrompts;
+            const prompts = [
+                {
+                    type: 'list',
+                    name: 'subgen',
+                    message: 'Which kind of template do you want?',
+                    choices: [
+                        {
+                            name: 'Generic',
+                            value: '@soulsoftware/rxbus:generic',
+                            // disabled: 'Unavailable at this time',
+                        },
+                        {
+                            name: 'Worker',
+                            value: '@soulsoftware/rxbus:worker',
+                            disabled: 'Unavailable at this time'
+                        }
+                    ]
+                }
+            ];
             return this.prompt(prompts).then((props) => {
-                // To access props later use this.props.someAnswer;
-                this._config = props;
+                this.composeWith(props.subgen, {});
             });
         });
     }
@@ -48,22 +70,11 @@ class TextFieldTemplateGenerator extends util.CommonGenerator {
      *
      */
     writing() {
-        const config = this._config.Module;
-        // pcfconfig.Constructor = "TextFieldTemplate"
-        // this.fs.copyTpl( 
-        //   this.templatePath(),
-        //   this.destinationPath(pcfconfig.Name),
-        //   this._config
-        // );
-        // super.copyTemplateFromRoot( this._config )
     }
     install() {
-        const config = this._config.Module;
-        this.destinationRoot(config.Name);
-        this.installDependencies({ npm: true, bower: false });
     }
     end() {
     }
 }
-exports.default = TextFieldTemplateGenerator;
+exports.default = MainGenerator;
 ;

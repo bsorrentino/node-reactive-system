@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import { Separator, Answers } from 'inquirer'
 import yosay from 'yosay'
 import yo = require('yeoman-generator')
-import * as util from '../generators-util' 
+import * as util from '../generator-utils' 
 
 type Config = Partial<{ 
   subgen:string
@@ -27,12 +27,13 @@ export default class MainGenerator extends yo<Options> {
         choices: [
           {
             name: 'Generic',
-            value: '@soulsoftware/rxbus-generator:generic',
+            value: '@soulsoftware/rxbus:generic',
             // disabled: 'Unavailable at this time',
           },
           { 
             name: 'Worker',
-            value: '@soulsoftware/rxbus-generator:worker'
+            value: '@soulsoftware/rxbus:worker',
+            disabled: 'Unavailable at this time'
           }
         ]
       }
