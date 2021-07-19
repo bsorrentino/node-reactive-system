@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommonGenerator = exports.componentPrompts = exports.GENERATOR_NAME = void 0;
 const YO = require("yeoman-generator");
-exports.GENERATOR_NAME = 'rxbus-generator';
+exports.GENERATOR_NAME = 'generator-rxbus';
 const validateName = (minLenght = 1) => {
     return (input) => {
         const len = input.trim().length;

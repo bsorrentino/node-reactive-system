@@ -15,7 +15,7 @@ export default class MainGenerator extends yo<Options> {
 
   constructor(args: string|string[], options: Options) {
 		super(args, options)
-    this.log(yosay(`Welcome to the ${chalk.red(util.GENERATOR_NAME)}!`))
+    this.log( yosay(`Welcome to the ${chalk.red(util.GENERATOR_NAME)}`) )
 	}
 
   public async prompting() {

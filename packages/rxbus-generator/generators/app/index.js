@@ -38,7 +38,7 @@ const util = __importStar(require("../generator-utils"));
 class MainGenerator extends yo {
     constructor(args, options) {
         super(args, options);
-        this.log(yosay_1.default(`Welcome to the ${chalk_1.default.red(util.GENERATOR_NAME)}!`));
+        this.log(yosay_1.default(`Welcome to the ${chalk_1.default.red(util.GENERATOR_NAME)}`));
     }
     prompting() {
         return __awaiter(this, void 0, void 0, function* () {

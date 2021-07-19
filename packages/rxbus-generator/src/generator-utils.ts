@@ -2,7 +2,7 @@ import YO = require('yeoman-generator')
 import * as path from 'path'
 import assert from 'assert'
 
-export const GENERATOR_NAME = 'rxbus-generator'
+export const GENERATOR_NAME = 'generator-rxbus'
 
 
 type TemplateCommonOptions = {
@@ -51,8 +51,7 @@ export const componentPrompts:YO.Questions = [
     {
         name: 'Module.Description',
         message: 'Module description:',
-        default: ( answers:ModuleConfig ) => 
-            `The ${answers.Module!.Name} Module` 
+        default: ( answers:ModuleConfig ) => `The ${answers.Module!.Name} Module` 
     },
   
 ]
@@ -60,7 +59,6 @@ export const componentPrompts:YO.Questions = [
     
 
 export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions> extends YO<T> {
-
             
     copyTemplateFromRoot( config:ModuleConfig ) {
 
@@ -77,4 +75,6 @@ export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions
     //     this.sourceRoot( root )
     
     }
+
+    
 }

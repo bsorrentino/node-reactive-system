@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -28,36 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const util = __importStar(require("../generator-utils"));
-class DetailListGenerator extends util.CommonGenerator {
+const generator_utils_1 = require("../generator-utils");
+class GenericModuleGenerator extends generator_utils_1.CommonGenerator {
     constructor(args, options) {
         super(args, options);
-        this._config = {};
+        this.params = {};
     }
     prompting() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Have Yeoman greet the user.
-            const prompts = util.componentPrompts;
-            return this.prompt(prompts).then((props) => {
-                // To access props later use this.props.someAnswer;
-                this._config = props;
-            });
+            this.params = yield this.prompt(generator_utils_1.componentPrompts);
         });
     }
     /**
      *
      */
     writing() {
-        const config = this._config.Module;
-        this.fs.copyTpl(this.templatePath(), this.destinationPath(config.Name), this._config);
+        const { Name } = this.params.Module;
+        this.fs.copyTpl(this.sourceRoot(), this.destinationPath(Name), this.params);
     }
     install() {
-        const config = this._config.Module;
-        this.destinationRoot(config.Name);
+        const { Name } = this.params.Module;
+        this.destinationRoot(Name);
+        // this.addDependencies( { rxjs:'7.0.0'} )
         // this.installDependencies({ npm: true, bower: false });
+        this.spawnCommandSync('npm', ['install']);
     }
     end() {
     }
 }
-exports.default = DetailListGenerator;
+exports.default = GenericModuleGenerator;
 ;

@@ -1,56 +1,44 @@
-import chalk from 'chalk'
-import yosay from 'yosay'
-import yo = require('yeoman-generator')
-import * as util from '../generator-utils' 
-import * as path from 'path'
+import YO = require('yeoman-generator')
+import { CommonGenerator, ModuleConfig, componentPrompts } from '../generator-utils' 
 
-type Options = yo.GeneratorOptions
+type Options = YO.GeneratorOptions
 
+export default class GenericModuleGenerator extends CommonGenerator<Options> {
 
-type Config = util.ModuleConfig
-
-export default class DetailListGenerator extends util.CommonGenerator<Options> {
-
-  private _config:util.ModuleConfig = {}
+  private params:ModuleConfig = {}
 
   constructor(args: string|string[], options: Options) {
 		super(args, options)
 	}
 
   public async prompting() {
-    // Have Yeoman greet the user.
-
-    const prompts = util.componentPrompts
-
-    return this.prompt(prompts).then( (props:Config) => {
-      // To access props later use this.props.someAnswer;
-      
-      this._config = props
-    });
+    this.params = await this.prompt(componentPrompts)
   }
 
   /**
    * 
    */
   public writing() {
-
-    const config = this._config.Module!
+  
+    const { Name } = this.params.Module!
 
     this.fs.copyTpl( 
-      this.templatePath(),
-      this.destinationPath(config.Name),
-      this._config
+      this.sourceRoot(),
+      this.destinationPath(Name),
+      this.params
     );
 
       
   }
 
   public install() {
-    const config = this._config.Module!
+    const { Name } = this.params.Module!
 
-    this.destinationRoot( config.Name )
+    this.destinationRoot( Name )
+    // this.addDependencies( { rxjs:'7.0.0'} )
     // this.installDependencies({ npm: true, bower: false });
   
+    this.spawnCommandSync( 'npm', ['install'])
   }
 
   public end() {
