@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "lerna run build",
-    "start":"lerna run start --scope=rxbus-sample --stream",
-    "clean":"lerna clean -y",
+    "start": "lerna run start --scope=rxbus-sample --stream",
+    "clean": "lerna clean -y",
     "bootstrap": "lerna bootstrap",
-    "doc":"typedoc"
+    "doc": "typedoc"
   },
   "keywords": [],
   "author": "bsorrentino <bartolomeo.sorrentino@gmail.com> (http://soulsoftware-bsc.blogspot.it/)",
