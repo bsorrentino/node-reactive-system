@@ -1,12 +1,12 @@
 {
-  "name": "@soulsoftware/rxbus-timer",
-  "version": "0.6.0",
-  "description": "> TODO: description",
+  "name": "@soulsoftware/rxbus-<%= Module.Name.toLowerCase() %>",
+  "version": "<%= Module.Version %>",
+  "description": "<%= Module.Description %>",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
-  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "homepage": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "license": "ISC",
+  "license": "MIT",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -20,16 +20,14 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "tsc src/*.ts --declaration --outDir ./lib",
-    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
+    "build": "tsc --project ."
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.6.0",
-    "@soulsoftware/rxbus": "^0.6.0",
+    "@soulsoftware/bus-core": "*",
+    "@soulsoftware/rxbus": "*",
     "rxjs": "^7.0.0"
-  },
-  "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"
+  }
 }

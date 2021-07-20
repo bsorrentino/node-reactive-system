@@ -1,6 +1,6 @@
 {
   "name": "@soulsoftware/rxbus-trace",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -27,9 +27,9 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.5.0",
-    "@soulsoftware/rxbus": "^0.5.0",
-    "@soulsoftware/rxmq": "^0.5.0",
+    "@soulsoftware/bus-core": "^0.6.0",
+    "@soulsoftware/rxbus": "^0.6.0",
+    "@soulsoftware/rxmq": "^0.6.0",
     "rxjs": "^7.0.0"
   },
   "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"

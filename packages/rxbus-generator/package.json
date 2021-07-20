@@ -1,0 +1,37 @@
+{
+  "name": "@soulsoftware/generator-rxbus",
+  "version": "0.6.0",
+  "description": "> TODO: description",
+  "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
+  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "license": "MIT",
+  "main": "generators/app/index.js",
+  "files": [
+    "app",
+    "generic",
+    "worker"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+  },
+  "scripts": {
+    "build": "tsc --project ."
+  },
+  "bugs": {
+    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+  },
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "yeoman-generator": "^5.4.0",
+    "yosay": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/yeoman-assert": "^3.1.1",
+    "@types/yeoman-generator": "^5.2.1",
+    "@types/yeoman-test": "^4.0.2",
+    "@types/yosay": "^2.0.0",
+    "yeoman-assert": "^3.1.1",
+    "yeoman-test": "^6.2.0"
+  }
+}
