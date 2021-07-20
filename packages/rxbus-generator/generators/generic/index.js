@@ -13,26 +13,38 @@ const generator_utils_1 = require("../generator-utils");
 class GenericModuleGenerator extends generator_utils_1.CommonGenerator {
     constructor(args, options) {
         super(args, options);
-        this.params = {};
     }
     prompting() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.params = yield this.prompt(generator_utils_1.componentPrompts);
+            const questions = [...generator_utils_1.componentQuestions,
+                {
+                    name: 'installDeps',
+                    message: 'install Dependencies',
+                    type: 'confirm'
+                }
+            ];
+            this.answers = (yield this.prompt(questions));
+            this.answers.Module.Name = generator_utils_1.capitalize(this.answers.Module.Name);
         });
     }
     /**
      *
      */
     writing() {
-        const { Name } = this.params.Module;
-        this.fs.copyTpl(this.sourceRoot(), this.destinationPath(Name), this.params);
+        if (!this.answers)
+            return;
+        const { Name } = this.answers.Module;
+        this.fs.copyTpl(this.sourceRoot(), this.destinationPath(Name.toLowerCase()), this.answers);
     }
     install() {
-        const { Name } = this.params.Module;
+        if (!this.answers)
+            return;
+        const { Module: { Name }, installDeps } = this.answers;
         this.destinationRoot(Name);
         // this.addDependencies( { rxjs:'7.0.0'} )
         // this.installDependencies({ npm: true, bower: false });
-        this.spawnCommandSync('npm', ['install']);
+        if (installDeps)
+            this.spawnCommandSync('npm', ['install']);
     }
     end() {
     }

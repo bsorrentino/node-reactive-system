@@ -1,51 +1,54 @@
 import * as bus from '@soulsoftware/bus-core'
 import { rxbus } from '@soulsoftware/rxbus'
-import { interval, Subscription } from 'rxjs'
-// import { tap } from 'rxjs/operators'
+import {  Subscription, of } from 'rxjs'
 
 /**
  * Configuration parameters
  */
 export interface Config extends bus.ModuleConfiguration {
-    /**
-     * The interval size in milliseconds.
-     * 
-     * default 1000
-     */
-    period: number
-
+    // custom configuration parameters
 }
 
 /**
- *  Tick    = 'TICK'
+ *  Event    = 'GENERIC_EVENT'
  */
 export const Subjects = {
-    Tick: 'TICK'
+    Event: 'GENERIC_EVENT'
 }
 
-class TimerModule implements bus.Module<Config> {
+class <%= Module.Name %>Module implements bus.Module<Config> {
 
-    readonly name = 'TIMER'
+    readonly name = '<%= Module.Name.toUpperCase() %>'
 
     private config: Config = {
-        period: 1000
+        // default configuration   
     }
 
     private _subscription?: Subscription
 
+    /**
+     * register and configure module
+     * 
+     * @param config module configuration
+     */
     onRegister(config?: Config) {
         if (config) this.config = config
     }
 
+    /**
+     *  start 
+     */
     onStart() {
 
-        const emitter$ = rxbus.subject<number>(this.name, Subjects.Tick)
+        // example to setup an emitter
+        const emitter$ = rxbus.subject<string>(this.name, Subjects.Event)
 
-        this._subscription = interval(this.config.period)
-            // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
-            .subscribe(emitter$)
+        this._subscription = of('this is a test for emitting data').subscribe(emitter$)
     }
 
+    /**
+     *  stop
+     */
     onStop() {
         if (this._subscription) {
             this._subscription.unsubscribe()
@@ -55,5 +58,5 @@ class TimerModule implements bus.Module<Config> {
 }
 
 
-export const Module = new TimerModule()
+export const Module = new <%= Module.Name %>Module()
 

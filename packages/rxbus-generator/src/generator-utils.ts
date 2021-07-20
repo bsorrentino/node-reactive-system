@@ -16,13 +16,14 @@ type TemplateCommonOptions = {
 
 
 type TemplateOptions = {
-    Module: TemplateCommonOptions 
+    Module: TemplateCommonOptions
 }
 
-export type ModuleConfig = Partial<TemplateOptions>
+export type ModuleConfig = TemplateOptions
 
 const validateName = ( minLenght:number = 1 ) => {
-    return ( input:string ) => {    const len = input.trim().length
+    return ( input:string ) => {    
+        const len = input.trim().length
         if( len >= minLenght ) return true
         
         return (len ==0 ) ? 
@@ -36,11 +37,15 @@ const validateVersion = ( input:string ) => {
     return 'invalid version format! must be - "(d+).(d+).(d+)"'
 }
 
-export const componentPrompts:YO.Questions = [
+export const capitalize = (value:string) =>  
+                            value.charAt(0).toUpperCase() + value.slice(1)
+
+export const componentQuestions:Array<YO.Question> = [
     {
         name: 'Module.Name',
         message: 'Module name:',
-        validate: validateName()
+        validate: validateName(),
+        transformer: ( input, answer, flags ) => capitalize(input)
     },
     {
         name: 'Module.Version',
@@ -59,7 +64,7 @@ export const componentPrompts:YO.Questions = [
     
 
 export class CommonGenerator<T extends YO.GeneratorOptions = YO.GeneratorOptions> extends YO<T> {
-            
+        
     copyTemplateFromRoot( config:ModuleConfig ) {
 
     //     assert.ok( config.Module, 'Module configuration is not set' )

@@ -1,4 +1,4 @@
-# Module "<%=Module.Name%>" 
+# Module "<%= Module.Name %>" 
 
 
 > <%= Module.Description %>
@@ -7,8 +7,8 @@
 
 ```typescript
 import { 
-    Module as <%=Module.Name%>Module, 
-} from '@soulsoftware/rxbus-<%=Module.Name%>'
+    Module as <%= Module.Name %>Module, 
+} from '@soulsoftware/rxbus-<%= Module.Name.toLowerCase() %>'
 
 // TODO: DEMONSTRATE API
 ```

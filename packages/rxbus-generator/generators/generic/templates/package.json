@@ -1,5 +1,5 @@
 {
-  "name": "@soulsoftware/rxbus-<%=Module.Name%>",
+  "name": "@soulsoftware/rxbus-<%= Module.Name.toLowerCase() %>",
   "version": "<%= Module.Version %>",
   "description": "<%= Module.Description %>",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",

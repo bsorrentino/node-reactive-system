@@ -1,32 +1,34 @@
 import chalk from 'chalk'
 import yosay from 'yosay'
 import YO = require('yeoman-generator')
-import * as util from '../generator-utils' 
+import { capitalize, CommonGenerator, componentQuestions, ModuleConfig } from '../generator-utils' 
 import * as path from 'path'
 
 type Options = YO.GeneratorOptions
 
+type GeneratorConfig = ModuleConfig & { installDeps?:boolean }
 
-type Config = util.ModuleConfig
+export default class TextFieldTemplateGenerator extends CommonGenerator<Options> {
 
-export default class TextFieldTemplateGenerator extends util.CommonGenerator<Options> {
-
-  private _config:util.ModuleConfig = {}
+  private answers?:GeneratorConfig
 
   constructor(args: string|string[], options: Options) {
 		super(args, options)
 	}
 
   public async prompting() {
-    // Have Yeoman greet the user.
 
-    const prompts = util.componentPrompts
+    const questions = [ ...componentQuestions,
+      {
+        name: 'installDeps',
+        message: 'install Dependencies',
+        type:'confirm'
+      }
+    ]
 
-    return this.prompt(prompts).then( (props:Config) => {
-      // To access props later use this.props.someAnswer;
-      
-      this._config = props
-    });
+    this.answers = await this.prompt(questions) as GeneratorConfig
+
+    this.answers.Module.Name = capitalize(this.answers.Module.Name) 
   }
 
   /**
@@ -34,26 +36,20 @@ export default class TextFieldTemplateGenerator extends util.CommonGenerator<Opt
    */
   public writing() {
 
-    const config = this._config.Module!
-
-    // pcfconfig.Constructor = "TextFieldTemplate"
-    // this.fs.copyTpl( 
-    //   this.templatePath(),
-    //   this.destinationPath(pcfconfig.Name),
-    //   this._config
-    // );
-
-    // super.copyTemplateFromRoot( this._config )
       
   }
 
   public install() {
-    const config = this._config.Module!
+    if( !this.answers ) return 
 
-    this.destinationRoot( config.Name )
-    this.installDependencies({ npm: true, bower: false });
+    const { Module: { Name }, installDeps  } = this.answers
+
+    this.destinationRoot( Name )
   
+    if( installDeps )
+      this.spawnCommandSync( 'npm', ['install'])
   }
+  
 
   public end() {
     

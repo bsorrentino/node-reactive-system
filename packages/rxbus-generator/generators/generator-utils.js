@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommonGenerator = exports.componentPrompts = exports.GENERATOR_NAME = void 0;
+exports.CommonGenerator = exports.componentQuestions = exports.capitalize = exports.GENERATOR_NAME = void 0;
 const YO = require("yeoman-generator");
 exports.GENERATOR_NAME = 'generator-rxbus';
 const validateName = (minLenght = 1) => {
@@ -18,11 +18,14 @@ const validateVersion = (input) => {
         return true;
     return 'invalid version format! must be - "(d+).(d+).(d+)"';
 };
-exports.componentPrompts = [
+const capitalize = (value) => value.charAt(0).toUpperCase() + value.slice(1);
+exports.capitalize = capitalize;
+exports.componentQuestions = [
     {
         name: 'Module.Name',
         message: 'Module name:',
-        validate: validateName()
+        validate: validateName(),
+        transformer: (input, answer, flags) => exports.capitalize(input)
     },
     {
         name: 'Module.Version',

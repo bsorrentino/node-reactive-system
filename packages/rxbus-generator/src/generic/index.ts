@@ -1,18 +1,32 @@
 import YO = require('yeoman-generator')
-import { CommonGenerator, ModuleConfig, componentPrompts } from '../generator-utils' 
+import { CommonGenerator, ModuleConfig, componentQuestions, capitalize } from '../generator-utils' 
 
 type Options = YO.GeneratorOptions
 
+type GeneratorConfig = ModuleConfig & { installDeps?:boolean }
+
+
 export default class GenericModuleGenerator extends CommonGenerator<Options> {
 
-  private params:ModuleConfig = {}
+  private answers?:GeneratorConfig 
 
   constructor(args: string|string[], options: Options) {
 		super(args, options)
 	}
 
   public async prompting() {
-    this.params = await this.prompt(componentPrompts)
+
+    const questions = [ ...componentQuestions,
+      {
+        name: 'installDeps',
+        message: 'install Dependencies',
+        type:'confirm'
+      }
+    ]
+
+    this.answers = await this.prompt(questions) as GeneratorConfig
+
+    this.answers.Module.Name = capitalize(this.answers.Module.Name) 
   }
 
   /**
@@ -20,25 +34,31 @@ export default class GenericModuleGenerator extends CommonGenerator<Options> {
    */
   public writing() {
   
-    const { Name } = this.params.Module!
+    if( !this.answers ) return
+
+    const { Name } = this.answers.Module
 
     this.fs.copyTpl( 
       this.sourceRoot(),
-      this.destinationPath(Name),
-      this.params
+      this.destinationPath(Name.toLowerCase()),
+      this.answers
     );
-
+  
       
   }
 
   public install() {
-    const { Name } = this.params.Module!
+
+    if( !this.answers ) return 
+
+    const { Module: { Name }, installDeps  } = this.answers
 
     this.destinationRoot( Name )
     // this.addDependencies( { rxjs:'7.0.0'} )
     // this.installDependencies({ npm: true, bower: false });
   
-    this.spawnCommandSync( 'npm', ['install'])
+    if( installDeps )
+      this.spawnCommandSync( 'npm', ['install'])
   }
 
   public end() {
