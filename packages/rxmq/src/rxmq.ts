@@ -19,7 +19,7 @@ export class Rxmq {
   /**
    * Returns a channel names
    */
-  channelNames() {
+  get channelNames() {
     return Object.keys(this.channels);
   }
 

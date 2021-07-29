@@ -66,7 +66,7 @@ export namespace rxbus {
      * 
      * @returns 
      */    
-    export const channelNames = () => rxmq.channelNames()
+    export const channelNames = () => rxmq.channelNames
 
     /**
      * get or create a standard Channel 
