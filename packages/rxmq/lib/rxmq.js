@@ -16,12 +16,16 @@ var Rxmq = /** @class */ (function () {
     function Rxmq() {
         this.channels = {};
     }
-    /**
-     * Returns a channel names
-     */
-    Rxmq.prototype.channelNames = function () {
-        return Object.keys(this.channels);
-    };
+    Object.defineProperty(Rxmq.prototype, "channelNames", {
+        /**
+         * Returns a channel names
+         */
+        get: function () {
+            return Object.keys(this.channels);
+        },
+        enumerable: false,
+        configurable: true
+    });
     /**
      * Returns a channel for given name
      * @param  {String} name  Channel name

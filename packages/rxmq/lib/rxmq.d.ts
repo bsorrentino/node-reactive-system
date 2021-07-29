@@ -15,7 +15,7 @@ export declare class Rxmq {
     /**
      * Returns a channel names
      */
-    channelNames(): string[];
+    get channelNames(): string[];
     /**
      * Returns a channel for given name
      * @param  {String} name  Channel name

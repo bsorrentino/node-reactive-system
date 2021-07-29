@@ -51,7 +51,7 @@ function main() {
     console.log('start');
     rxbus_1.rxbus.modules.register(rxbus_trace_1.Module);
     rxbus_1.rxbus.modules.register(rxbus_timer_1.Module);
-    //rxbus.modules.register( WorkerModule )
+    rxbus_1.rxbus.modules.register(rxbus_worker_1.Module);
     rxbus_1.rxbus.modules.register(rxbus_fastify_1.Module, {
         port: 8888,
         requestTimeout: 5000
@@ -70,7 +70,7 @@ function main() {
         finally { if (e_1) throw e_1.error; }
     }
     routeTimerToWS();
-    //runWorkerModule()
+    runWorkerModule();
     rxbus_1.rxbus.modules.start();
 }
 main();

@@ -51,7 +51,7 @@ var rxbus;
      *
      * @returns
      */
-    rxbus.channelNames = () => rxmq_1.default.channelNames();
+    rxbus.channelNames = () => rxmq_1.default.channelNames;
     /**
      * get or create a standard Channel
      *
