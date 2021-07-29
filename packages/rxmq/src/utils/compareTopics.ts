@@ -1,10 +1,10 @@
 /**
  * Converts topic to search regex
  * @param  {String} topic   Topic name
- * @return {Regex}          Search regex
+ * @return {String}          Search regex
  * @private
  */
-const topicToRegex = topic =>
+const topicToRegex = (topic: string):string =>
   `^${topic.split('.').reduce((result, segment, index, arr) => {
     let res = '';
     if (arr[index - 1]) {
@@ -29,7 +29,7 @@ const topicToRegex = topic =>
  * should(compareTopics('test.one.two', 'test.#')).equal(true);
  * @private
  */
-const compareTopics = (topic, existingTopic) => {
+export const compareTopics = (topic: string, existingTopic: string) => {
   // if no # or * found, do plain string matching
   if (existingTopic.indexOf('#') === -1 && existingTopic.indexOf('*') === -1) {
     return topic === existingTopic;
@@ -40,5 +40,3 @@ const compareTopics = (topic, existingTopic) => {
   const result = rgx.test(topic);
   return result;
 };
-
-export { compareTopics };

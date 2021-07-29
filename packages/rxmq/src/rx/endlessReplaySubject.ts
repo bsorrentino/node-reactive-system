@@ -10,29 +10,27 @@ import { ReplaySubject } from 'rxjs';
  * The only difference is that EndlessReplaySubject never triggers '.complete()' and
  * does not closes observers on errors (thus allowing to continuously dispatch them).
  */
-class EndlessReplaySubject extends ReplaySubject {
+export class EndlessReplaySubject<T> extends ReplaySubject<T> {
   /**
    * Dummy method override to prevent execution and Observable completion
    * @return {void}
    */
-  complete() {}
+  complete(): void {}
 
   /**
    * Override of error method that prevents stopping that Observer
    * @param  {Error} error  - Error to be dispatched
    * @return {void}
    */
-  error(error) {
+  error(error: any): void {
     // store error
     this.error = error;
     // dispatch to all observers
-    this.observers.forEach(os => {
+    this.observers.forEach((os: any) => {
       // dispatch
       os.error(error);
-      // mark observer as not stopped
+      // mark observer as not stoppedos;
       os.isStopped = false;
     });
   }
 }
-
-export { EndlessReplaySubject };

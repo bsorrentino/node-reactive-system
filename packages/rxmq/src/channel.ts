@@ -1,49 +1,44 @@
-import { AsyncSubject, NEVER } from 'rxjs';
+import { NEVER, Observable, Subject } from 'rxjs';
 import { filter, mergeAll } from 'rxjs/operators';
+
 import { EndlessReplaySubject, EndlessSubject } from './rx/index';
 import { compareTopics, findSubjectByName } from './utils/index';
+
+export type RequestOptions<T,Res> = {
+  topic: string
+  data: T
+  subject?: Subject<Res>
+};
 
 // const channelName = Symbol('channel.name');
 // const channelData = Symbol('channel.data');
 /**
  * Rxmq channel class
+ * 
  */
-class Channel {
-  /**
-   * Represents a new Rxmq channel.
-   * Normally you wouldn't need to instantiate it directly, you'd just work with existing instance.
-   * @constructor
-   * @return {void}
-   */
-  constructor() {
-    /**
-     * Internal set of utilities
-     * @type {Object}
-     * @private
-     */
-    this.utils = {
-      findSubjectByName,
-      compareTopics,
-    };
+export class BaseChannel<Req,Res,Event> {
 
-    /**
-     * Instances of subjects
-     * @type {Array}
-     * @private
-     */
-    this.subjects = [];
-    /**
-     * Channel bus
-     * @type {EndlessReplaySubject}
-     * @private
-     */
-    this.channelBus = new EndlessReplaySubject();
-    /**
-     * Permanent channel bus stream as Observable
-     * @type {Observable}
-     * @private
-     */
-    this.channelStream = this.channelBus;
+  /**
+   * Instances of subjects
+   * @type {Array}
+   * @private
+   */
+  private subjects:Array<Subject<any>> = []
+
+   /**
+   * Channel bus
+   * @type {EndlessReplaySubject}
+   * @private
+   */
+  private channelBus = new EndlessReplaySubject<any>();
+
+  /**
+   * Permanent channel bus stream as Observable
+   * @type {Observable}
+   * @private
+   */
+  private get channelStream() {
+    return this.channelBus
   }
 
   /**
@@ -54,15 +49,17 @@ class Channel {
    * const channel = rxmq.channel('test');
    * const subject = channel.subject('test.topic');
    */
-  subject(name, { Subject = EndlessSubject } = {}) {
-    let s = this.utils.findSubjectByName(this.subjects, name);
+  subject(name: string, { Subject = EndlessSubject } = {}):Subject<Res> {
+    let s = findSubjectByName(this.subjects, name);
     if (!s) {
       console.log('add proxy for ', name);
-      s = new Proxy(new Subject(), {
+      s = new Proxy(new Subject<Res>(), {
+
         get(target, propKey, receiver) {
+
           if (propKey === 'next') {
             const origMethod = target[propKey];
-            return function (...args) {
+            return  (...args: any[]) => {
               const params = [];
               if (
                 typeof args[0] === 'string' ||
@@ -74,19 +71,21 @@ class Channel {
               } else {
                 params.push({ channel: name, ...args[0] });
               }
-              const result = origMethod.apply(this, params);
+              const result = origMethod.apply(target, <any>params);
               // console.log(name, propKey, JSON.stringify(params), JSON.stringify(result));
               return result;
             };
-          } else return Reflect.get(...arguments);
+          } else 
+          return Reflect.get(target, propKey, receiver);
         },
       });
       // s = new Subject();
-      s.name = name;
+      Object.defineProperty(s, 'name', { value: name, writable:false })
+      
       this.subjects.push(s);
       this.channelBus.next(s);
     }
-    return s;
+    return s
   }
 
   /**
@@ -100,16 +99,15 @@ class Channel {
    *            // handle results
    *        });
    */
-  observe(name) {
+  observe(name: string):Observable<Event> {
     // create new topic if it's plain text
     if (name.indexOf('#') === -1 && name.indexOf('*') === -1) {
-      return this.subject(name);
+      return <any>this.subject(name);
     }
     // return stream
-    return this.channelStream.pipe(
-      filter(obs => compareTopics(obs.name, name)),
-      mergeAll()
-    );
+    return <any>this.channelStream.pipe(
+                filter(obs => compareTopics(obs.name, name)),
+                mergeAll() )
   }
 
   /**
@@ -129,20 +127,27 @@ class Channel {
    *     // handle response
    * });
    */
-  request({ topic, data, Subject = AsyncSubject }) {
-    const subj = this.utils.findSubjectByName(this.subjects, topic);
+   request(options: RequestOptions<Req, Res>): Observable<Res> {
+    const { topic, data, subject } = options
+    const subj = findSubjectByName(this.subjects, topic);
     if (!subj) {
       return NEVER;
     }
 
     // create reply subject
-    const replySubject = new Subject();
+    const replySubject = subject ?? new Subject<Res>()
     subj.next({ replySubject, data });
     return replySubject;
   }
+
 }
 
-/**
- * Channel definition
- */
-export default Channel;
+export type ChannelEvent<T> = { channel:string, data:T }
+
+export type Channel<T> = BaseChannel<T,T,ChannelEvent<T>>;
+
+
+export type ReqResChannelEvent<Req, Res> = ChannelEvent<Req> & { replySubject: Subject<Res> }
+
+export type RequestResponseChannel<Req, Res> = BaseChannel<Req,Res,ReqResChannelEvent<Req,Res>>
+  

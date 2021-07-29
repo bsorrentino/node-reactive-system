@@ -76,7 +76,7 @@ export declare namespace rxbus {
      * @param topic - Topic Id
      * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
      */
-    const reply: <T, R>(name: string, topic: string) => Observable<import("@soulsoftware/rxmq").ReqResChannelEvent<T, R>>;
+    const reply: <T, R>(name: string, topic: string) => Observable<import("@soulsoftware/rxmq/lib/channel").ReqResChannelEvent<T, R>>;
     /**
      * Set up an _Subject_(like an EventEmitter) to emit/observe data
      * data from **Topic** belong to a **Channel**
@@ -94,5 +94,5 @@ export declare namespace rxbus {
      * @param options
      * @returns
      */
-    const request: <T, R>(name: string, options: Omit<RequestOptions<T, any, R>, "Subject">) => Promise<R>;
+    const request: <T, R>(name: string, options: Omit<RequestOptions<T, R>, "Subject">) => Promise<R>;
 }

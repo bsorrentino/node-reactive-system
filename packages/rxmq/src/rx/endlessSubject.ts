@@ -10,19 +10,19 @@ import { Subject } from 'rxjs';
  * The only difference is that EndlessSubject never triggers '.complete()' and
  * does not closes observers on errors (thus allowing to continuously dispatch them).
  */
-class EndlessSubject extends Subject {
+export class EndlessSubject<T> extends Subject<T> {
   /**
    * Dummy method override to prevent execution and Rx.Observable completion
    * @return {void}
    */
-  complete() {}
+  complete(): void {}
 
   /**
    * Override of error method that prevents stopping that Rx.Observer
    * @param  {Error} error  - Error to be dispatched
    * @return {void}
    */
-  error(error) {
+  error(error: any): void {
     this.thrownError = error;
     // dispatch to all observers
     // eslint-disable-next-line prettier/prettier
@@ -35,5 +35,3 @@ class EndlessSubject extends Subject {
     // });
   }
 }
-
-export { EndlessSubject };
