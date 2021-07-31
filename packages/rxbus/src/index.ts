@@ -1,4 +1,4 @@
-import Rxmq, {  RequestOptions,RequestResponseChannel, Channel } from '@soulsoftware/rxmq'
+import rxmq, {  RequestOptions, RequestResponseChannel, Channel } from '@soulsoftware/rxmq'
 import { firstValueFrom, Observable, Subject } from 'rxjs'
 import { Worker } from 'worker_threads'
 import * as bus  from '@soulsoftware/bus-core'
@@ -66,7 +66,7 @@ export namespace rxbus {
      * 
      * @returns 
      */    
-    export const channelNames = () => Rxmq.channelNames()
+    export const channelNames = () => rxmq.channelNames
 
     /**
      * get or create a standard Channel 
@@ -75,7 +75,7 @@ export namespace rxbus {
      * @returns 
      */
     export const channel = <T>( name:string ) => 
-                        Rxmq.channel<Channel<T>,T,unknown>(name)
+                        rxmq.channel<Channel<T>,T,unknown>(name)
     
     /**
      * get or create a Request/Response Channel 
@@ -84,7 +84,7 @@ export namespace rxbus {
      * @returns 
      */
     export const replyChannel = <T, R>( name:string ) =>
-                            Rxmq.channel<RequestResponseChannel<T, R>,T,R>(name)
+            rxmq.channel<RequestResponseChannel<T, R>,T,R>(name)
 
 
     /**
@@ -153,7 +153,7 @@ export namespace rxbus {
      * @param options 
      * @returns 
      */
-    export const request = <T, R> ( name:string, options:Omit<RequestOptions<T,any,R>, "Subject">) => 
+    export const request = <T, R> ( name:string, options:Omit<RequestOptions<T,R>, "Subject">) => 
                                             firstValueFrom(replyChannel<T,R>( name ).request( options ))
         
 }
