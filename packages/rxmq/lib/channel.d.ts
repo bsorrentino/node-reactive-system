@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { EndlessSubject } from './rx/index';
+import { EndlessSubject } from './rx/subjects';
 export declare type RequestOptions<T, Res> = {
     topic: string;
     data: T;
@@ -28,6 +28,13 @@ export declare class BaseChannel<Req, Res, Event> {
      * @private
      */
     private get channelStream();
+    /**
+     * Find a specific subject by given name
+     * @param  {Array}                  subjects    Array of subjects to search in
+     * @param  {String}                 name        Name to search for
+     * @return {(EndlessSubject|void)}              Found subject or void
+     */
+    private findSubjectByName;
     /**
      * Returns EndlessSubject representing given topic
      * @param  {String}         name           Topic name

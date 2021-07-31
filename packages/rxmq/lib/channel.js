@@ -14,8 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseChannel = void 0;
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
-var index_1 = require("./rx/index");
-var index_2 = require("./utils/index");
+var subjects_1 = require("./rx/subjects");
 // const channelName = Symbol('channel.name');
 // const channelData = Symbol('channel.data');
 /**
@@ -24,6 +23,7 @@ var index_2 = require("./utils/index");
  */
 var BaseChannel = /** @class */ (function () {
     function BaseChannel() {
+        var _this = this;
         /**
          * Instances of subjects
          * @type {Array}
@@ -35,7 +35,16 @@ var BaseChannel = /** @class */ (function () {
         * @type {EndlessReplaySubject}
         * @private
         */
-        this.channelBus = new index_1.EndlessReplaySubject();
+        this.channelBus = new subjects_1.EndlessReplaySubject();
+        /**
+         * Find a specific subject by given name
+         * @param  {Array}                  subjects    Array of subjects to search in
+         * @param  {String}                 name        Name to search for
+         * @return {(EndlessSubject|void)}              Found subject or void
+         */
+        this.findSubjectByName = function (name) {
+            return _this.subjects.find(function (s) { var _a; return name === ((_a = Object.getOwnPropertyDescriptor(s, 'name')) === null || _a === void 0 ? void 0 : _a.value); });
+        };
     }
     Object.defineProperty(BaseChannel.prototype, "channelStream", {
         /**
@@ -58,8 +67,8 @@ var BaseChannel = /** @class */ (function () {
      * const subject = channel.subject('test.topic');
      */
     BaseChannel.prototype.subject = function (name, _a) {
-        var _b = _a === void 0 ? {} : _a, _c = _b.Subject, Subject = _c === void 0 ? index_1.EndlessSubject : _c;
-        var s = index_2.findSubjectByName(this.subjects, name);
+        var _b = _a === void 0 ? {} : _a, _c = _b.Subject, Subject = _c === void 0 ? subjects_1.EndlessSubject : _c;
+        var s = this.findSubjectByName(name);
         if (!s) {
             console.log('add proxy for ', name);
             s = new Proxy(new Subject(), {
@@ -114,7 +123,7 @@ var BaseChannel = /** @class */ (function () {
             return this.subject(name);
         }
         // return stream
-        return this.channelStream.pipe(operators_1.filter(function (obs) { return index_2.compareTopics(obs.name, name); }), operators_1.mergeAll());
+        return this.channelStream.pipe(operators_1.filter(function (obs) { return compareTopics(obs.name, name); }), operators_1.mergeAll());
     };
     /**
      * Do a request that will be replied into returned AsyncSubject
@@ -135,15 +144,60 @@ var BaseChannel = /** @class */ (function () {
      */
     BaseChannel.prototype.request = function (options) {
         var topic = options.topic, data = options.data, subject = options.subject;
-        var subj = index_2.findSubjectByName(this.subjects, topic);
+        var subj = this.findSubjectByName(topic);
         if (!subj) {
+            console.warn("subject for " + topic + " not found!");
             return rxjs_1.NEVER;
         }
         // create reply subject
-        var replySubject = subject !== null && subject !== void 0 ? subject : new rxjs_1.Subject();
+        var replySubject = subject !== null && subject !== void 0 ? subject : new rxjs_1.AsyncSubject();
         subj.next({ replySubject: replySubject, data: data });
-        return replySubject;
+        return replySubject.asObservable();
     };
     return BaseChannel;
 }());
 exports.BaseChannel = BaseChannel;
+/**
+ * Converts topic to search regex
+ * @param  {String} topic   Topic name
+ * @return {String}          Search regex
+ * @private
+ */
+var topicToRegex = function (topic) {
+    return "^" + topic.split('.').reduce(function (result, segment, index, arr) {
+        var res = '';
+        if (arr[index - 1]) {
+            res = arr[index - 1] !== '#' ? '\\.\\b' : '\\b';
+        }
+        if (segment === '#') {
+            res += '[\\s\\S]*';
+        }
+        else if (segment === '*') {
+            res += '[^.]+';
+        }
+        else {
+            res += segment;
+        }
+        return result + res;
+    }, '') + "$";
+};
+/**
+* Compares given topic with existing topic
+* @param  {String}  topic         Topic name
+* @param  {String}  existingTopic Topic name to compare to
+* @return {Boolean}               Whether topic is included in existingTopic
+* @example
+* should(compareTopics('test.one.two', 'test.#')).equal(true);
+* @private
+*/
+var compareTopics = function (topic, existingTopic) {
+    // if no # or * found, do plain string matching
+    if (existingTopic.indexOf('#') === -1 && existingTopic.indexOf('*') === -1) {
+        return topic === existingTopic;
+    }
+    // otherwise do regex matching
+    var pattern = topicToRegex(existingTopic);
+    var rgx = new RegExp(pattern);
+    var result = rgx.test(topic);
+    return result;
+};

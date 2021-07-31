@@ -1,8 +1,7 @@
-import { NEVER, Observable, Subject } from 'rxjs';
+import { AsyncSubject, NEVER, Observable, Subject } from 'rxjs';
 import { filter, mergeAll } from 'rxjs/operators';
 
-import { EndlessReplaySubject, EndlessSubject } from './rx/index';
-import { compareTopics, findSubjectByName } from './utils/index';
+import { EndlessReplaySubject, EndlessSubject } from './rx/subjects';
 
 export type RequestOptions<T,Res> = {
   topic: string
@@ -41,6 +40,16 @@ export class BaseChannel<Req,Res,Event> {
     return this.channelBus
   }
 
+/**
+ * Find a specific subject by given name
+ * @param  {Array}                  subjects    Array of subjects to search in
+ * @param  {String}                 name        Name to search for
+ * @return {(EndlessSubject|void)}              Found subject or void
+ */
+ private findSubjectByName = (name: string) => 
+  this.subjects.find(s => name === Object.getOwnPropertyDescriptor( s, 'name' )?.value )
+
+
   /**
    * Returns EndlessSubject representing given topic
    * @param  {String}         name           Topic name
@@ -50,7 +59,7 @@ export class BaseChannel<Req,Res,Event> {
    * const subject = channel.subject('test.topic');
    */
   subject(name: string, { Subject = EndlessSubject } = {}):Subject<Res> {
-    let s = findSubjectByName(this.subjects, name);
+    let s = this.findSubjectByName(name);
     if (!s) {
       console.log('add proxy for ', name);
       s = new Proxy(new Subject<Res>(), {
@@ -129,15 +138,16 @@ export class BaseChannel<Req,Res,Event> {
    */
    request(options: RequestOptions<Req, Res>): Observable<Res> {
     const { topic, data, subject } = options
-    const subj = findSubjectByName(this.subjects, topic);
+    const subj = this.findSubjectByName(topic);
     if (!subj) {
+      console.warn( `subject for ${topic} not found!`)
       return NEVER;
     }
-
+    
     // create reply subject
-    const replySubject = subject ?? new Subject<Res>()
+    const replySubject = subject ?? new AsyncSubject<Res>()
     subj.next({ replySubject, data });
-    return replySubject;
+    return replySubject.asObservable();
   }
 
 }
@@ -151,3 +161,46 @@ export type ReqResChannelEvent<Req, Res> = ChannelEvent<Req> & { replySubject: S
 
 export type RequestResponseChannel<Req, Res> = BaseChannel<Req,Res,ReqResChannelEvent<Req,Res>>
   
+
+/**
+ * Converts topic to search regex
+ * @param  {String} topic   Topic name
+ * @return {String}          Search regex
+ * @private
+ */
+ const topicToRegex = (topic: string):string =>
+ `^${topic.split('.').reduce((result, segment, index, arr) => {
+   let res = '';
+   if (arr[index - 1]) {
+     res = arr[index - 1] !== '#' ? '\\.\\b' : '\\b';
+   }
+   if (segment === '#') {
+     res += '[\\s\\S]*';
+   } else if (segment === '*') {
+     res += '[^.]+';
+   } else {
+     res += segment;
+   }
+   return result + res;
+ }, '')}$`;
+
+/**
+* Compares given topic with existing topic
+* @param  {String}  topic         Topic name
+* @param  {String}  existingTopic Topic name to compare to
+* @return {Boolean}               Whether topic is included in existingTopic
+* @example
+* should(compareTopics('test.one.two', 'test.#')).equal(true);
+* @private
+*/
+const compareTopics = (topic: string, existingTopic: string) => {
+ // if no # or * found, do plain string matching
+ if (existingTopic.indexOf('#') === -1 && existingTopic.indexOf('*') === -1) {
+   return topic === existingTopic;
+ }
+ // otherwise do regex matching
+ const pattern = topicToRegex(existingTopic);
+ const rgx = new RegExp(pattern);
+ return rgx.test(topic);
+
+};
