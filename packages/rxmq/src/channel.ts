@@ -96,12 +96,12 @@ export class BaseChannel<Req, Res, Event> {
                 typeof args[0] === 'boolean' ||
                 args[0] instanceof Date
               ) { // if is primitive type
-                params.push({ channel: name, data: args[0] });
+                params.push({ topic$: name, data: args[0] });
               } else if( args[0].topic$ ) { // if already contains topic attribute
                 params.push(args[0])
               }
               else {
-                params.push({ channel: name, data: args[0] });
+                params.push({ topic$: name, data: args[0] });
               }
 
               const result = origMethod.apply(target, <any>params);
@@ -153,7 +153,7 @@ export class BaseChannel<Req, Res, Event> {
    * @return {AsyncSubject}                      AsyncSubject that will dispatch the response
    * @example
    * const channel = rxmq.channel('test');
-   * channel.requestTo({
+   * channel.request({
    *     topic: 'test.topic',
    *     data: 'test data',
    * }).subscribe((response) => { // default Observable subscription

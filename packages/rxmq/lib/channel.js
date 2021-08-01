@@ -89,13 +89,13 @@ var BaseChannel = /** @class */ (function () {
                                 typeof args[0] === 'number' ||
                                 typeof args[0] === 'boolean' ||
                                 args[0] instanceof Date) { // if is primitive type
-                                params.push({ channel: name, data: args[0] });
+                                params.push({ topic$: name, data: args[0] });
                             }
                             else if (args[0].topic$) { // if already contains topic attribute
                                 params.push(args[0]);
                             }
                             else {
-                                params.push({ channel: name, data: args[0] });
+                                params.push({ topic$: name, data: args[0] });
                             }
                             var result = origMethod_1.apply(target, params);
                             // console.log(name, propKey, JSON.stringify(params), JSON.stringify(result));

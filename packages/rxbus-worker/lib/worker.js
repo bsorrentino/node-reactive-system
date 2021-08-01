@@ -23,7 +23,7 @@ var WorkerModule = /** @class */ (function () {
             this._worker = new worker_threads_1.Worker(__filename, {});
             var _a = rxbus.workerChannel(this._worker), observable = _a.observable, subject_1 = _a.subject;
             observable.subscribe({
-                next: (function (v) { return console.log(v); })
+                next: (function (v) { return console.log('worker event', v); })
             });
             rxbus.observe(this.name, exports.Subjects.Run).subscribe({
                 next: (function (v) { return subject_1.next(v.data); })
