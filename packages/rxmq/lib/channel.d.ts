@@ -36,6 +36,19 @@ export declare class BaseChannel<Req, Res, Event> {
      */
     private findSubjectByName;
     /**
+     * channel name
+     */
+    private _name;
+    /**
+     * channel name
+     */
+    get name(): string;
+    /**
+     *
+     * @param name channel name
+     */
+    constructor(name: string);
+    /**
      * Returns EndlessSubject representing given topic
      * @param  {String}         name           Topic name
      * @return {EndlessSubject}             EndlessSubject representing given topic
@@ -78,7 +91,7 @@ export declare class BaseChannel<Req, Res, Event> {
     request(options: RequestOptions<Req, Res>): Observable<Res>;
 }
 export declare type ChannelEvent<T> = {
-    channel: string;
+    topic$: string;
     data: T;
 };
 export declare type Channel<T> = BaseChannel<T, T, ChannelEvent<T>>;
@@ -86,3 +99,13 @@ export declare type ReqResChannelEvent<Req, Res> = ChannelEvent<Req> & {
     replySubject: Subject<Res>;
 };
 export declare type RequestResponseChannel<Req, Res> = BaseChannel<Req, Res, ReqResChannelEvent<Req, Res>>;
+/**
+* Compares given topic with existing topic
+* @param  {String}  topic         Topic name
+* @param  {String}  existingTopic Topic name to compare to
+* @return {Boolean}               Whether topic is included in existingTopic
+* @example
+* should(compareTopics('test.one.two', 'test.#')).equal(true);
+* @private
+*/
+export declare const compareTopics: (topic: string, existingTopic: string) => boolean;

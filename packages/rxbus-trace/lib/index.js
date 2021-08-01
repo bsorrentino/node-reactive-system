@@ -41,8 +41,8 @@ var TraceModule = /** @class */ (function () {
         var _loop_1 = function (c) {
             console.log("trace: subscribe on " + c);
             var trace = function (_a) {
-                var channel = _a.channel, data = _a.data;
-                return console.log(Reverse, "trace: got message from '" + c + "' on channel '" + channel + "' ==> ", data, Reset);
+                var topic$ = _a.topic$, data = _a.data;
+                return console.log(Reverse, "trace: got message from '" + c + "' on channel '" + topic$ + "' ==> ", data, Reset);
             };
             this_1._subscriptions.push(rxbus.observe(c, "*").subscribe({ next: trace }));
         };

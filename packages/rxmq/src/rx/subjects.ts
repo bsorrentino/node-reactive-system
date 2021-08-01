@@ -1,4 +1,5 @@
 import { Subject, ReplaySubject } from 'rxjs';
+import { SafeSubscriber } from 'rxjs/internal/Subscriber';
 
 /**
  * EndlessSubject extension of Rx.Subject.
@@ -22,10 +23,15 @@ export class EndlessSubject<T> extends Subject<T> {
    * @return {void}
    */
   error(error: any): void {
+    
     this.thrownError = error;
+
     // dispatch to all observers
-    // eslint-disable-next-line prettier/prettier
-    this.observers.forEach( os => os.error( error ) );
+    this.observers.forEach( (os:any) => { 
+      // os is a SafeSubscriber<T>
+      //console.log( os )
+      os.destination.error( error ) 
+    });
 
     // THERE IS AN ERROR ON ORIGINAL CODE BELOW
     // this.observers.forEach(os => {

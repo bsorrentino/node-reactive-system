@@ -35,7 +35,7 @@ var Rxmq = /** @class */ (function () {
      */
     Rxmq.prototype.channel = function (name) {
         if (!this.channels[name]) {
-            this.channels[name] = new channel_1.BaseChannel();
+            this.channels[name] = new channel_1.BaseChannel(name);
         }
         return this.channels[name];
     };

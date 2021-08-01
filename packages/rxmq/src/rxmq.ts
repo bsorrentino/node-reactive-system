@@ -30,9 +30,9 @@ export class Rxmq {
    * @example
    * const testChannel = rxmq.channel('test');
    */
-  channel<T extends ChannelType<U, V>, U, V>(name:string):T {
+  channel<T extends ChannelType<U, V>, U, V = unknown>(name:string):T {
     if (!this.channels[name]) {
-      this.channels[name] = new BaseChannel();
+      this.channels[name] = new BaseChannel(name);
     }
 
     return <T>this.channels[name];

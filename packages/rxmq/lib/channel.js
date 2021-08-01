@@ -1,17 +1,6 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseChannel = void 0;
+exports.compareTopics = exports.BaseChannel = void 0;
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
 var subjects_1 = require("./rx/subjects");
@@ -22,7 +11,11 @@ var subjects_1 = require("./rx/subjects");
  *
  */
 var BaseChannel = /** @class */ (function () {
-    function BaseChannel() {
+    /**
+     *
+     * @param name channel name
+     */
+    function BaseChannel(name) {
         var _this = this;
         /**
          * Instances of subjects
@@ -45,6 +38,7 @@ var BaseChannel = /** @class */ (function () {
         this.findSubjectByName = function (name) {
             return _this.subjects.find(function (s) { var _a; return name === ((_a = Object.getOwnPropertyDescriptor(s, 'name')) === null || _a === void 0 ? void 0 : _a.value); });
         };
+        this._name = name;
     }
     Object.defineProperty(BaseChannel.prototype, "channelStream", {
         /**
@@ -54,6 +48,16 @@ var BaseChannel = /** @class */ (function () {
          */
         get: function () {
             return this.channelBus;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(BaseChannel.prototype, "name", {
+        /**
+         * channel name
+         */
+        get: function () {
+            return this._name;
         },
         enumerable: false,
         configurable: true
@@ -70,7 +74,7 @@ var BaseChannel = /** @class */ (function () {
         var _b = _a === void 0 ? {} : _a, _c = _b.Subject, Subject = _c === void 0 ? subjects_1.EndlessSubject : _c;
         var s = this.findSubjectByName(name);
         if (!s) {
-            console.log('add proxy for ', name);
+            // console.trace('add proxy for ', name);
             s = new Proxy(new Subject(), {
                 get: function (target, propKey, receiver) {
                     if (propKey === 'next') {
@@ -84,11 +88,14 @@ var BaseChannel = /** @class */ (function () {
                             if (typeof args[0] === 'string' ||
                                 typeof args[0] === 'number' ||
                                 typeof args[0] === 'boolean' ||
-                                args[0] instanceof Date) {
+                                args[0] instanceof Date) { // if is primitive type
                                 params.push({ channel: name, data: args[0] });
                             }
+                            else if (args[0].topic$) { // if already contains topic attribute
+                                params.push(args[0]);
+                            }
                             else {
-                                params.push(__assign({ channel: name }, args[0]));
+                                params.push({ channel: name, data: args[0] });
                             }
                             var result = origMethod_1.apply(target, params);
                             // console.log(name, propKey, JSON.stringify(params), JSON.stringify(result));
@@ -123,7 +130,7 @@ var BaseChannel = /** @class */ (function () {
             return this.subject(name);
         }
         // return stream
-        return this.channelStream.pipe(operators_1.filter(function (obs) { return compareTopics(obs.name, name); }), operators_1.mergeAll());
+        return this.channelStream.pipe(operators_1.filter(function (obs) { return exports.compareTopics(obs.name, name); }), operators_1.mergeAll());
     };
     /**
      * Do a request that will be replied into returned AsyncSubject
@@ -151,7 +158,11 @@ var BaseChannel = /** @class */ (function () {
         }
         // create reply subject
         var replySubject = subject !== null && subject !== void 0 ? subject : new rxjs_1.AsyncSubject();
-        subj.next({ replySubject: replySubject, data: data });
+        subj.next({
+            topic$: topic,
+            replySubject: replySubject,
+            data: data
+        });
         return replySubject.asObservable();
     };
     return BaseChannel;
@@ -200,3 +211,4 @@ var compareTopics = function (topic, existingTopic) {
     var rgx = new RegExp(pattern);
     return rgx.test(topic);
 };
+exports.compareTopics = compareTopics;

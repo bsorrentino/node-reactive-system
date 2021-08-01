@@ -44,8 +44,11 @@ var EndlessSubject = /** @class */ (function (_super) {
     EndlessSubject.prototype.error = function (error) {
         this.thrownError = error;
         // dispatch to all observers
-        // eslint-disable-next-line prettier/prettier
-        this.observers.forEach(function (os) { return os.error(error); });
+        this.observers.forEach(function (os) {
+            // os is a SafeSubscriber<T>
+            //console.log( os )
+            os.destination.error(error);
+        });
         // THERE IS AN ERROR ON ORIGINAL CODE BELOW
         // this.observers.forEach(os => {
         //   // dispatch directly to destination

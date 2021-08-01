@@ -23,5 +23,5 @@ export declare class Rxmq {
      * @example
      * const testChannel = rxmq.channel('test');
      */
-    channel<T extends ChannelType<U, V>, U, V>(name: string): T;
+    channel<T extends ChannelType<U, V>, U, V = unknown>(name: string): T;
 }
