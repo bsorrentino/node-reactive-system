@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Module = exports.Subjects = void 0;
-var rxbus_1 = require("@soulsoftware/rxbus");
+var rxbus = require("@soulsoftware/rxbus");
 var rxjs_1 = require("rxjs");
 /**
  *  Tick    = 'TICK'
@@ -21,7 +21,7 @@ var TimerModule = /** @class */ (function () {
             this.config = config;
     };
     TimerModule.prototype.onStart = function () {
-        var emitter$ = rxbus_1.rxbus.subject(this.name, exports.Subjects.Tick);
+        var emitter$ = rxbus.subject(this.name, exports.Subjects.Tick);
         this._subscription = rxjs_1.interval(this.config.period)
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
             .subscribe(emitter$);

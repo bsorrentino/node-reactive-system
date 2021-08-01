@@ -1,5 +1,5 @@
 import * as bus from '@soulsoftware/bus-core'
-import { rxbus } from '@soulsoftware/rxbus'
+import * as rxbus from '@soulsoftware/rxbus'
 import {Worker, isMainThread, parentPort} from 'worker_threads'
 import { PerformanceObserver, performance } from 'perf_hooks'
 

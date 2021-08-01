@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.Module = exports.Subjects = void 0;
-var rxbus_1 = require("@soulsoftware/rxbus");
+var rxbus = require("@soulsoftware/rxbus");
 require("fastify-websocket");
 require("@soulsoftware/rxmq");
 var fastify_1 = require("fastify");
@@ -72,8 +72,8 @@ var FastifyModule = /** @class */ (function () {
     }
     FastifyModule.prototype.setupWebSocketChannel = function (module) {
         var channelName = module;
-        var messageSubject$ = rxbus_1.rxbus.subject(channelName, exports.Subjects.WSMessageIn);
-        var messageObserver$ = rxbus_1.rxbus.observe(channelName, exports.Subjects.WSMessage);
+        var messageSubject$ = rxbus.subject(channelName, exports.Subjects.WSMessageIn);
+        var messageObserver$ = rxbus.observe(channelName, exports.Subjects.WSMessage);
         this.server.get("/" + this.name + "/channel/" + channelName + "/*", { websocket: true }, function (connection /* SocketStream */, req /* FastifyRequest */) {
             connection.socket.on('message', function (message) { return messageSubject$.next(message); });
             messageObserver$.subscribe(function (message) {
@@ -89,7 +89,7 @@ var FastifyModule = /** @class */ (function () {
         var _this = this;
         if (config)
             this.config = config;
-        var httpRequest = rxbus_1.rxbus.replyChannel(this.name).request;
+        var httpRequest = rxbus.replyChannel(this.name).request;
         var rxp = new RegExp("/" + this.name + "/channel/([\\w]+)([?].+)?");
         this.server.get("/" + this.name + "/channel/*", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
             var cmd;
@@ -123,7 +123,7 @@ var FastifyModule = /** @class */ (function () {
         //
         // Listen for adding Web Socket channel
         //
-        rxbus_1.rxbus.reply(this.name, exports.Subjects.WSAdd)
+        rxbus.reply(this.name, exports.Subjects.WSAdd)
             .subscribe(function (_a) {
             var data = _a.data, replySubject = _a.replySubject;
             console.log('request add channel ', data);
@@ -137,12 +137,12 @@ var FastifyModule = /** @class */ (function () {
         this.server.listen(this.config.port || 3000, function (err, address) {
             if (err) {
                 console.error(err);
-                rxbus_1.rxbus.subject(_this.name, exports.Subjects.ServerStart)
+                rxbus.subject(_this.name, exports.Subjects.ServerStart)
                     .error(err);
             }
             else {
                 console.log("Server listening at " + address);
-                rxbus_1.rxbus.subject(_this.name, exports.Subjects.ServerStart)
+                rxbus.subject(_this.name, exports.Subjects.ServerStart)
                     .next({ address: address });
             }
         });
@@ -151,7 +151,7 @@ var FastifyModule = /** @class */ (function () {
         var _this = this;
         this.server.close().then(function (v) {
             console.log('server closed!');
-            rxbus_1.rxbus.subject(_this.name, exports.Subjects.ServerClose)
+            rxbus.subject(_this.name, exports.Subjects.ServerClose)
                 .complete();
         });
     };

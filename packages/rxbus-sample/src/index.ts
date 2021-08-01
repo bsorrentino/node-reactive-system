@@ -1,6 +1,7 @@
 import {filter} from 'rxjs/operators'
 
-import { rxbus } from '@soulsoftware/rxbus'
+import * as rxbus from '@soulsoftware/rxbus'
+
 import { 
     Module as FastifyModule, 
     Subjects as FastifySubjects,

@@ -1,5 +1,5 @@
 import * as bus from '@soulsoftware/bus-core'
-import { rxbus } from '@soulsoftware/rxbus'
+import * as rxbus from '@soulsoftware/rxbus'
 import { ChannelEvent } from '@soulsoftware/rxmq'
 import { Subscription } from 'rxjs'
 

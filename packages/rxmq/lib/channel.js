@@ -198,6 +198,5 @@ var compareTopics = function (topic, existingTopic) {
     // otherwise do regex matching
     var pattern = topicToRegex(existingTopic);
     var rgx = new RegExp(pattern);
-    var result = rgx.test(topic);
-    return result;
+    return rgx.test(topic);
 };
