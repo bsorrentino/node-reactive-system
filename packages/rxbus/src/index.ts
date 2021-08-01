@@ -1,8 +1,13 @@
-import rxmq, {  RequestOptions, RequestResponseChannel, Channel } from '@soulsoftware/rxmq'
+import { Rxmq, RequestOptions, RequestResponseChannel, Channel } from '@soulsoftware/rxmq'
 import { firstValueFrom, Observable, Subject } from 'rxjs'
 import { Worker } from 'worker_threads'
 import * as bus  from '@soulsoftware/bus-core'
 import assert = require('assert')
+
+/**
+ * create new message bus
+ */
+const rxmq = new Rxmq()
 
 /**
  * Worker Channel

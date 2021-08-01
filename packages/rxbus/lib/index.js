@@ -5,6 +5,10 @@ const rxmq_1 = require("@soulsoftware/rxmq");
 const rxjs_1 = require("rxjs");
 const assert = require("assert");
 /**
+ * create new message bus
+ */
+const rxmq = new rxmq_1.Rxmq();
+/**
  * Module Management
  */
 class Modules {
@@ -46,7 +50,7 @@ exports.modules = new Modules();
  *
  * @returns
  */
-const channelNames = () => rxmq_1.default.channelNames;
+const channelNames = () => rxmq.channelNames;
 exports.channelNames = channelNames;
 /**
  * get or create a standard Channel
@@ -54,7 +58,7 @@ exports.channelNames = channelNames;
  * @param - Channel Id
  * @returns
  */
-const channel = (name) => rxmq_1.default.channel(name);
+const channel = (name) => rxmq.channel(name);
 exports.channel = channel;
 /**
  * get or create a Request/Response Channel
@@ -62,7 +66,7 @@ exports.channel = channel;
  * @param name - Channel Id
  * @returns
  */
-const replyChannel = (name) => rxmq_1.default.channel(name);
+const replyChannel = (name) => rxmq.channel(name);
 exports.replyChannel = replyChannel;
 /**
  * get or create a Channel conneted to a Worker Thread
