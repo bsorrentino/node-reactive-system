@@ -1,4 +1,4 @@
-import { rxbus } from '../src/index'
+import * as rxbus from '../src/index'
 import * as bus from '@soulsoftware/bus-core'
 
 

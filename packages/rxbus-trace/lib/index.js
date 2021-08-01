@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Module = void 0;
-var rxbus_1 = require("@soulsoftware/rxbus");
+var rxbus = require("@soulsoftware/rxbus");
 /*
 
 Bright = "\x1b[1m"
@@ -41,13 +41,13 @@ var TraceModule = /** @class */ (function () {
         var _loop_1 = function (c) {
             console.log("trace: subscribe on " + c);
             var trace = function (_a) {
-                var channel = _a.channel, data = _a.data;
-                return console.log(Reverse, "trace: got message from '" + c + "' on channel '" + channel + "' ==> ", data, Reset);
+                var topic$ = _a.topic$, data = _a.data;
+                return console.log(Reverse, "trace: got message from '" + c + "' on topic '" + topic$ + "' ==> ", data, Reset);
             };
-            this_1._subscriptions.push(rxbus_1.rxbus.observe(c, "*").subscribe({ next: trace }));
+            this_1._subscriptions.push(rxbus.observe(c, "*").subscribe({ next: trace }));
         };
         var this_1 = this;
-        for (var _i = 0, _a = rxbus_1.rxbus.channelNames(); _i < _a.length; _i++) {
+        for (var _i = 0, _a = rxbus.channelNames(); _i < _a.length; _i++) {
             var c = _a[_i];
             _loop_1(c);
         }

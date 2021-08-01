@@ -1,5 +1,5 @@
 import * as bus from '@soulsoftware/bus-core'
-import { rxbus } from '@soulsoftware/rxbus'
+import * as rxbus from '@soulsoftware/rxbus'
 import {Worker, isMainThread, parentPort} from 'worker_threads'
 import { PerformanceObserver, performance } from 'perf_hooks'
 
@@ -38,7 +38,7 @@ class WorkerModule implements bus.Module<Config> {
                 rxbus.workerChannel<number,{input:any,waitTime:number}>( this._worker ) 
 
             observable.subscribe( {
-                next:( v => console.log(v) )
+                next:( v => console.log('worker event', v) )
             })
 
             rxbus.observe(this.name, Subjects.Run).subscribe( {

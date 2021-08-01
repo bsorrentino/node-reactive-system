@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Module = exports.Subjects = void 0;
-var rxbus_1 = require("@soulsoftware/rxbus");
+var rxbus = require("@soulsoftware/rxbus");
 var worker_threads_1 = require("worker_threads");
 var perf_hooks_1 = require("perf_hooks");
 /**
@@ -21,11 +21,11 @@ var WorkerModule = /** @class */ (function () {
             console.log('Thread Worker file:', __filename);
             // this._worker = new Worker( './node_modules/@soulsoftware/rxbus-worker/lib/worker.js', {})
             this._worker = new worker_threads_1.Worker(__filename, {});
-            var _a = rxbus_1.rxbus.workerChannel(this._worker), observable = _a.observable, subject_1 = _a.subject;
+            var _a = rxbus.workerChannel(this._worker), observable = _a.observable, subject_1 = _a.subject;
             observable.subscribe({
-                next: (function (v) { return console.log(v); })
+                next: (function (v) { return console.log('worker event', v); })
             });
-            rxbus_1.rxbus.observe(this.name, exports.Subjects.Run).subscribe({
+            rxbus.observe(this.name, exports.Subjects.Run).subscribe({
                 next: (function (v) { return subject_1.next(v.data); })
             });
         }

@@ -1,4 +1,4 @@
-import { rxbus } from '@soulsoftware/rxbus'
+import * as rxbus from '@soulsoftware/rxbus'
 import * as bus  from '@soulsoftware/bus-core'
 import 'fastify-websocket'
 import '@soulsoftware/rxmq'
