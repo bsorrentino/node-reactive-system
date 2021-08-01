@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Modules | node-service-bus</title>
+	<title>Rxmq | node-service-bus</title>
 	<meta name="description" content="Documentation for node-service-bus">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">node-service-bus</a>
 				</li>
 				<li>
-					<a href="../modules/rxbus_src.html">rxbus/src</a>
+					<a href="../modules/rxmq_lib.html">rxmq/lib</a>
 				</li>
 				<li>
-					<a href="rxbus_src.modules.html">Modules</a>
+					<a href="rxmq_lib.rxmq.html">Rxmq</a>
 				</li>
 			</ul>
-			<h1>Class Modules</h1>
+			<h1>Class Rxmq</h1>
 		</div>
 	</div>
 </header>
@@ -71,15 +71,24 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Module Management</p>
+						<p>Rxmq message bus class
+							Represents a new Rxmq message bus.
+							Normally you&#39;d just use a signleton returned by default, but it&#39;s also
+						possible to create a new instance of Rxmq should you need it.</p>
 					</div>
+					<dl class="tsd-comment-tags">
+						<dt>example</dt>
+						<dd><p>import {Rxmq} from &#39;rxmq&#39;;
+							const myRxmq = new Rxmq();</p>
+						</dd>
+					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Modules</span>
+						<span class="target">Rxmq</span>
 					</li>
 				</ul>
 			</section>
@@ -90,20 +99,19 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="rxbus_src.modules.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="rxmq_lib.rxmq.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="rxbus_src.modules.html#names" class="tsd-kind-icon">names</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="rxmq_lib.rxmq.html#channelnames" class="tsd-kind-icon">channel<wbr>Names</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="rxbus_src.modules.html#register" class="tsd-kind-icon">register</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rxbus_src.modules.html#start" class="tsd-kind-icon">start</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="rxmq_lib.rxmq.html#channel" class="tsd-kind-icon">channel</a></li>
 							</ul>
 						</section>
 					</div>
@@ -115,13 +123,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Modules<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="rxbus_src.modules.html" class="tsd-signature-type" data-tsd-kind="Class">Modules</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Rxmq<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="rxmq_lib.rxmq.html" class="tsd-signature-type" data-tsd-kind="Class">Rxmq</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="rxbus_src.modules.html" class="tsd-signature-type" data-tsd-kind="Class">Modules</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="rxmq_lib.rxmq.html" class="tsd-signature-type" data-tsd-kind="Class">Rxmq</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -129,19 +137,24 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="names" class="tsd-anchor"></a>
-					<h3>names</h3>
+					<a name="channelnames" class="tsd-anchor"></a>
+					<h3>channel<wbr>Names</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> names<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> channelNames<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/6ef0d5d/packages/rxbus/src/index.ts#L42">rxbus/src/index.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/b9385f0/packages/rxmq/lib/rxmq.d.ts#L18">rxmq/lib/rxmq.d.ts:18</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a channel names</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -149,51 +162,51 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="register" class="tsd-anchor"></a>
-					<h3>register</h3>
+					<a name="channel" class="tsd-anchor"></a>
+					<h3>channel</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">register&lt;C&gt;<span class="tsd-signature-symbol">(</span>module<span class="tsd-signature-symbol">: </span><a href="../modules/bus_core_lib.html#module" class="tsd-signature-type" data-tsd-kind="Type alias">Module</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span>, config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">channel&lt;T, U, V&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/6ef0d5d/packages/rxbus/src/index.ts#L29">rxbus/src/index.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/b9385f0/packages/rxmq/lib/rxmq.d.ts#L26">rxmq/lib/rxmq.d.ts:26</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a channel for given name</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p>const testChannel = rxmq.channel(&#39;test&#39;);</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>C<span class="tsd-signature-symbol">: </span><a href="../interfaces/bus_core_lib.moduleconfiguration.html" class="tsd-signature-type" data-tsd-kind="Interface">ModuleConfiguration</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ChannelType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+								<li>
+									<h4>U</h4>
+								</li>
+								<li>
+									<h4>V = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>module: <a href="../modules/bus_core_lib.html#module" class="tsd-signature-type" data-tsd-kind="Type alias">Module</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> config: <span class="tsd-signature-type">C</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Channel name</p>
+									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="start" class="tsd-anchor"></a>
-					<h3>start</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/soulsoftware/node-message-bus/blob/6ef0d5d/packages/rxbus/src/index.ts#L46">rxbus/src/index.ts:46</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+							<p>Channel object</p>
 						</li>
 					</ul>
 				</section>
@@ -208,66 +221,51 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/bus_core_lib.html">bus-<wbr>core/lib</a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/rxbus_lib.html">rxbus/lib</a>
+					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/rxbus_src.html">rxbus/src</a>
+						<a href="../modules/rxmq_lib.html">rxmq/lib</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="rxmq_lib.endlessreplaysubject.html" class="tsd-kind-icon">Endless<wbr>Replay<wbr>Subject</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="rxmq_lib.endlesssubject.html" class="tsd-kind-icon">Endless<wbr>Subject</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="rxbus_src.modules.html" class="tsd-kind-icon">Modules</a>
+						<a href="rxmq_lib.rxmq.html" class="tsd-kind-icon">Rxmq</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="rxbus_src.modules.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="rxmq_lib.rxmq.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="rxbus_src.modules.html#names" class="tsd-kind-icon">names</a>
+								<a href="rxmq_lib.rxmq.html#channelnames" class="tsd-kind-icon">channel<wbr>Names</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="rxbus_src.modules.html#register" class="tsd-kind-icon">register</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="rxbus_src.modules.html#start" class="tsd-kind-icon">start</a>
+								<a href="rxmq_lib.rxmq.html#channel" class="tsd-kind-icon">channel</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/rxbus_src.html#moduleinfo" class="tsd-kind-icon">Module<wbr>Info</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/rxmq_lib.html#channel" class="tsd-kind-icon">Channel</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#workerchannel" class="tsd-kind-icon">Worker<wbr>Channel</a>
+						<a href="../modules/rxmq_lib.html#channelevent" class="tsd-kind-icon">Channel<wbr>Event</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/rxbus_src.html#modules-1" class="tsd-kind-icon">modules</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/rxmq_lib.html#requestoptions" class="tsd-kind-icon">Request<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#channel" class="tsd-kind-icon">channel</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/rxbus_src.html#channelnames" class="tsd-kind-icon">channel<wbr>Names</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#observe" class="tsd-kind-icon">observe</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#reply" class="tsd-kind-icon">reply</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#replychannel" class="tsd-kind-icon">reply<wbr>Channel</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#request" class="tsd-kind-icon">request</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#subject-1" class="tsd-kind-icon">subject</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/rxbus_src.html#workerchannel-1" class="tsd-kind-icon">worker<wbr>Channel</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/rxmq_lib.html#requestresponsechannel" class="tsd-kind-icon">Request<wbr>Response<wbr>Channel</a>
 					</li>
 				</ul>
 			</nav>
@@ -287,8 +285,8 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
