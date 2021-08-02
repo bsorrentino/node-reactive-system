@@ -81,7 +81,7 @@ export declare class BaseChannel<Req, Res, Event> {
      * @return {AsyncSubject}                      AsyncSubject that will dispatch the response
      * @example
      * const channel = rxmq.channel('test');
-     * channel.requestTo({
+     * channel.request({
      *     topic: 'test.topic',
      *     data: 'test data',
      * }).subscribe((response) => { // default Observable subscription
