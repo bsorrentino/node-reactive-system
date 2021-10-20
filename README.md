@@ -1,6 +1,6 @@
-## Experiment on developing a message bus in nodejs
+## Experiment on developing a Reactive System in Nodejs
 
-Idea is to provide an **Event-Driven Application Framework** to develop a **Reactive System** on top of nodejs, having as back bones an **Event Bus** based on [RxJS](https://rxjs-dev.firebaseapp.com/guide/overview) and a simple and flexible **Modules System** to develop complex and scalable backend services.
+Idea is to provide an **Event-Driven Application Framework** to develop a **Reactive System** on top of Nodejs, having as back bones an **Event Bus** based on [RxJS](https://rxjs-dev.firebaseapp.com/guide/overview) and a simple and flexible **Modules System** to develop complex and scalable backend services.
 
 
 ### Build project
