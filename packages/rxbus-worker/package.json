@@ -1,5 +1,5 @@
 {
-  "name": "@soulsoftware/rxbus-worker",
+  "name": "@bsorrentino/rxbus-worker",
   "version": "0.6.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
@@ -28,8 +28,8 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.6.0",
-    "@soulsoftware/rxbus": "^0.6.0",
+    "@bsorrentino/bus-core": "^0.6.0",
+    "@bsorrentino/rxbus": "^0.6.0",
     "rxjs": "^7.0.0"
   }
 }

@@ -1,7 +1,7 @@
-import { Rxmq, RequestOptions, RequestResponseChannel, Channel } from '@soulsoftware/rxmq'
+import { Rxmq, RequestOptions, RequestResponseChannel, Channel } from '@bsorrentino/rxmq'
 import { firstValueFrom, Observable, Subject } from 'rxjs'
 import { Worker } from 'worker_threads'
-import * as bus  from '@soulsoftware/bus-core'
+import * as bus  from '@bsorrentino/bus-core'
 import assert = require('assert')
 
 /**

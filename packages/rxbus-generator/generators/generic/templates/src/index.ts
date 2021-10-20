@@ -1,5 +1,5 @@
-import * as bus from '@soulsoftware/bus-core'
-import { rxbus } from '@soulsoftware/rxbus'
+import * as bus from '@bsorrentino/bus-core'
+import { rxbus } from '@bsorrentino/rxbus'
 import {  Subscription, of } from 'rxjs'
 
 /**

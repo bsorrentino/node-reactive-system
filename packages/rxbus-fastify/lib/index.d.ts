@@ -1,6 +1,6 @@
-import * as bus from '@soulsoftware/bus-core';
+import * as bus from '@bsorrentino/bus-core';
 import 'fastify-websocket';
-import '@soulsoftware/rxmq';
+import '@bsorrentino/rxmq';
 /**
  * Configuration parameters
  */

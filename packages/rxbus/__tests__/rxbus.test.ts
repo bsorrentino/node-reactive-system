@@ -1,5 +1,5 @@
 import * as rxbus from '../src/index'
-import * as bus from '@soulsoftware/bus-core'
+import * as bus from '@bsorrentino/bus-core'
 
 
 class MyModule implements bus.Module {

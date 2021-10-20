@@ -1,5 +1,5 @@
 {
-  "name": "@soulsoftware/rxbus-timer",
+  "name": "@bsorrentino/rxbus-timer",
   "version": "0.6.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
@@ -27,8 +27,8 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.6.0",
-    "@soulsoftware/rxbus": "^0.6.0",
+    "@bsorrentino/bus-core": "^0.6.0",
+    "@bsorrentino/rxbus": "^0.6.0",
     "rxjs": "^7.0.0"
   },
   "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"

@@ -1,5 +1,5 @@
 {
-  "name": "@soulsoftware/rxmq",
+  "name": "@bsorrentino/rxmq",
   "version": "0.6.0",
   "description": "Typescript pub/sub library based on RxJS",
   "main": "./lib/index.js",
