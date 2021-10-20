@@ -1,7 +1,7 @@
-import * as rxbus from '@soulsoftware/rxbus'
-import * as bus  from '@soulsoftware/bus-core'
+import * as rxbus from '@bsorrentino/rxbus'
+import * as bus  from '@bsorrentino/bus-core'
 import 'fastify-websocket'
-import '@soulsoftware/rxmq'
+import '@bsorrentino/rxmq'
 
 import Fastify from 'fastify'
 import { timeout } from 'rxjs/operators'

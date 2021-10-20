@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Module = exports.Subjects = void 0;
-var rxbus = require("@soulsoftware/rxbus");
+var rxbus = require("@bsorrentino/rxbus");
 var rxjs_1 = require("rxjs");
 /**
  *  Tick    = 'TICK'

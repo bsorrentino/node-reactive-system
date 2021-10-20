@@ -12,11 +12,11 @@ var __values = (this && this.__values) || function(o) {
 };
 exports.__esModule = true;
 var operators_1 = require("rxjs/operators");
-var rxbus = require("@soulsoftware/rxbus");
-var rxbus_fastify_1 = require("@soulsoftware/rxbus-fastify");
-var rxbus_timer_1 = require("@soulsoftware/rxbus-timer");
-var rxbus_trace_1 = require("@soulsoftware/rxbus-trace");
-var rxbus_worker_1 = require("@soulsoftware/rxbus-worker");
+var rxbus = require("@bsorrentino/rxbus");
+var rxbus_fastify_1 = require("@bsorrentino/rxbus-fastify");
+var rxbus_timer_1 = require("@bsorrentino/rxbus-timer");
+var rxbus_trace_1 = require("@bsorrentino/rxbus-trace");
+var rxbus_worker_1 = require("@bsorrentino/rxbus-worker");
 /**
  * Route message from Timer to WebSocket
  *

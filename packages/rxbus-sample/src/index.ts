@@ -1,20 +1,20 @@
 import {filter} from 'rxjs/operators'
 
-import * as rxbus from '@soulsoftware/rxbus'
+import * as rxbus from '@bsorrentino/rxbus'
 
 import { 
     Module as FastifyModule, 
     Subjects as FastifySubjects,
     Config as FastifyConfig
-} from '@soulsoftware/rxbus-fastify'
+} from '@bsorrentino/rxbus-fastify'
 
 import { 
     Module as TimerModule, 
     Subjects as TimerSubjects
-} from '@soulsoftware/rxbus-timer'
+} from '@bsorrentino/rxbus-timer'
 
-import { Module as TraceModule } from '@soulsoftware/rxbus-trace'
-import { Module as WorkerModule, Subjects as WorkerSubjects } from '@soulsoftware/rxbus-worker'
+import { Module as TraceModule } from '@bsorrentino/rxbus-trace'
+import { Module as WorkerModule, Subjects as WorkerSubjects } from '@bsorrentino/rxbus-worker'
 
 
 /**
