@@ -50,12 +50,12 @@ class MainGenerator extends yo {
                     choices: [
                         {
                             name: 'Generic',
-                            value: '@soulsoftware/rxbus:generic',
+                            value: '@bsorrentino/rxbus:generic',
                             // disabled: 'Unavailable at this time',
                         },
                         {
                             name: 'Worker',
-                            value: '@soulsoftware/rxbus:worker',
+                            value: '@bsorrentino/rxbus:worker',
                             disabled: 'Unavailable at this time'
                         }
                     ]

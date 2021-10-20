@@ -29,12 +29,12 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@soulsoftware/bus-core": "^0.6.0",
-    "@soulsoftware/rxbus": "^0.6.0",
-    "@soulsoftware/rxbus-fastify": "^0.6.0",
-    "@soulsoftware/rxbus-timer": "^0.6.0",
-    "@soulsoftware/rxbus-trace": "^0.6.0",
-    "@soulsoftware/rxbus-worker": "^0.6.0",
+    "@bsorrentino/bus-core": "^0.6.0",
+    "@bsorrentino/rxbus": "^0.6.0",
+    "@bsorrentino/rxbus-fastify": "^0.6.0",
+    "@bsorrentino/rxbus-timer": "^0.6.0",
+    "@bsorrentino/rxbus-trace": "^0.6.0",
+    "@bsorrentino/rxbus-worker": "^0.6.0",
     "fastify": "^3.15.0",
     "rxjs": "^7.0.0"
   },

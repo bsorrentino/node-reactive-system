@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Module = void 0;
-var rxbus = require("@soulsoftware/rxbus");
+var rxbus = require("@bsorrentino/rxbus");
 /*
 
 Bright = "\x1b[1m"

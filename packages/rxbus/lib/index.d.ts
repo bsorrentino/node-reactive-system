@@ -1,7 +1,7 @@
-import { RequestOptions, RequestResponseChannel, Channel } from '@soulsoftware/rxmq';
+import { RequestOptions, RequestResponseChannel, Channel } from '@bsorrentino/rxmq';
 import { Observable, Subject } from 'rxjs';
 import { Worker } from 'worker_threads';
-import * as bus from '@soulsoftware/bus-core';
+import * as bus from '@bsorrentino/bus-core';
 /**
  * Worker Channel
  */
@@ -63,7 +63,7 @@ export declare const workerChannel: <IN, OUT>(worker: Worker) => WorkerChannel<I
  * @param topic - Topic Id
  * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
  */
-export declare const observe: <T>(name: string, topic: string) => Observable<import("@soulsoftware/rxmq").ChannelEvent<T>>;
+export declare const observe: <T>(name: string, topic: string) => Observable<import("@bsorrentino/rxmq").ChannelEvent<T>>;
 /**
  * _Observe_ for a data coming from **Topic** belong to a **Channel** and
  * _Reply_ to the provided Subject
@@ -72,7 +72,7 @@ export declare const observe: <T>(name: string, topic: string) => Observable<imp
  * @param topic - Topic Id
  * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
  */
-export declare const reply: <T, R>(name: string, topic: string) => Observable<import("@soulsoftware/rxmq/lib/channel").ReqResChannelEvent<T, R>>;
+export declare const reply: <T, R>(name: string, topic: string) => Observable<import("@bsorrentino/rxmq/lib/channel").ReqResChannelEvent<T, R>>;
 /**
  * Set up an _Subject_(like an EventEmitter) to emit/observe data
  * data from **Topic** belong to a **Channel**

@@ -1,5 +1,5 @@
-import * as bus from '@soulsoftware/bus-core'
-import * as rxbus from '@soulsoftware/rxbus'
+import * as bus from '@bsorrentino/bus-core'
+import * as rxbus from '@bsorrentino/rxbus'
 import { interval, Subscription } from 'rxjs'
 // import { tap } from 'rxjs/operators'
 

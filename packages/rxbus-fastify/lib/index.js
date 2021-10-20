@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.Module = exports.Subjects = void 0;
-var rxbus = require("@soulsoftware/rxbus");
+var rxbus = require("@bsorrentino/rxbus");
 require("fastify-websocket");
-require("@soulsoftware/rxmq");
+require("@bsorrentino/rxmq");
 var fastify_1 = require("fastify");
 var operators_1 = require("rxjs/operators");
 /**

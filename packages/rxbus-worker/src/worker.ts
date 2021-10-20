@@ -1,5 +1,5 @@
-import * as bus from '@soulsoftware/bus-core'
-import * as rxbus from '@soulsoftware/rxbus'
+import * as bus from '@bsorrentino/bus-core'
+import * as rxbus from '@bsorrentino/rxbus'
 import {Worker, isMainThread, parentPort} from 'worker_threads'
 import { PerformanceObserver, performance } from 'perf_hooks'
 
@@ -31,7 +31,7 @@ class WorkerModule implements bus.Module<Config> {
             
             console.log( 'Thread Worker file:', __filename)
 
-            // this._worker = new Worker( './node_modules/@soulsoftware/rxbus-worker/lib/worker.js', {})
+            // this._worker = new Worker( './node_modules/@bsorrentino/rxbus-worker/lib/worker.js', {})
             this._worker = new Worker( __filename, {})
             
             const { observable, subject } = 

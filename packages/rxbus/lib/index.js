@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.request = exports.subject = exports.reply = exports.observe = exports.workerChannel = exports.replyChannel = exports.channel = exports.channelNames = exports.modules = exports.Modules = void 0;
-const rxmq_1 = require("@soulsoftware/rxmq");
+const rxmq_1 = require("@bsorrentino/rxmq");
 const rxjs_1 = require("rxjs");
 const assert = require("assert");
 /**

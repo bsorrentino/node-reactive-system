@@ -1,4 +1,4 @@
-import * as bus from '@soulsoftware/bus-core';
+import * as bus from '@bsorrentino/bus-core';
 declare class TraceModule implements bus.Module {
     readonly name = "TRACE";
     private _subscriptions;
