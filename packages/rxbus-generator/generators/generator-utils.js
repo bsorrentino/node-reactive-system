@@ -25,7 +25,7 @@ exports.componentQuestions = [
         name: 'Module.Name',
         message: 'Module name:',
         validate: validateName(),
-        transformer: (input, answer, flags) => exports.capitalize(input)
+        transformer: (input, answer, flags) => (0, exports.capitalize)(input)
     },
     {
         name: 'Module.Version',

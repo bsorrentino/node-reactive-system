@@ -21,7 +21,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "tsc src/*.ts --declaration --outDir ./lib",
+    "prepare": "tsc src/*.ts --declaration --outDir ./lib",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "test": "jest --config ../../jest.config.js"
   },
@@ -33,11 +33,9 @@
     "@bsorrentino/rxbus": "^0.7.0",
     "@bsorrentino/rxmq": "^0.7.0",
     "fastify": "^3.15.0",
-    "fastify-websocket": "^3.2.0",
-    "rxjs": "^7.0.0"
+    "fastify-websocket": "^3.2.0"
   },
   "devDependencies": {
-    "@types/node": "12.20.10"
   },
   "engines": {
     "node": ">=12.x"

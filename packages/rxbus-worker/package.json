@@ -21,7 +21,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "tsc src/*.ts --declaration --outDir ./lib",
+    "prepare": "tsc src/*.ts --declaration --outDir ./lib",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
   },
   "bugs": {
@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.7.0",
-    "@bsorrentino/rxbus": "^0.7.0",
-    "rxjs": "^7.0.0"
+    "@bsorrentino/rxbus": "^0.7.0"
   }
 }

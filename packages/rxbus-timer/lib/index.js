@@ -22,7 +22,7 @@ var TimerModule = /** @class */ (function () {
     };
     TimerModule.prototype.onStart = function () {
         var emitter$ = rxbus.subject(this.name, exports.Subjects.Tick);
-        this._subscription = rxjs_1.interval(this.config.period)
+        this._subscription = (0, rxjs_1.interval)(this.config.period)
             // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
             .subscribe(emitter$);
     };

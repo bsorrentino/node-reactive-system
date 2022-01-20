@@ -76,7 +76,7 @@ exports.replyChannel = replyChannel;
  */
 const workerChannel = (worker) => {
     const uniqueId = `WORKER${worker.threadId}`;
-    const channel$ = exports.channel(uniqueId);
+    const channel$ = (0, exports.channel)(uniqueId);
     const worker_message_out = channel$.subject('WORKER_OUT');
     worker.on('message', value => worker_message_out.next(value));
     worker.on('error', err => worker_message_out.error(err));
@@ -96,7 +96,7 @@ exports.workerChannel = workerChannel;
  * @param topic - Topic Id
  * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
  */
-const observe = (name, topic) => exports.channel(name).observe(topic);
+const observe = (name, topic) => (0, exports.channel)(name).observe(topic);
 exports.observe = observe;
 /**
  * _Observe_ for a data coming from **Topic** belong to a **Channel** and
@@ -106,7 +106,7 @@ exports.observe = observe;
  * @param topic - Topic Id
  * @returns - [Rxjs Observable<T>](https://rxjs.dev/api/index/class/Observable)
  */
-const reply = (name, topic) => exports.replyChannel(name).observe(topic);
+const reply = (name, topic) => (0, exports.replyChannel)(name).observe(topic);
 exports.reply = reply;
 /**
  * Set up an _Subject_(like an EventEmitter) to emit/observe data
@@ -117,7 +117,7 @@ exports.reply = reply;
  * @returns  - [Subject](https://rxjs.dev/api/index/class/Subject)
  *
  */
-const subject = (name, topic) => exports.channel(name).subject(topic);
+const subject = (name, topic) => (0, exports.channel)(name).subject(topic);
 exports.subject = subject;
 /**
  * Send a request to a **Topic** belong a **Channel** and wait for Reply
@@ -126,5 +126,5 @@ exports.subject = subject;
  * @param options
  * @returns
  */
-const request = (name, options) => rxjs_1.firstValueFrom(exports.replyChannel(name).request(options));
+const request = (name, options) => (0, rxjs_1.firstValueFrom)((0, exports.replyChannel)(name).request(options));
 exports.request = request;

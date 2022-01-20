@@ -39,10 +39,10 @@ var TraceModule = /** @class */ (function () {
     TraceModule.prototype.onStart = function () {
         console.log(this.name, 'start');
         var _loop_1 = function (c) {
-            console.log("trace: subscribe on " + c);
+            console.log("trace: subscribe on ".concat(c));
             var trace = function (_a) {
                 var topic$ = _a.topic$, data = _a.data;
-                return console.log(Reverse, "trace: got message from '" + c + "' on topic '" + topic$ + "' ==> ", data, Reset);
+                return console.log(Reverse, "trace: got message from '".concat(c, "' on topic '").concat(topic$, "' ==> "), data, Reset);
             };
             this_1._subscriptions.push(rxbus.observe(c, "*").subscribe({ next: trace }));
         };

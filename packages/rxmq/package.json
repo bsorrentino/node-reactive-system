@@ -10,7 +10,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "tsc --project .",
+    "prepare": "tsc --project .",
     "test": "jest --config ../../jest.config.js"
   },
   "repository": {
@@ -19,6 +19,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "rxjs": "^7.0.0"
+    "rxjs": "^7.5.2"
   }
 }

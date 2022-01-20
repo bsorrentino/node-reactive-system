@@ -33,7 +33,7 @@ function routeTimerToWS() {
 function runWorkerModule() {
     var worker_subject$ = rxbus.subject(rxbus_worker_1.Module.name, rxbus_worker_1.Subjects.Run);
     rxbus.observe(rxbus_timer_1.Module.name, rxbus_timer_1.Subjects.Tick)
-        .pipe(operators_1.filter(function (_a) {
+        .pipe((0, operators_1.filter)(function (_a) {
         var data = _a.data;
         return data % 10 == 0;
     }))
@@ -59,7 +59,7 @@ function main() {
     try {
         for (var _b = __values(rxbus.modules.names), _c = _b.next(); !_c.done; _c = _b.next()) {
             var module_1 = _c.value;
-            console.log("\"" + module_1 + "\"", 'registerd');
+            console.log("\"".concat(module_1, "\""), 'registerd');
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }

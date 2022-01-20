@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "tsc --project ."
+    "prepare": "tsc --project ."
   },
   "bugs": {
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
@@ -28,6 +28,6 @@
   "dependencies": {
     "@bsorrentino/bus-core": "*",
     "@bsorrentino/rxbus": "*",
-    "rxjs": "^7.0.0"
+    "rxjs": "^7.5.2"
   }
 }

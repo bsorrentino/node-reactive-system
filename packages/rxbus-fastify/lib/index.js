@@ -63,7 +63,7 @@ exports.Subjects = {
  */
 var FastifyModule = /** @class */ (function () {
     function FastifyModule() {
-        this.server = fastify_1["default"]({});
+        this.server = (0, fastify_1["default"])({});
         this.name = "FASTIFY";
         this.config = {
             port: 3000,
@@ -74,7 +74,7 @@ var FastifyModule = /** @class */ (function () {
         var channelName = module;
         var messageSubject$ = rxbus.subject(channelName, exports.Subjects.WSMessageIn);
         var messageObserver$ = rxbus.observe(channelName, exports.Subjects.WSMessage);
-        this.server.get("/" + this.name + "/channel/" + channelName + "/*", { websocket: true }, function (connection /* SocketStream */, req /* FastifyRequest */) {
+        this.server.get("/".concat(this.name, "/channel/").concat(channelName, "/*"), { websocket: true }, function (connection /* SocketStream */, req /* FastifyRequest */) {
             connection.socket.on('message', function (message) { return messageSubject$.next(message); });
             messageObserver$.subscribe(function (message) {
                 console.log('ws send', message);
@@ -90,8 +90,8 @@ var FastifyModule = /** @class */ (function () {
         if (config)
             this.config = config;
         var httpRequest = rxbus.replyChannel(this.name).request;
-        var rxp = new RegExp("/" + this.name + "/channel/([\\w]+)([?].+)?");
-        this.server.get("/" + this.name + "/channel/*", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+        var rxp = new RegExp("/".concat(this.name, "/channel/([\\w]+)([?].+)?"));
+        this.server.get("/".concat(this.name, "/channel/*"), function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
             var cmd;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -99,7 +99,7 @@ var FastifyModule = /** @class */ (function () {
                         cmd = rxp.exec(request.url);
                         if (cmd) {
                             httpRequest({ topic: cmd[1], data: request })
-                                .pipe(operators_1.timeout(this.config.requestTimeout || 5000))
+                                .pipe((0, operators_1.timeout)(this.config.requestTimeout || 5000))
                                 .subscribe({
                                 next: function (data) { return reply.send(data); },
                                 error: function (err) { return reply.code(500).send(err); },
@@ -141,7 +141,7 @@ var FastifyModule = /** @class */ (function () {
                     .error(err);
             }
             else {
-                console.log("Server listening at " + address);
+                console.log("Server listening at ".concat(address));
                 rxbus.subject(_this.name, exports.Subjects.ServerStart)
                     .next({ address: address });
             }

@@ -24,7 +24,7 @@ class TextFieldTemplateGenerator extends generator_utils_1.CommonGenerator {
                 }
             ];
             this.answers = (yield this.prompt(questions));
-            this.answers.Module.Name = generator_utils_1.capitalize(this.answers.Module.Name);
+            this.answers.Module.Name = (0, generator_utils_1.capitalize)(this.answers.Module.Name);
         });
     }
     /**

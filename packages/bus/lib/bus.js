@@ -57,13 +57,13 @@ var Message;
             this._channels = new Map();
         }
         Bus.prototype.newChannel = function (name) {
-            assert.ok(!this._channels.has(name), "Channel " + name + " already exists!");
+            assert.ok(!this._channels.has(name), "Channel ".concat(name, " already exists!"));
             var result = new SubjectChannel();
             this._channels.set(name, result);
             return result;
         };
         Bus.prototype.channel = function (name) {
-            assert.ok(this._channels.has(name), "Channel " + name + " doesn't exists!");
+            assert.ok(this._channels.has(name), "Channel ".concat(name, " doesn't exists!"));
             return this._channels.get(name);
         };
         return Bus;

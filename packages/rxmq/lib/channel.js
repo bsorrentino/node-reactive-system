@@ -130,7 +130,7 @@ var BaseChannel = /** @class */ (function () {
             return this.subject(name);
         }
         // return stream
-        return this.channelStream.pipe(operators_1.filter(function (obs) { return exports.compareTopics(obs.name, name); }), operators_1.mergeAll());
+        return this.channelStream.pipe((0, operators_1.filter)(function (obs) { return (0, exports.compareTopics)(obs.name, name); }), (0, operators_1.mergeAll)());
     };
     /**
      * Do a request that will be replied into returned AsyncSubject
@@ -153,7 +153,7 @@ var BaseChannel = /** @class */ (function () {
         var topic = options.topic, data = options.data, subject = options.subject;
         var subj = this.findSubjectByName(topic);
         if (!subj) {
-            console.warn("subject for " + topic + " not found!");
+            console.warn("subject for ".concat(topic, " not found!"));
             return rxjs_1.NEVER;
         }
         // create reply subject
@@ -175,7 +175,7 @@ exports.BaseChannel = BaseChannel;
  * @private
  */
 var topicToRegex = function (topic) {
-    return "^" + topic.split('.').reduce(function (result, segment, index, arr) {
+    return "^".concat(topic.split('.').reduce(function (result, segment, index, arr) {
         var res = '';
         if (arr[index - 1]) {
             res = arr[index - 1] !== '#' ? '\\.\\b' : '\\b';
@@ -190,7 +190,7 @@ var topicToRegex = function (topic) {
             res += segment;
         }
         return result + res;
-    }, '') + "$";
+    }, ''), "$");
 };
 /**
 * Compares given topic with existing topic
