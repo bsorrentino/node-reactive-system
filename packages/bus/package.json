@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/bus",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "message bus based on EventEmitter",
   "keywords": [
     "bus",
@@ -32,6 +32,6 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@bsorrentino/bus-core": "^0.7.0"
+    "@bsorrentino/bus-core": "^0.8.0"
   }
 }

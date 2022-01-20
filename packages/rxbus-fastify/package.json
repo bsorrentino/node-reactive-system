@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/rxbus-fastify",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
@@ -29,13 +29,11 @@
     "url": "https://github.com/soulsoftware/node-message-bus/issues"
   },
   "dependencies": {
-    "@bsorrentino/bus-core": "^0.7.0",
-    "@bsorrentino/rxbus": "^0.7.0",
-    "@bsorrentino/rxmq": "^0.7.0",
+    "@bsorrentino/bus-core": "^0.8.0",
+    "@bsorrentino/rxbus": "^0.8.0",
+    "@bsorrentino/rxmq": "^0.8.0",
     "fastify": "^3.15.0",
     "fastify-websocket": "^3.2.0"
-  },
-  "devDependencies": {
   },
   "engines": {
     "node": ">=12.x"
