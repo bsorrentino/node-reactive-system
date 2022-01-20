@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
-  "types": "./lib/index.d.ts",
+  "types": "./src/index.d.ts",
   "license": "ISC",
   "directories": {
     "lib": "lib",
