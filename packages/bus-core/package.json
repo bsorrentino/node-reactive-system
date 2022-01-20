@@ -1,9 +1,9 @@
 {
   "name": "@bsorrentino/bus-core",
-  "version": "0.8.0",
+  "version": "0.7.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
-  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
   "types": "./lib/index.d.ts",
   "license": "ISC",
   "directories": {
@@ -15,11 +15,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
   "scripts": {},
   "bugs": {
-    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
-  "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"
+  "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

@@ -16,14 +16,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
   "scripts": {
     "clean": "rm -rf lib",
     "prepare": "tsc --project ."
   },
   "bugs": {
-    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
     "@bsorrentino/bus-core": "*",

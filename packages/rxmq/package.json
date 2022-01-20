@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/rxmq",
-  "version": "0.8.0",
+  "version": "0.7.0",
   "description": "Typescript pub/sub library based on RxJS",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -15,10 +15,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
   "license": "MIT",
   "dependencies": {
     "rxjs": "^7.5.2"
-  }
+  },
+  "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

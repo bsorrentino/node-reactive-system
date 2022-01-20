@@ -1,9 +1,9 @@
 {
   "name": "@bsorrentino/rxbus-worker",
-  "version": "0.8.0",
+  "version": "0.7.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
-  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
   "private": true,
   "main": "./lib/worker.js",
   "types": "./lib/worker.d.ts",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
   "scripts": {
     "clean": "rm -rf lib",
@@ -25,7 +25,7 @@
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
   },
   "bugs": {
-    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",

@@ -1,9 +1,9 @@
 {
   "name": "@bsorrentino/rxbus-timer",
-  "version": "0.8.0",
+  "version": "0.7.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
-  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "license": "ISC",
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
   "scripts": {
     "clean": "rm -rf lib",
@@ -24,11 +24,11 @@
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
   },
   "bugs": {
-    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
     "@bsorrentino/rxbus": "^0.8.0"
   },
-  "gitHead": "fa9ca6010b43ad85a3cd7bbfffcfbd4bb2a3a818"
+  "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

@@ -1,9 +1,9 @@
 {
   "name": "@bsorrentino/generator-rxbus",
-  "version": "0.8.0",
+  "version": "0.7.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
-  "homepage": "https://github.com/soulsoftware/node-message-bus#readme",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
   "license": "MIT",
   "main": "generators/app/index.js",
   "files": [
@@ -13,13 +13,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soulsoftware/node-message-bus.git"
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
   "scripts": {
     "prepare": "tsc --project ."
   },
   "bugs": {
-    "url": "https://github.com/soulsoftware/node-message-bus/issues"
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
     "chalk": "^4.1.1",
@@ -33,5 +33,6 @@
     "@types/yosay": "^2.0.0",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^6.2.0"
-  }
+  },
+  "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }
