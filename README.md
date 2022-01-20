@@ -10,14 +10,10 @@ Idea is to provide an **Event-Driven Application Framework** to develop a **Reac
     ```
     npm install
     ```
-1. prepare lerna project
+1. prepare & build lerna project
     ```
     npx lerna clean
     npx lerna bootstap
-    ```
-1. build packages
-    ```
-    npx lerna run build
     ```
 1. start sample
     ```
