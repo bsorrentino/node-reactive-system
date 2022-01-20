@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/bus",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "message bus based on EventEmitter",
   "keywords": [
     "bus",
