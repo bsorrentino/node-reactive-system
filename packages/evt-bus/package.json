@@ -1,0 +1,37 @@
+{
+  "name": "evt-bus",
+  "version": "0.8.0",
+  "description": "experiment use evt package as bus",
+  "keywords": [
+    "bus",
+    "evt"
+  ],
+  "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "prepare": "tsc src/*.ts --declaration --outDir ./lib",
+    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
+    "test": "jest --config ../../jest.config.js",
+    "start": "node lib/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
+  },
+  "dependencies": {
+    "evt": "^1.11.2"
+  }
+}
