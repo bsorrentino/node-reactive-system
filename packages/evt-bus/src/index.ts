@@ -57,7 +57,7 @@ async function snippet3() {
 }
 
 interface EventIterator<T> extends AsyncIterable<T>  {
-    stop(): void
+    done(): void
 }
 
 function waitForEvents<T>(  evt: Evt<T> , timeout?: number ): EventIterator<T> {
@@ -81,7 +81,7 @@ function waitForEvents<T>(  evt: Evt<T> , timeout?: number ): EventIterator<T> {
     return {
         [Symbol.asyncIterator]: () => events(),
 
-        stop: () => isStopped = true
+        done: () => isStopped = true
     }
 }
 
@@ -113,9 +113,77 @@ async function snippet4() {
     }
 }
 
+function waitForEvents2<T>(  evt: Evt<T> , timeout?: number ): EventIterator<T> {
+    let isStopped = false
+
+    const ctx = Evt.newCtx();
+
+    ctx.evtDoneOrAborted.attachOnce(doneOrAborted=> {
+
+        switch( doneOrAborted.type ) {
+            case 'ABORTED':
+                isStopped = true
+                break
+            case 'DONE':
+                isStopped = true
+                break
+        }
+    
+      });
+
+    async function* events() {
+        
+        while(!isStopped) {
+
+            try{
+                const res =  await evt.waitFor( ctx, timeout )
+                yield res
+
+            } catch(error) {
+                console.warn("TIMEOUT!");
+                ctx.abort( error )
+            }
+        }
+    }
+
+    return {
+        [Symbol.asyncIterator]: () => events(),
+
+        done: () => ctx.done()
+    }
+}
+
+async function snippet5() {
+
+    type Data = {
+        type: "TEXT";
+        text: string;
+    } | {
+        type: "AGE";
+        age: number;
+    }
+
+    const evt = new Evt<Data>()
+    
+    let numEvents = 0;
+    const interval = setInterval( () => {
+        evt.post( { type: 'TEXT', text: 'HI THERE!'})
+        if( ++numEvents==10 )  clearInterval(interval)
+    }, 2000);
+
+    const eventIterator = waitForEvents2( evt, 5000 ) 
+
+    for await ( const ev of eventIterator ) {
+    
+        console.log( numEvents, ev )
+    
+        
+    }
+}
 
 
-snippet1()
-snippet2()
+// snippet1()
+// snippet2()
 // snippet3()
-snippet4()
+// snippet4()
+snippet5()
