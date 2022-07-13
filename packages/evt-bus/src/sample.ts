@@ -139,7 +139,7 @@ function waitForEvents2<T>(  evt: Evt<T> , timeout?: number ): EventIterator<T> 
                 const res =  await evt.waitFor( ctx, timeout )
                 yield res
 
-            } catch(error) {
+            } catch(error:any) {
                 console.warn("TIMEOUT!");
                 ctx.abort( error )
             }
@@ -152,6 +152,7 @@ function waitForEvents2<T>(  evt: Evt<T> , timeout?: number ): EventIterator<T> 
         done: () => ctx.done()
     }
 }
+
 
 async function snippet5() {
 
@@ -180,7 +181,6 @@ async function snippet5() {
         
     }
 }
-
 
 // snippet1()
 // snippet2()

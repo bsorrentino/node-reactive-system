@@ -23,9 +23,9 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "prepare": "tsc src/*.ts --declaration --outDir ./lib",
+    "prepare": "rm -rf lib && tsc",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
-    "test": "jest --config ../../jest.config.js",
+    "test": "jest --roots=packages/evt-bus --config ../../jest.config.js",
     "start": "node lib/index.js"
   },
   "bugs": {
