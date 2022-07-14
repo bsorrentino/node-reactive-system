@@ -2,14 +2,14 @@
 
 import { Broker } from "../src/broker";
 
-const sleep = (m:number) => new Promise(r => setTimeout(r, m))
-
+const sleep = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const broker = new Broker()
 
+const JEST_TIMEOUT = 10000
+jest.setTimeout(JEST_TIMEOUT)
 
 describe('evt-bus test pub sub', () => {
-    jest.setTimeout(10000)
 
     test( 'get a Pub Sub Topic', () => {
 
@@ -27,6 +27,47 @@ describe('evt-bus test pub sub', () => {
 
         expect(topic1).not.toBe( topic3 )
     })
+
+    test( 'post message in Pub Sub Topic', async () => {
+        // expect.assertions(1)
+
+        const topic1 = broker.lookupPubSubTopic<String>( 'topic1' );
+
+        const postEvents = async ( ms:number ) => {
+            await sleep( ms )
+            topic1.post( 'event1' )
+            await sleep( ms )
+            topic1.post( 'event2' )
+            await sleep( ms )
+            topic1.post( 'event3' )
+            await sleep( ms )
+            topic1.done()
+        }
+
+        const result = Array<String>()
+
+        const waitFor = async ( numElements:number ) => {
+            let step = 0
+            for await ( const  e of topic1.observe() ) {
+
+                expect( e.topic$ ).toEqual( 'topic1' )
+                // console.log( e )
+                result.push( e.data )
+    
+                if( numElements == ++step ) break
+    
+            }    
+        }
+
+        await Promise.all( [waitFor(2), waitFor(3), waitFor(1), postEvents(1000) ] )
+
+        expect( result.length ).toEqual( 6 ) 
+
+    })
+
+});
+
+describe('evt-bus test  request reply topic', () => {
 
     test( 'get a Request Reply topic', () => {
 
@@ -47,43 +88,121 @@ describe('evt-bus test pub sub', () => {
         expect(topic1).not.toBe( topic3 )
     })
 
-
-    
-    test( 'post message in Pub Sub Topic', async () => {
+    test( 'post message in request reply topic', async () => {
         // expect.assertions(1)
 
-        const topic1 = broker.lookupPubSubTopic<String>( 'topic1' );
+        const topic_name = 'topic_reply_1'
+        const topic1 = broker.lookupRequestReplyTopic<string, number>( topic_name );
 
-        setTimeout( () => {
-            topic1.post( 'event1' )
-            topic1.post( 'event2' )
-            topic1.post( 'event3' )
-        }, 3000 )
+        const postEvents = async ( ms:number ) => {
+            await sleep( ms )
+            let reply = await topic1.request( 'event1' )
+            expect( reply ).toEqual( 0 )
+            await sleep( ms )
+            reply = await topic1.request( 'event1' )
+            expect( reply ).toEqual( 1 )
+            await sleep( ms )
+            topic1.abort()
+            // console.log( 'topic1.abort()' )
+        }
 
-        const result = Array<String>()
+        const result = Array<string>()
 
-        const waitFor = async () => {
+        const waitFor = async ( numElements:number ) => {
             let step = 0
             for await ( const  e of topic1.observe() ) {
 
-                expect( e.topic$ ).toEqual( 'topic1' )
-                console.log( e )
+                expect( e.topic$ ).toEqual( topic_name )
+                // console.log( e )
                 result.push( e.data )
+                e.reply.done( step )
     
-                if( ++step == 2 ) {
-                    break
-                }
+                if( numElements == ++step ) break
     
             }    
         }
 
-        await Promise.all( [waitFor(), waitFor(), waitFor()] )
+        await Promise.all( [waitFor(2), postEvents(1000) ] )
 
-        expect( result.length ).toEqual( 6 ) 
-
-        
+        expect( result.length ).toEqual( 2 ) 
 
     })
 
+    test( 'post message in request reply topic with timeout', async () => {
+        // expect.assertions(1)
 
-});
+        const topic_name = 'topic_reply_1'
+        const topic1 = broker.lookupRequestReplyTopic<string, number>( topic_name );
+
+        const postEvents = async ( ms:number ) => {
+            await sleep( ms )
+            let reply = await topic1.request( 'event1' )
+            expect( reply ).toEqual( 0 )
+            await sleep( ms )
+            topic1.abort()
+            // console.log( 'topic1.abort()' )
+        }
+
+        const result = Array<string>()
+
+        const waitFor = async ( numElements:number ) => {
+            let step = 0
+            for await ( const  e of topic1.observe(JEST_TIMEOUT - 1000) ) {
+
+                expect( e.topic$ ).toEqual( topic_name )
+                // console.log( e )
+                result.push( e.data )
+                e.reply.done( step )
+    
+                if( numElements == ++step ) break
+    
+            }    
+        }
+
+        await Promise.all( [waitFor(2), postEvents(1000) ] )
+
+        expect( result.length ).toEqual( 1 ) 
+
+    })
+
+    test( 'post message in request reply topic with multiple waitFor', async () => {
+        // expect.assertions(1)
+
+        const topic_name = 'topic_reply_2'
+        const topic = broker.lookupRequestReplyTopic<string, number>( topic_name );
+
+        const postEvents = async ( ms:number ) => {
+            await sleep( ms )
+            let reply = await topic.request( 'event1' )
+            expect( reply ).toEqual( 0 )
+            await sleep( ms )
+            topic.abort()
+            // console.log( 'topic.abort()' )
+        }
+
+        const result = Array<string>()
+
+        const waitFor = async ( numElements:number ) => {
+            let step = 0
+            for await ( const  e of topic.observe(1000) ) {
+
+                expect( e.topic$ ).toEqual( topic_name )
+                // console.log( e )
+                result.push( e.data )
+                e.reply.done( step )
+    
+                if( numElements == ++step ) break
+    
+            }    
+        }
+
+        try {
+            await Promise.all( [waitFor(2), waitFor(1), postEvents(1000) ] )
+        }
+        catch( e ) {
+            expect(e).toEqual('it is forbidden invoke waitFor more than one time on a RequestReplyTopic')
+        }
+
+    })
+
+})
