@@ -30,6 +30,8 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
 
     #ctx = Evt.newCtx()
     
+    #waitForCall = 0
+
     /**
      * 
      * @param name 
@@ -49,6 +51,11 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
     get name() { return this.#name }
 
     /**
+     * waitFor in progess calls
+     */
+    get waitForCall() { return this.#waitForCall }
+
+    /**
      * 
      */
     done() { this.#ctx.done() }
@@ -65,9 +72,16 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
      * @returns 
      */
      observe( timeout?: number ): EventIterator<Event> {
+        ++this.#waitForCall
+
         let isStopped = false
     
-        this.#ctx.evtDoneOrAborted.attachOnce( doneOrAborted => isStopped = true )
+        const stop = () => {
+            isStopped = true 
+            --this.#waitForCall
+        }
+
+        this.#ctx.evtDoneOrAborted.attachOnce( doneOrAborted => stop() )
     
         const self = this
         const events = async function* () {
@@ -75,14 +89,14 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
             while(!isStopped) {
     
                 try {
+                    // console.debug( `start waitFor: ${self.#name}` ) 
                     const event =  await self.emitter.waitFor( self.#ctx, timeout )
-                    if( isStopped ) break;
-                    yield event
+                    // console.debug( `end waitFor: ${self.#name}` ) 
+                    yield event ;
     
                 } catch(error:any) {
                     console.warn( `timeout occurred observing topic "${self.name}"`);
-                    // self.#ctx.abort( error )
-                    isStopped = true
+                    stop()
                 }
             }
         }
@@ -92,8 +106,7 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
     
             abort: () => {
                 console.warn( `observing topic ${this.#name} aborted by user'"`)
-                // this.#ctx.abort( new Error('operation aborted by user'))
-                isStopped = true
+                stop()
             } 
         }
     }
@@ -110,7 +123,6 @@ export class PubSubTopic<Data> extends BaseTopic<Data, TopicEvent<Data>> {
      * @param data 
      */
     post( data:Data  ) {
-
         this.emitter.post( { topic$: this.name, data: data })
     }
 
@@ -156,6 +168,11 @@ export class RequestReplyTopic<Data, Result> extends BaseTopic<Data, ReplyTopicE
         })
     } 
 
+    observe( timeout?: number ): EventIterator<ReplyTopicEvent<Data,Result>> {
+        if( this.waitForCall > 0 ) throw 'it is forbidden invoke waitFor more than one time on a RequestReplyTopic'
+    
+        return super.observe( timeout )
+    }
 
 }
 
