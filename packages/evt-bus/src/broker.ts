@@ -8,7 +8,7 @@ export type RequestOptions<Data, Result> = {
 
 export interface TopicEvent<Data> { 
     topic$: string, 
-    data: Data 
+    data?: Data
 }
 
 export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> { 
@@ -17,7 +17,9 @@ export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> {
   
 
 interface EventIterator<Data> extends AsyncIterable<Data>  {
-    abort(): void
+    // abort(): void
+
+    readonly isTerminated: boolean
 }
 
 type Event<Data,Result> = TopicEvent<Data> | ReplyTopicEvent<Data,Result>
@@ -32,12 +34,16 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
     
     #waitForCall = 0
 
+    #endEvent:Event 
+    
     /**
      * 
-     * @param name 
+     * @param topic_name 
      */
-    constructor( name: string ) {
-        this.#name = name
+    constructor( topic_name: string ) {
+        this.#name = topic_name
+
+        this.#endEvent = <Event>{ topic$: topic_name }
     }
 
     /**
@@ -58,13 +64,21 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
     /**
      * 
      */
-    done() { this.#ctx.done() }
+    done() { 
+        this.#emitter.postAndWait( this.#endEvent )
+            .then( () => this.#ctx.done() )
+        
+    }
 
     /**
      * 
      * @param message 
      */
-    abort( message?: string  ) { this.#ctx.abort( new Error( message )) } 
+    abort( message?: string  ) { 
+        this.#emitter.postAndWait( this.#endEvent )
+            .then( () => this.#ctx.abort( new Error( message )) )
+        
+    } 
 
     /**
      * 
@@ -74,10 +88,10 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
      observe( timeout?: number ): EventIterator<Event> {
         ++this.#waitForCall
 
-        let isStopped = false
+        let isTerminated = false
     
         const stop = () => {
-            isStopped = true 
+            isTerminated = true 
             --this.#waitForCall
         }
 
@@ -86,17 +100,18 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
         const self = this
         const events = async function* () {
             
-            while(!isStopped) {
+            while(!isTerminated) {
     
                 try {
                     // console.debug( `start waitFor: ${self.#name}` ) 
-                    const event =  await self.emitter.waitFor( self.#ctx, timeout )
+                    const event =  await self.#emitter.waitFor( self.#ctx, timeout )
                     // console.debug( `end waitFor: ${self.#name}` ) 
                     yield event ;
     
                 } catch(error:any) {
-                    console.warn( `timeout occurred observing topic "${self.name}"`);
+                    console.warn( `timeout occurred observing topic "${self.#name}"`);
                     stop()
+                    yield self.#endEvent
                 }
             }
         }
@@ -104,10 +119,14 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
         return {
             [Symbol.asyncIterator]: () => events(),
     
-            abort: () => {
-                console.warn( `observing topic ${this.#name} aborted by user'"`)
-                stop()
-            } 
+            // abort: () => {
+            //     console.warn( `observing topic ${this.#name} aborted by user'"`)
+            //     stop()
+            // }, 
+
+            get isTerminated() {
+                return isTerminated
+            }
         }
     }
     
@@ -169,7 +188,10 @@ export class RequestReplyTopic<Data, Result> extends BaseTopic<Data, ReplyTopicE
     } 
 
     observe( timeout?: number ): EventIterator<ReplyTopicEvent<Data,Result>> {
-        if( this.waitForCall > 0 ) throw 'it is forbidden invoke waitFor more than one time on a RequestReplyTopic'
+        // console.log( `RequestReplyTopic.Observe( ${this.name} )  = ${this.waitForCall}`)
+        if( this.waitForCall > 0 ) {
+            throw 'it is forbidden invoke waitFor more than one time on a RequestReplyTopic'
+        }
     
         return super.observe( timeout )
     }

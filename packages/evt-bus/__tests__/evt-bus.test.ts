@@ -49,17 +49,20 @@ describe('evt-bus test pub sub', () => {
         const waitFor = async ( numElements:number ) => {
             let step = 0
             for await ( const  e of topic1.observe() ) {
+                // console.log( e )
 
                 expect( e.topic$ ).toEqual( 'topic1' )
-                // console.log( e )
-                result.push( e.data )
+
+                if( !e.data ) break // no more events
+                
+                 result.push( e.data )
     
                 if( numElements == ++step ) break
     
             }    
         }
 
-        await Promise.all( [waitFor(2), waitFor(3), waitFor(1), postEvents(1000) ] )
+        await Promise.all( [waitFor(2), waitFor(4), waitFor(1), postEvents(1000) ] )
 
         expect( result.length ).toEqual( 6 ) 
 
@@ -113,7 +116,9 @@ describe('evt-bus test  request reply topic', () => {
             for await ( const  e of topic1.observe() ) {
 
                 expect( e.topic$ ).toEqual( topic_name )
-                // console.log( e )
+                
+                if( !e.data ) break // no more events
+                
                 result.push( e.data )
                 e.reply.done( step )
     
@@ -151,6 +156,9 @@ describe('evt-bus test  request reply topic', () => {
 
                 expect( e.topic$ ).toEqual( topic_name )
                 // console.log( e )
+                
+                if( !e.data ) break // no more events
+
                 result.push( e.data )
                 e.reply.done( step )
     
@@ -167,28 +175,25 @@ describe('evt-bus test  request reply topic', () => {
 
     test( 'post message in request reply topic with multiple waitFor', async () => {
         // expect.assertions(1)
+        const POST_TIMEOUT = 1000
 
         const topic_name = 'topic_reply_2'
         const topic = broker.lookupRequestReplyTopic<string, number>( topic_name );
-
-        const postEvents = async ( ms:number ) => {
-            await sleep( ms )
-            let reply = await topic.request( 'event1' )
-            expect( reply ).toEqual( 0 )
-            await sleep( ms )
-            topic.abort()
-            // console.log( 'topic.abort()' )
-        }
 
         const result = Array<string>()
 
         const waitFor = async ( numElements:number ) => {
             let step = 0
-            for await ( const  e of topic.observe(1000) ) {
+
+            for await ( const  e of topic.observe(POST_TIMEOUT + 1) ) {
+                console.log( e )
 
                 expect( e.topic$ ).toEqual( topic_name )
-                // console.log( e )
+                
+                if( !e.data ) break // no more events
+
                 result.push( e.data )
+                
                 e.reply.done( step )
     
                 if( numElements == ++step ) break
@@ -197,10 +202,12 @@ describe('evt-bus test  request reply topic', () => {
         }
 
         try {
-            await Promise.all( [waitFor(2), waitFor(1), postEvents(1000) ] )
+            await Promise.all( [waitFor(2), waitFor(1) ] )
         }
         catch( e ) {
             expect(e).toEqual('it is forbidden invoke waitFor more than one time on a RequestReplyTopic')
+
+            await topic.abort()
         }
 
     })
