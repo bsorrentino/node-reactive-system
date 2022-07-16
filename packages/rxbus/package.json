@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "prepare": "tsc src/*.ts --target es6 --module commonjs --declaration --outDir ./lib",
+    "prepare": "rm -rf lib && tsc",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "test": "jest --config ../../jest.config.js"
   },
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
-    "@bsorrentino/rxmq": "^0.8.0"
+    "@bsorrentino/evt-bus": "^0.8.0"
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

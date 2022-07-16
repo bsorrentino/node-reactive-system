@@ -1,6 +1,8 @@
 {
   "packages": [
-    "packages/*"
+    "packages/bus-core",
+    "packages/evt-bus",
+    "packages/rxbus"
   ],
   "useNx": true,
   "version": "0.8.0"

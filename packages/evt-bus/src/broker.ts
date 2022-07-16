@@ -24,7 +24,7 @@ interface EventIterator<Data> extends AsyncIterable<Data>  {
 
 type Event<Data,Result> = TopicEvent<Data> | ReplyTopicEvent<Data,Result>
 
-export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
+export class BaseTopic<Data, Event extends TopicEvent<Data>> {
 
     #name: string
 
@@ -74,9 +74,9 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
      * 
      * @param message 
      */
-    abort( message?: string  ) { 
+    abort( error: Error  ) { 
         this.#emitter.postAndWait( this.#endEvent )
-            .then( () => this.#ctx.abort( new Error( message )) )
+            .then( () => this.#ctx.abort( error ) )
         
     } 
 
@@ -131,6 +131,8 @@ export abstract class BaseTopic<Data, Event extends TopicEvent<Data>> {
     }
     
 }
+
+export type ObservableTopic<Data> = BaseTopic<Data, TopicEvent<Data>> 
 
 /**
  * 
@@ -206,6 +208,13 @@ type GenericTopic<Data,Result> = PubSubTopic<Data> | RequestReplyTopic<Data,Resu
 export class Broker  {
 
     #topics: Record<string, GenericTopic<unknown, unknown>> = {}
+
+    /**
+    * Returns a topic names
+    */
+    get topicNames() {
+        return Object.keys(this.#topics);
+    }
 
     /**
      * return (and eventually create) a topic

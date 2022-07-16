@@ -105,7 +105,7 @@ describe('evt-bus test  request reply topic', () => {
             reply = await topic1.request( 'event1' )
             expect( reply ).toEqual( 1 )
             await sleep( ms )
-            topic1.abort()
+            topic1.abort( new Error('abort by user') )
             // console.log( 'topic1.abort()' )
         }
 
@@ -144,7 +144,7 @@ describe('evt-bus test  request reply topic', () => {
             let reply = await topic1.request( 'event1' )
             expect( reply ).toEqual( 0 )
             await sleep( ms )
-            topic1.abort()
+            topic1.abort( new Error('abort by user' ))
             // console.log( 'topic1.abort()' )
         }
 
@@ -207,7 +207,7 @@ describe('evt-bus test  request reply topic', () => {
         catch( e ) {
             expect(e).toEqual('it is forbidden invoke waitFor more than one time on a RequestReplyTopic')
 
-            await topic.abort()
+            await topic.abort( new Error('abort by user' ) )
         }
 
     })
