@@ -1,7 +1,6 @@
 import * as bus from '@bsorrentino/bus-core'
+import { PubSubTopic } from '@bsorrentino/evt-bus'
 import * as rxbus from '@bsorrentino/rxbus'
-import { interval, Subscription } from 'rxjs'
-// import { tap } from 'rxjs/operators'
 
 /**
  * Configuration parameters
@@ -31,7 +30,9 @@ class TimerModule implements bus.Module<Config> {
         period: 1000
     }
 
-    private _subscription?: Subscription
+    private topic?: PubSubTopic<number>
+
+    #interval?:any = undefined
 
     onRegister(config?: Config) {
         if (config) this.config = config
@@ -39,17 +40,18 @@ class TimerModule implements bus.Module<Config> {
 
     onStart() {
 
-        const emitter$ = rxbus.subject<number>(this.name, Subjects.Tick)
+        this.topic = rxbus.lookupPubSubTopic<number>(this.name, Subjects.Tick)
 
-        this._subscription = interval(this.config.period)
-            // .pipe( tap( tick => console.log( `${this.name} emit `, tick )) )
-            .subscribe(emitter$)
+        let tick = 0
+        this.#interval = 
+            setInterval( () => this.topic?.post( ++tick ), this.config.period)
+
     }
 
     onStop() {
-        if (this._subscription) {
-            this._subscription.unsubscribe()
-            this._subscription = undefined
+        if (this.#interval) {
+            clearInterval( this.#interval)
+            this.#interval = undefined
         }
     }
 }

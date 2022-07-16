@@ -2,7 +2,9 @@
   "packages": [
     "packages/bus-core",
     "packages/evt-bus",
-    "packages/rxbus"
+    "packages/rxbus",
+    "packages/rxbus-timer",
+    "packages/rxbus-sample"
   ],
   "useNx": true,
   "version": "0.8.0"
