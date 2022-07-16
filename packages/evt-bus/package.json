@@ -25,7 +25,8 @@
     "clean": "rm -rf lib",
     "prepare": "rm -rf lib && tsc",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
-    "test": "jest --silent --roots=packages/evt-bus --config ../../jest.config.js",
+    "test": "jest --silent --detectOpenHandles --roots=packages/evt-bus --config ../../jest.config.js",
+    "test#verbose": "jest --detectOpenHandles --roots=packages/evt-bus --config ../../jest.config.js",
     "start": "node lib/index.js"
   },
   "bugs": {
