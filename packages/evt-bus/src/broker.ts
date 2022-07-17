@@ -8,7 +8,7 @@ export type RequestOptions<Data, Result> = {
 
 export interface TopicEvent<Data> { 
     topic$: string, 
-    data?: Data
+    data: Data
 }
 
 export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> { 
@@ -16,13 +16,8 @@ export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> {
 }
   
 
-interface EventIterator<Data> extends AsyncIterable<Data>  {
-    // abort(): void
+export type  EventIterator<Data> = AsyncIterable<Data> 
 
-    readonly isTerminated: boolean
-}
-
-type Event<Data,Result> = TopicEvent<Data> | ReplyTopicEvent<Data,Result>
 
 
 export interface Publisher<Data> {
@@ -37,9 +32,9 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
 
     #name: string
 
-    #emitter = Evt.create<Event>()
+    #evt = Evt.create<Event>()
 
-    #ctx = Evt.newCtx()
+    #ctx:Ctx<void>|null
     
     #waitForCall = 0
 
@@ -52,13 +47,14 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     constructor( topic_name: string ) {
         this.#name = topic_name
 
+        this.#ctx = Evt.newCtx()
         this.#endEvent = <Event>{ topic$: topic_name }
     }
 
     /**
      * 
      */
-    get emitter() { return this.#emitter }
+    get evt() { return this.#evt }
 
     /**
      * 
@@ -74,8 +70,12 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      * 
      */
     done() { 
-        this.#emitter.postAndWait( this.#endEvent )
-            .then( () => this.#ctx.done() )
+        if( this.#ctx !== null ) {
+            this.#evt.postAndWait( this.#endEvent )
+            .then( () => this.#ctx?.done() )
+            .then( () => this.#ctx = null )
+
+        }
         
     }
 
@@ -84,8 +84,11 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      * @param message 
      */
     abort( error: Error  ) { 
-        this.#emitter.postAndWait( this.#endEvent )
-            .then( () => this.#ctx.abort( error ) )
+        if( this.#ctx !== null ) {
+            this.#evt.postAndWait( this.#endEvent )
+                .then( () => this.#ctx?.abort( error ) )
+                .then( () => this.#ctx = null )
+        }
         
     } 
 
@@ -95,6 +98,8 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      * @returns 
      */
      observe( timeout?: number ): EventIterator<Event> {
+        if( this.#ctx === null ) throw new Error( 'context is no longer valid!')
+
         ++this.#waitForCall
 
         let isTerminated = false
@@ -113,16 +118,22 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     
                 try {
                     // console.debug( `start waitFor: ${self.#name}` ) 
-                    const event =  await self.#emitter.waitFor( self.#ctx, timeout )
-                    // console.debug( `end waitFor: ${self.#name}` ) 
-                    yield event ;
+                    const event =  await self.#evt.waitFor( self.#ctx!, timeout )
+                    // console.debug( `end waitFor: ${self.#name}`, event.data ) 
+                    
+                    if( event.data === undefined ) break
+
+                    yield event 
     
                 } catch(error:any) {
                     console.warn( `timeout occurred observing topic "${self.#name}"`);
                     stop()
-                    yield self.#endEvent
+                    break
                 }
+                
             }
+
+            return null
         }
     
         return {
@@ -133,9 +144,9 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
             //     stop()
             // }, 
 
-            get isTerminated() {
-                return isTerminated
-            }
+            // get isTerminated() {
+            //     return isTerminated
+            // }
         }
     }
     
@@ -153,7 +164,7 @@ export  class PubSubTopic<Data>
      * @param data 
      */
     post( data:Data  ) {
-        this.emitter.post( { topic$: this.name, data: data })
+        this.evt.post( { topic$: this.name, data: data })
     }
 
     // async postAndWait( data:Data ) {
@@ -166,25 +177,23 @@ export  class PubSubTopic<Data>
 export  class RequestReplyTopic<Data, Result> 
         extends BaseTopic<Data, ReplyTopicEvent<Data,Result>> {
 
-    #ctx = Evt.newCtx()
-
     /**
      * 
      * @param data 
      */
     async request( data:Data  ): Promise<Result> {
 
-        const ctx = Evt.newCtx<Result>() 
+        const replyCtx = Evt.newCtx<Result>() 
 
-        this.emitter.post({ 
+        this.evt.post({ 
             topic$: this.name, 
             data: data,
-            reply: ctx
+            reply: replyCtx
          })
 
         return new Promise<Result>( (resolve, reject ) => {
             
-            ctx.evtDoneOrAborted.attachOnce( doneOrAborted => {
+            replyCtx.evtDoneOrAborted.attachOnce( doneOrAborted => {
 
                 switch( doneOrAborted.type ){
                     case 'ABORTED':
