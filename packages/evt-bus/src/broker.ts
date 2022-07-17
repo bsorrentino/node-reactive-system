@@ -24,7 +24,16 @@ interface EventIterator<Data> extends AsyncIterable<Data>  {
 
 type Event<Data,Result> = TopicEvent<Data> | ReplyTopicEvent<Data,Result>
 
-export class BaseTopic<Data, Event extends TopicEvent<Data>> {
+
+export interface Publisher<Data> {
+    post( data:Data ):void
+}
+
+export interface Observable<Data> {
+    observe( timeout?: number ): EventIterator<TopicEvent<Data>>
+}
+
+export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
 
     #name: string
 
@@ -132,12 +141,12 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>> {
     
 }
 
-export type ObservableTopic<Data> = BaseTopic<Data, TopicEvent<Data>> 
-
 /**
  * 
  */
-export class PubSubTopic<Data> extends BaseTopic<Data, TopicEvent<Data>> {
+export  class PubSubTopic<Data> 
+        extends BaseTopic<Data, TopicEvent<Data>> 
+        implements Publisher<Data>, Observable<Data> {
 
     /**
      * 
@@ -154,7 +163,8 @@ export class PubSubTopic<Data> extends BaseTopic<Data, TopicEvent<Data>> {
 
 }
 
-export class RequestReplyTopic<Data, Result> extends BaseTopic<Data, ReplyTopicEvent<Data,Result>> {
+export  class RequestReplyTopic<Data, Result> 
+        extends BaseTopic<Data, ReplyTopicEvent<Data,Result>> {
 
     #ctx = Evt.newCtx()
 

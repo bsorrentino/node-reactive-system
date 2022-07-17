@@ -1,9 +1,11 @@
 import { Worker } from 'worker_threads'
 import * as bus  from '@bsorrentino/bus-core'
 import assert = require('assert')
-import {Broker, 
-PubSubTopic,
-ObservableTopic } from '@bsorrentino/evt-bus'
+import {
+    Broker, 
+    Observable, 
+    Publisher
+} from '@bsorrentino/evt-bus'
 
 /**
  * create new message bus
@@ -13,7 +15,7 @@ const broker = new Broker()
 /**
  * Worker Channel
  */
- export type WorkerTopics<IN,OUT> = { publisher:PubSubTopic<IN>, subscriber:ObservableTopic<OUT> }
+ export type WorkerTopics<IN,OUT> = { publisher:Publisher<IN>, subscriber:Observable<OUT> }
 
 /**
  * Module information
@@ -102,7 +104,7 @@ export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
     worker.on('exit', () =>  worker_message_out.done() )
 
     const worker_message_in     = lookupPubSubTopic<IN>( uniqueId, `WORKER_IN` )
-    worker_message_in.emitter.attach( value => worker.postMessage(value) )
+    worker_message_in.emitter.attach( value => worker.postMessage(value.data) )
     
     return {
         publisher: worker_message_in,
