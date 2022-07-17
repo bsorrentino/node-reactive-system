@@ -27,12 +27,13 @@
     "prepare": "rm -rf lib && tsc",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "test": "jest --silent --detectOpenHandles --roots=packages/evt-bus --config ../../jest.config.js",
-    "test#verbose": "jest --detectOpenHandles --roots=packages/evt-bus --config ../../jest.config.js"
+    "test#verbose": "jest --detectOpenHandles --roots=packages/evt-bus --config ../../jest.config.js",
+    "start#sample": "node ./lib/sample.js"
   },
   "bugs": {
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
-    "evt": "^1.11.2"
+    "evt": "^2.2.0"
   }
 }
