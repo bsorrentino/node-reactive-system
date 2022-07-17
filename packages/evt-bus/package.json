@@ -34,6 +34,6 @@
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
-    "evt": "^2.2.0"
+    "evt": "^2.2.1"
   }
 }

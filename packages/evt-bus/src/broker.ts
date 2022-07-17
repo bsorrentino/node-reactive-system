@@ -56,15 +56,15 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     /**
      * 
      */
-    get evt() { return this.#evt }
+    get name() { return this.#name }
 
     /**
      * 
      */
-    get name() { return this.#name }
+     get evt() { return this.#evt }
 
     /**
-     * waitFor in progess calls
+     * 'waitFor' in progess calls
      */
     get waitForCall() { return this.#waitForCall }
 
@@ -83,7 +83,6 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
 
     /**
      * 
-     * @param message 
      */
     abort( error: Error  ) { 
         if( this.#ctx !== null ) {
@@ -120,7 +119,7 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     
                 try {
                     // console.debug( `start waitFor: ${self.#name}` ) 
-                    const event =  await self.#evt.waitFor( self.#ctx!, timeout )
+                    const event =  await self.evt.waitFor( self.#ctx!, timeout )
                     // console.debug( `end waitFor: ${self.#name}`, event.data ) 
                     
                     if( event.data === undefined ) break

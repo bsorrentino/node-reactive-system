@@ -157,7 +157,7 @@ describe('evt-bus test request reply topic', () => {
             for await ( const  e of topic1.observe(JEST_TIMEOUT - 1000) ) {
 
                 expect( e.topic$ ).toEqual( topic_name )
-                console.log( e )
+                // console.log( e )
 
                 result.push( e.data )
                 e.reply.done( step )
