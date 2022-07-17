@@ -9,8 +9,7 @@ const broker = new Broker()
 const JEST_TIMEOUT = 10000
 jest.setTimeout(JEST_TIMEOUT)
 
-describe('evt-bus test pub sub', () => {
-
+describe( 'evt-bus lookup for topics', () => {
     test( 'get a Pub Sub Topic', () => {
 
         expect(broker).not.toBeNull()
@@ -27,50 +26,6 @@ describe('evt-bus test pub sub', () => {
 
         expect(topic1).not.toBe( topic3 )
     })
-
-    test( 'post message in Pub Sub Topic', async () => {
-        // expect.assertions(1)
-
-        const topic1 = broker.lookupPubSubTopic<String>( 'topic1' );
-
-        const postEvents = async ( ms:number ) => {
-            await sleep( ms )
-            topic1.post( 'event1' )
-            await sleep( ms )
-            topic1.post( 'event2' )
-            await sleep( ms )
-            topic1.post( 'event3' )
-            await sleep( ms )
-            topic1.done()
-        }
-
-        const result = Array<String>()
-
-        const waitFor = async ( numElements:number ) => {
-            let step = 0
-            for await ( const  e of topic1.observe() ) {
-                // console.log( e )
-
-                expect( e.topic$ ).toEqual( 'topic1' )
-
-                if( !e.data ) break // no more events
-                
-                 result.push( e.data )
-    
-                if( numElements == ++step ) break
-    
-            }    
-        }
-
-        await Promise.all( [waitFor(2), waitFor(4), waitFor(1), postEvents(1000) ] )
-
-        expect( result.length ).toEqual( 6 ) 
-
-    })
-
-});
-
-describe('evt-bus test  request reply topic', () => {
 
     test( 'get a Request Reply topic', () => {
 
@@ -91,18 +46,65 @@ describe('evt-bus test  request reply topic', () => {
         expect(topic1).not.toBe( topic3 )
     })
 
+
+})
+
+describe('evt-bus test pub sub', () => {
+
+    test( 'post message in Pub Sub Topic', async () => {
+        // expect.assertions(1)
+
+        const topic1 = broker.lookupPubSubTopic<String>( 'topic1' );
+
+        const postEvents = async ( ms:number ) => {
+            await sleep( ms )
+            topic1.post( 'event1' )
+            await sleep( ms )
+            topic1.post( 'event2' )
+            await sleep( ms )
+            topic1.post( 'event3' )
+            await sleep( ms )
+            topic1.done() 
+        }
+
+        const result = Array<String>()
+
+        const waitFor = async ( numElements:number ) => {
+            let step = 0
+            for await ( const  e of topic1.observe() ) {
+                // console.log( e )
+
+                expect( e.topic$ ).toEqual( 'topic1' )
+                
+                result.push( e.data )
+    
+                if( numElements == ++step ) break
+    
+            }    
+        }
+
+        await Promise.all( [waitFor(2), waitFor(4), waitFor(1), postEvents(1000) ] )
+
+        expect( result.length ).toEqual( 6 ) 
+
+    })
+
+});
+
+describe('evt-bus test request reply topic', () => {
+
     test( 'post message in request reply topic', async () => {
         // expect.assertions(1)
 
         const topic_name = 'topic_reply_1'
         const topic1 = broker.lookupRequestReplyTopic<string, number>( topic_name );
-
+        
         const postEvents = async ( ms:number ) => {
             await sleep( ms )
             let reply = await topic1.request( 'event1' )
             expect( reply ).toEqual( 0 )
             await sleep( ms )
-            reply = await topic1.request( 'event1' )
+            reply = await topic1.request( 'event2' )
             expect( reply ).toEqual( 1 )
             await sleep( ms )
             topic1.abort( new Error('abort by user') )
@@ -136,7 +138,7 @@ describe('evt-bus test  request reply topic', () => {
     test( 'post message in request reply topic with timeout', async () => {
         // expect.assertions(1)
 
-        const topic_name = 'topic_reply_1'
+        const topic_name = 'topic_reply_2'
         const topic1 = broker.lookupRequestReplyTopic<string, number>( topic_name );
 
         const postEvents = async ( ms:number ) => {
@@ -155,9 +157,7 @@ describe('evt-bus test  request reply topic', () => {
             for await ( const  e of topic1.observe(JEST_TIMEOUT - 1000) ) {
 
                 expect( e.topic$ ).toEqual( topic_name )
-                // console.log( e )
-                
-                if( !e.data ) break // no more events
+                console.log( e )
 
                 result.push( e.data )
                 e.reply.done( step )
@@ -177,7 +177,7 @@ describe('evt-bus test  request reply topic', () => {
         // expect.assertions(1)
         const POST_TIMEOUT = 1000
 
-        const topic_name = 'topic_reply_2'
+        const topic_name = 'topic_reply_3'
         const topic = broker.lookupRequestReplyTopic<string, number>( topic_name );
 
         const result = Array<string>()
@@ -186,11 +186,9 @@ describe('evt-bus test  request reply topic', () => {
             let step = 0
 
             for await ( const  e of topic.observe(POST_TIMEOUT + 1) ) {
-                console.log( e )
+                // console.log( e )
 
                 expect( e.topic$ ).toEqual( topic_name )
-                
-                if( !e.data ) break // no more events
 
                 result.push( e.data )
                 
