@@ -1,5 +1,18 @@
-import { Evt, EvtError, to } from "evt";
+import { create } from "domain";
+import { Evt, TimeoutEvtError, to } from "evt";
 //Or import { Evt } from "https://evt.land/x/evt/mod.ts" on deno
+
+const interval = (ms:number, cb:()=>boolean ) => { 
+    let handle:any
+    return new Promise(resolve => {
+        handle = setInterval( () => {
+            if( cb() ) {
+                resolve(null)
+                clearInterval( handle )
+            }  
+        }, ms)
+    })
+}
 
 function snippet1() {
     const evtText = Evt.create<string>();
@@ -182,8 +195,93 @@ async function snippet5() {
     }
 }
 
-// snippet1()
-// snippet2()
-// snippet3()
-// snippet4()
-snippet5()
+type Data = {
+    type: "TEXT";
+    text: string;
+} | {
+    type: "AGE";
+    age: number;
+}
+
+class Sample1 {
+
+    static create() { return new Sample1() }
+
+    "test new asyncIterator feature from evt with timeout" =  async () => {
+    
+        const evt = Evt.create<Data>()
+        
+        const waitForEvent =  async () => {
+
+            const ctx = Evt.newCtx();
+          
+            for await(const data of evt.iter(ctx, 1500 )) {   
+              console.log(data);
+            }
+          
+            if( ctx.completionStatus?.error instanceof TimeoutEvtError ){
+              console.log("We exited the loop because of a timeout");
+            }
+          
+            console.log(`Out of the loop, handler count: ${evt.getHandlers().length}`)
+          
+        }
+          
+        const postData = async () => {
+            let numEvents = 0;
+            await interval( 1000, () => {
+                evt.post( { type: 'TEXT', text: 'HI THERE!'})
+                return ( ++numEvents==5 ) 
+            })   
+        }
+    
+        return Promise.all( [waitForEvent(), postData()] )
+    }
+
+    "test new asyncIterator feature from evt with done" =  async () => {
+
+        const evt = Evt.create<Data>()
+
+        const ctx = Evt.newCtx();
+                
+        const waitForEvent =  async () => {
+  
+            for await(const data of evt.iter(ctx)) {   
+              console.log(data);
+            }
+                    
+            console.log(`Out of the loop, handler count: ${evt.getHandlers().length}`)
+          
+        }
+          
+        const postData = async () => {
+            let numEvents = 0;
+            await interval( 1000, () => {
+                evt.post( { type: 'TEXT', text: 'HI THERE!'})
+                if( ++numEvents==5 ) {
+                    ctx.done()
+                    return true
+                }
+                return false
+            })   
+        }
+    
+        return Promise.all( [waitForEvent(), postData()] )
+    }
+}
+
+
+
+const main = async () => {
+    // snippet1()
+    // snippet2()
+    // snippet3()
+    // snippet4()
+    // snippet5()
+    const sample = Sample1.create()
+
+    await sample["test new asyncIterator feature from evt with timeout"]()
+    await sample["test new asyncIterator feature from evt with done"]()
+}
+
+main()
