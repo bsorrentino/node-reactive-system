@@ -104,7 +104,7 @@ export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
     worker.on('exit', () =>  worker_message_out.done() )
 
     const worker_message_in     = lookupPubSubTopic<IN>( uniqueId, `WORKER_IN` )
-    worker_message_in.emitter.attach( value => worker.postMessage(value.data) )
+    worker_message_in.evt.attach( value => worker.postMessage(value.data) )
     
     return {
         publisher: worker_message_in,
