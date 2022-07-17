@@ -7,6 +7,7 @@ import {
     Publisher
 } from '@bsorrentino/evt-bus'
 
+
 /**
  * create new message bus
  */
@@ -70,6 +71,12 @@ export const modules = new Modules()
  * @returns 
  */    
 export const topicNames = () => broker.topicNames
+
+/**
+ * 
+ * @returns 
+ */
+export const topics = () => broker.topics
 
 /**
  * get or create a standard Channel 

@@ -1,7 +1,6 @@
 import * as bus from '@bsorrentino/bus-core'
+import { Evt, TopicEvent } from '@bsorrentino/evt-bus'
 import * as rxbus from '@bsorrentino/rxbus'
-import { ChannelEvent } from '@bsorrentino/rxmq'
-import { Subscription } from 'rxjs'
 
 /*
 
@@ -33,35 +32,32 @@ const FgCyan = "\x1b[36m"
 const Reverse = "\x1b[7m"
 const Reset = "\x1b[0m"
 
-type TraceFunction<T = any> = ( event:ChannelEvent<T> ) => void 
+type TraceFunction<T = any> = ( event:TopicEvent<T> ) => void 
 
 class TraceModule implements bus.Module {
 
     readonly name = "TRACE"
     
-    private _subscriptions:Array<Subscription> = []
+    #ctx = Evt.newCtx()
 
     onStart() {
         console.log( this.name, 'start' )
 
-        for( let c of rxbus.channelNames() ) {
+        for( let topic of rxbus.topics() ) {
             
-            console.log( `trace: subscribe on ${c}`)
+            console.log( `trace: subscribe on ${topic.name}`)
 
             const trace:TraceFunction = ( { topic$, data } ) => 
-                console.log( Reverse, `trace: got message from '${c}' on topic '${topic$}' ==> `, data, Reset)
+                console.log( Reverse, `trace: got message on topic '${topic$}' ==> `, data, Reset)
 
-            this._subscriptions.push( 
-                rxbus.observe<any>( c, "*" ).subscribe( { next: trace }))
-
+            topic.evt.attach( this.#ctx, trace )
+ 
         }
     }
 
     onStop() {
-        for( let s of this._subscriptions) {
-           s.unsubscribe() 
-        }
-        this._subscriptions = []
+        this.#ctx.getHandlers()
+            .forEach( ( { handler } ) => handler.detach() )
     }
 }
 

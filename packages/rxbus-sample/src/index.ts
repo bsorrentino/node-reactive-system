@@ -4,14 +4,15 @@ import {
     Module as TimerModule, 
     Subjects as TimerSubjects
 } from '@bsorrentino/rxbus-timer'
-import { off } from 'process'
+
+import { Module as TraceModule } from '@bsorrentino/rxbus-trace'
 
 async function main() {
 
     console.log( 'start' )
 
-    // rxbus.modules.register( TraceModule )
     rxbus.modules.register( TimerModule )
+    rxbus.modules.register( TraceModule )
 
     for( let module of rxbus.modules.names ) {
         console.log( `"${module}"`, 'registerd' )

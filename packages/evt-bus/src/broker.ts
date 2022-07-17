@@ -1,5 +1,7 @@
 import { Ctx, Evt } from "evt"
 
+export * from 'evt'
+
 export type RequestOptions<Data, Result> = {
     data: Data
     ctx?: Ctx<Result>
@@ -219,7 +221,7 @@ export  class RequestReplyTopic<Data, Result>
 
 }
 
-type GenericTopic<Data,Result> = PubSubTopic<Data> | RequestReplyTopic<Data,Result>
+export type GenericTopic<Data,Result> = PubSubTopic<Data> | RequestReplyTopic<Data,Result>
 
 /**
  * 
@@ -235,6 +237,13 @@ export class Broker  {
         return Object.keys(this.#topics);
     }
 
+    /**
+     * 
+     */
+    get topics() {
+        return Object.values(this.#topics);
+    }
+    
     /**
      * return (and eventually create) a topic
      * 

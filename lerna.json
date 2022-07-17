@@ -4,6 +4,7 @@
     "packages/evt-bus",
     "packages/rxbus",
     "packages/rxbus-timer",
+    "packages/rxbus-trace",
     "packages/rxbus-sample"
   ],
   "useNx": true,
