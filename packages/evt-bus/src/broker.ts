@@ -1,4 +1,5 @@
 import { Ctx, Evt } from "evt"
+import { AsyncIterableEvt } from "evt/lib/types/AsyncIterableEvt";
 
 export * from 'evt'
 
@@ -18,9 +19,7 @@ export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> {
 }
   
 
-export type  EventIterator<Data> = AsyncIterable<Data> 
-
-
+export type  EventIterator<Event> = AsyncIterableEvt<Event> 
 
 export interface Publisher<Data> {
     post( data:Data ):void
@@ -40,8 +39,6 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     
     #waitForCall = 0
 
-    #endEvent:Event 
-    
     /**
      * 
      * @param topic_name 
@@ -50,7 +47,6 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
         this.#name = topic_name
 
         this.#ctx = Evt.newCtx()
-        this.#endEvent = <Event>{ topic$: topic_name }
     }
 
     /**
@@ -73,24 +69,22 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      */
     done() { 
         if( this.#ctx !== null ) {
-            this.#evt.postAndWait( this.#endEvent )
-            .then( () => this.#ctx?.done() )
-            .then( () => this.#ctx = null )
-
-        }
-        
+            this.#ctx.done()
+            --this.#waitForCall
+            this.#ctx = null
+        }        
     }
 
     /**
      * 
+     * @param error 
      */
     abort( error: Error  ) { 
         if( this.#ctx !== null ) {
-            this.#evt.postAndWait( this.#endEvent )
-                .then( () => this.#ctx?.abort( error ) )
-                .then( () => this.#ctx = null )
-        }
-        
+            this.#ctx.abort( error )
+            --this.#waitForCall
+            this.#ctx = null
+        }        
     } 
 
     /**
@@ -98,59 +92,14 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      * @param timeout 
      * @returns 
      */
-     observe( timeout?: number ): EventIterator<Event> {
+    observe( timeout?: number ): EventIterator<Event> {
         if( this.#ctx === null ) throw new Error( 'context is no longer valid!')
 
         ++this.#waitForCall
 
-        let isTerminated = false
-    
-        const stop = () => {
-            isTerminated = true 
-            --this.#waitForCall
-        }
-
-        this.#ctx.evtDoneOrAborted.attachOnce( doneOrAborted => stop() )
-    
-        const self = this
-        const events = async function* () {
-            
-            while(!isTerminated) {
-    
-                try {
-                    // console.debug( `start waitFor: ${self.#name}` ) 
-                    const event =  await self.evt.waitFor( self.#ctx!, timeout )
-                    // console.debug( `end waitFor: ${self.#name}`, event.data ) 
-                    
-                    if( event.data === undefined ) break
-
-                    yield event 
-    
-                } catch(error:any) {
-                    console.warn( `timeout occurred observing topic "${self.#name}"`);
-                    stop()
-                    break
-                }
-                
-            }
-
-            return null
-        }
-    
-        return {
-            [Symbol.asyncIterator]: () => events(),
-    
-            // abort: () => {
-            //     console.warn( `observing topic ${this.#name} aborted by user'"`)
-            //     stop()
-            // }, 
-
-            // get isTerminated() {
-            //     return isTerminated
-            // }
-        }
+        return this.#evt.iter( this.#ctx, timeout)
     }
-    
+
 }
 
 /**
@@ -279,3 +228,49 @@ export class Broker  {
     }
 
 }
+
+
+/*
+    
+observe( timeout?: number ): AsyncIterable<Event>  {
+    if( this.#ctx === null ) throw new Error( 'context is no longer valid!')
+
+    ++this.#waitForCall
+
+    let isTerminated = false
+
+    const stop = () => {
+        isTerminated = true 
+        --this.#waitForCall
+    }
+
+    this.#ctx.evtDoneOrAborted.attachOnce( doneOrAborted => stop() )
+
+    const self = this
+    const events = async function* () {
+        
+        while(!isTerminated) {
+
+            try {
+                const event =  await self.evt.waitFor( self.#ctx!, timeout )
+                
+                if( event.data === undefined ) break
+
+                yield event 
+
+            } catch(error:any) {
+                console.warn( `timeout occurred observing topic "${self.#name}"`);
+                stop()
+                break
+            }
+        }
+
+        return null
+    }
+
+    return {
+        [Symbol.asyncIterator]: () => events(),
+    }
+}
+
+*/
