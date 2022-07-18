@@ -22,7 +22,7 @@ export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> {
 export type  EventIterator<Event> = AsyncIterableEvt<Event> 
 
 export interface Publisher<Data> {
-    post( data:Data ):void
+    post( data:Data ): this
 }
 
 export interface Observable<Data> {
@@ -58,6 +58,9 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      * 
      */
      get evt() { return this.#evt }
+
+
+     get completionStatus() { return this.#ctx?.completionStatus }
 
     /**
      * 'waitFor' in progess calls
@@ -115,6 +118,7 @@ export  class PubSubTopic<Data>
      */
     post( data:Data  ) {
         this.evt.post( { topic$: this.name, data: data })
+        return this
     }
 
     // async postAndWait( data:Data ) {
@@ -131,7 +135,7 @@ export  class RequestReplyTopic<Data, Result>
      * 
      * @param data 
      */
-    async request( data:Data  ): Promise<Result> {
+    async request( data:Data, timeout?:number   ): Promise<Result> {
 
         const replyCtx = Evt.newCtx<Result>() 
 
