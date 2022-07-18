@@ -4,6 +4,8 @@ import { Broker } from "../src/broker";
 
 const sleep = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
 
+const immediate = () => new Promise(resolve => setImmediate(resolve))
+
 const broker = new Broker()
 
 const JEST_TIMEOUT = 10000
@@ -53,39 +55,40 @@ describe('evt-bus test pub sub', () => {
 
     test( 'post message in Pub Sub Topic', async () => {
         // expect.assertions(1)
-
-        const topic1 = broker.lookupPubSubTopic<String>( 'topic1' );
+        
+        const topic_name = 'topic1'
+        const topic1 = broker.lookupPubSubTopic<String>( topic_name );
 
         const postEvents = async ( ms:number ) => {
             await sleep( ms )
             topic1.post( 'event1' )
-            await sleep( ms )
+            // await sleep( ms )
             topic1.post( 'event2' )
-            await sleep( ms )
+            // await sleep( ms )
             topic1.post( 'event3' )
             await sleep( ms )
             topic1.done() 
+            return 0
         }
-
-        const result = Array<String>()
 
         const waitFor = async ( numElements:number ) => {
             let step = 0
-            for await ( const  e of topic1.observe() ) {
-                // console.log( e )
 
-                expect( e.topic$ ).toEqual( 'topic1' )
-                
-                result.push( e.data )
+            for await ( const  e of topic1.observe() ) {
+                console.log( e )
+
+                expect( e.topic$ ).toEqual( topic_name )
     
                 if( numElements == ++step ) break
-    
+
             }    
+
+            return step
         }
 
-        await Promise.all( [waitFor(2), waitFor(4), waitFor(1), postEvents(1000) ] )
+        const result = await Promise.all( [waitFor(2), waitFor(4), waitFor(1), postEvents(500) ] )
 
-        expect( result.length ).toEqual( 6 ) 
+        expect( result.reduce( (total, add) => total + add )).toEqual( 6 ) 
 
     })
 
