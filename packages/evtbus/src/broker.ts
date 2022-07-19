@@ -1,8 +1,6 @@
 import { Ctx, Evt } from "evt"
 import { AsyncIterableEvt } from "evt/lib/types/AsyncIterableEvt";
 
-export * from 'evt'
-
 export type RequestOptions<Data, Result> = {
     data: Data
     ctx?: Ctx<Result>

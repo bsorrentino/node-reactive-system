@@ -30,12 +30,11 @@
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
-    "@bsorrentino/rxbus": "^0.8.0",
     "@bsorrentino/evtbus": "^0.8.0",
     "@bsorrentino/rxbus-timer": "^0.8.0",
     "@bsorrentino/rxbus-trace": "^0.8.0"
   },
   "engines": {
-    "node": ">=12.x"
+    "node": ">=16.x"
   }
 }

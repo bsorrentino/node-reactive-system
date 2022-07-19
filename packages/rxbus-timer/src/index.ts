@@ -1,6 +1,6 @@
 import * as bus from '@bsorrentino/bus-core'
+import * as evtbus from '@bsorrentino/evtbus'
 import { PubSubTopic } from '@bsorrentino/evtbus'
-import * as rxbus from '@bsorrentino/rxbus'
 
 /**
  * Configuration parameters
@@ -40,7 +40,7 @@ class TimerModule implements bus.Module<Config> {
 
     onStart() {
 
-        this.topic = rxbus.lookupPubSubTopic<number>(this.name, Subjects.Tick)
+        this.topic = evtbus.lookupPubSubTopic<number>(this.name, Subjects.Tick)
 
         let tick = 0
         this.#interval = 

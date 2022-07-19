@@ -1,4 +1,5 @@
-import * as rxbus from '@bsorrentino/rxbus'
+import * as evtbus from '@bsorrentino/evtbus'
+
 
 import { 
     Module as TimerModule, 
@@ -13,11 +14,11 @@ import { Module as TraceModule } from '@bsorrentino/rxbus-trace'
 
 async function printTicks() {
 
-    const timerTopic = rxbus.lookupPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick)
+    const timerTopic = evtbus.lookupPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick)
 
     for await ( const tick of timerTopic.observe() ) {
         
-        if( tick.data%100 === 0 ) 
+        if( tick.data%10 === 0 ) 
             console.log( 'tick', tick.data )
     
     }
@@ -28,19 +29,19 @@ async function main() {
 
     console.log( 'start' )
 
-    rxbus.modules.register( TimerModule )
+    evtbus.modules.register( TimerModule )
     // rxbus.modules.register<FastifyConfig>( FastifyModule, 
     //     { 
     //         port:8888, 
     //         requestTimeout:5000
     //     }) 
-    rxbus.modules.register( TraceModule )
+    evtbus.modules.register( TraceModule )
 
-    for( let module of rxbus.modules.names ) {
+    for( let module of evtbus.modules.names ) {
         console.log( `"${module}"`, 'registerd' )
     }
 
-    rxbus.modules.start()
+    evtbus.modules.start()
 
     return Promise.all([
         printTicks()

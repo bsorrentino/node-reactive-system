@@ -2,7 +2,6 @@
   "packages": [
     "packages/bus-core",
     "packages/evtbus",
-    "packages/rxbus",
     "packages/rxbus-timer",
     "packages/rxbus-trace",
     "packages/rxbus-sample"

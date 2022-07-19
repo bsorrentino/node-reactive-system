@@ -1,6 +1,6 @@
 import * as bus from '@bsorrentino/bus-core'
+import * as evtbus from '@bsorrentino/evtbus'
 import { Evt, TopicEvent } from '@bsorrentino/evtbus'
-import * as rxbus from '@bsorrentino/rxbus'
 
 /*
 
@@ -43,7 +43,7 @@ class TraceModule implements bus.Module {
     onStart() {
         console.log( this.name, 'start' )
 
-        for( let topic of rxbus.topics() ) {
+        for( let topic of evtbus.topics() ) {
             
             console.log( `trace: subscribe on ${topic.name}`)
 

@@ -1,17 +1,17 @@
 {
   "name": "@bsorrentino/bus-core",
   "version": "0.8.0",
-  "description": "> TODO: description",
+  "description": "",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
   "types": "./src/index.d.ts",
-  "license": "ISC",
+  "license": "MIT",
   "directories": {
-    "lib": "lib",
+    "lib": "src",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "repository": {
     "type": "git",

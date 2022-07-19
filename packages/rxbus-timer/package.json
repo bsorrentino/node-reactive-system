@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
-    "@bsorrentino/rxbus": "^0.8.0",
     "@bsorrentino/evtbus": "^0.8.0"
 
   },
