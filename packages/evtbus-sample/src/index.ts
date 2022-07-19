@@ -4,9 +4,9 @@ import * as evtbus from '@bsorrentino/evtbus'
 import { 
     Module as TimerModule, 
     Subjects as TimerSubjects
-} from '@bsorrentino/rxbus-timer'
+} from '@bsorrentino/evtbus-timer'
 
-import { Module as TraceModule } from '@bsorrentino/rxbus-trace'
+import { Module as TraceModule } from '@bsorrentino/evtbus-trace'
 // import { 
 //     Module as FastifyModule, 
 //     Config as FastifyConfig

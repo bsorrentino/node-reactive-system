@@ -1,12 +1,12 @@
 {
-  "name": "@bsorrentino/rxbus-trace",
+  "name": "@bsorrentino/evtbus-timer",
   "version": "0.8.0",
-  "description": "> TODO: description",
+  "description": "",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "license": "ISC",
+  "license": "MIT",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -29,6 +29,7 @@
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
     "@bsorrentino/evtbus": "^0.8.0"
+
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

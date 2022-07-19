@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "lerna run prepare",
-    "start": "lerna run start --scope=rxbus-sample --stream",
+    "start": "lerna run start --scope=evtbus-sample --stream",
     "clean": "lerna clean -y",
     "bootstrap": "lerna bootstrap --strict --hoist",
     "doc": "typedoc",
