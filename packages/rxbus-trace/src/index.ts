@@ -1,5 +1,5 @@
 import * as bus from '@bsorrentino/bus-core'
-import { Evt, TopicEvent } from '@bsorrentino/evt-bus'
+import { Evt, TopicEvent } from '@bsorrentino/evtbus'
 import * as rxbus from '@bsorrentino/rxbus'
 
 /*

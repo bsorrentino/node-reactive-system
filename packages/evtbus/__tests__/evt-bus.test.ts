@@ -11,7 +11,7 @@ const broker = new Broker()
 const JEST_TIMEOUT = 10000
 jest.setTimeout(JEST_TIMEOUT)
 
-describe( 'evt-bus lookup for topics', () => {
+describe( 'evtbus lookup for topics', () => {
     test( 'get a Pub Sub Topic', () => {
 
         expect(broker).not.toBeNull()
@@ -51,7 +51,7 @@ describe( 'evt-bus lookup for topics', () => {
 
 })
 
-describe('evt-bus test pub sub', () => {
+describe('evtbus test pub sub', () => {
 
     test( 'post message in Pub Sub Topic', async () => {
         // expect.assertions(1)
@@ -94,7 +94,7 @@ describe('evt-bus test pub sub', () => {
 
 });
 
-describe('evt-bus test request reply topic', () => {
+describe('evtbus test request reply topic', () => {
 
     test( 'post message in request reply topic', async () => {
         // expect.assertions(1)

@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
-    "@bsorrentino/evt-bus": "^0.8.0"
+    "@bsorrentino/evtbus": "^0.8.0"
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

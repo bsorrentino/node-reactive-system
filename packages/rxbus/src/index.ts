@@ -5,7 +5,7 @@ import {
     Broker, 
     Observable, 
     Publisher
-} from '@bsorrentino/evt-bus'
+} from '@bsorrentino/evtbus'
 
 
 /**

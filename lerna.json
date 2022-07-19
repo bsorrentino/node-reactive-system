@@ -1,11 +1,10 @@
 {
   "packages": [
     "packages/bus-core",
-    "packages/evt-bus",
+    "packages/evtbus",
     "packages/rxbus",
     "packages/rxbus-timer",
     "packages/rxbus-trace",
-    "packages/rxbus-fastify",
     "packages/rxbus-sample"
   ],
   "useNx": true,

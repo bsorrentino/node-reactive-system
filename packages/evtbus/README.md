@@ -1,11 +1,11 @@
-# `evt-bus`
+# `evtbus`
 
 > TODO: description
 
 ## Usage
 
 ```
-const evtBus = require('evt-bus');
+const evtBus = require('evtbus');
 
 // TODO: DEMONSTRATE API
 ```

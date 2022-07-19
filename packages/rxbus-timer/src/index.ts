@@ -1,5 +1,5 @@
 import * as bus from '@bsorrentino/bus-core'
-import { PubSubTopic } from '@bsorrentino/evt-bus'
+import { PubSubTopic } from '@bsorrentino/evtbus'
 import * as rxbus from '@bsorrentino/rxbus'
 
 /**
