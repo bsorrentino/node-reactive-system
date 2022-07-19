@@ -1,9 +1,10 @@
 import * as rxbus from '@bsorrentino/rxbus'
 import * as bus  from '@bsorrentino/bus-core'
-import path from 'path'
+import 'fastify-websocket'
+import '@bsorrentino/rxmq'
+
 import Fastify from 'fastify'
-import '@fastify/websocket'
-import '@fastify/static'
+import { timeout } from 'rxjs/operators'
 
 type RequestData = any  
 type ResponseData = any
@@ -62,15 +63,15 @@ class FastifyModule implements bus.Module<Config> {
     private setupWebSocketChannel<M>( module:string ) {
         const channelName = module
         
-        const messagePublisher$    = rxbus.lookupPubSubTopic<M>( channelName, Subjects.WSMessageIn )
-        const messageObserver$   = rxbus.lookupPubSubTopic<any>( channelName, Subjects.WSMessage )
+        const messageSubject$    = rxbus.subject<M>( channelName, Subjects.WSMessageIn )
+        const messageObserver$   = rxbus.observe<any>( channelName, Subjects.WSMessage )
 
         this.server.get( `/${this.name}/channel/${channelName}/*`, { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
-            connection.socket.on( 'message', (message:M) => messagePublisher$.post( message ) )
+            connection.socket.on( 'message', (message:M) => messageSubject$.next( message ) )
 
-            messageObserver$.evt.attach( ( event ) => {
-                console.log( 'ws send', event.data )
-                connection.socket.emit( event.data )
+            messageObserver$.subscribe( message => {
+                console.log( 'ws send', message )
+                connection.socket.send( message )
             })
         })
         
@@ -82,24 +83,7 @@ class FastifyModule implements bus.Module<Config> {
     onRegister( config?:Config ) {
         if( config ) this.config = config
     
-        //
-        // add Web Socket plugin
-        //
-        this.server.register( require('@fastify/websocket'), {} )
-        //
-        // add static plugin
-        //
-        // this.server.register(require('@fastify/static'), {
-        //     root: path.join(process.cwd(), 'www'),
-        //     prefix: '/', // optional: default '/'
-        // })
-        this.server.register(require('@fastify/static'), {
-            root: __dirname,
-        })
-        
-        this.server.get(`/${this.name}/wstest`, (req, reply) => {
-            return reply.sendFile('websocket.html', __dirname ) // serving path.join(__dirname, 'public', 'myHtml.html') directly
-        })
+        const { request: httpRequest } = rxbus.replyChannel<RequestData,ResponseData>( this.name )
 
         const rxp = new RegExp( `/${this.name}/channel/([\\w]+)([?].+)?`)
 
@@ -107,19 +91,13 @@ class FastifyModule implements bus.Module<Config> {
             
             const cmd = rxp.exec(request.url)
             if( cmd ) {
-
-                const requestTopic = rxbus.lookupRequestReplyTopic<RequestData,ResponseData>( this.name, cmd[1] )
-                
-                try {
-                    const result = await requestTopic.request( request, this.config.requestTimeout || 5000 )
-
-                    reply.send(result)
-
-                }
-                catch( err:any ) {
-                    reply.code(500).send(err)
-                }
-
+                httpRequest( { topic: cmd[1], data:request } )
+                    .pipe( timeout( this.config.requestTimeout || 5000) )
+                    .subscribe({ 
+                        next: data => reply.send(data),
+                        error: err => reply.code(500).send(err),
+                        complete: () => {}
+                    })
             }
             else {
                 reply.status( 404 ).send('command not found!')
@@ -127,32 +105,36 @@ class FastifyModule implements bus.Module<Config> {
             await reply
         })
 
-          
+        //
+        // add Web Socket middleware
+        //
+        this.server.register( require('fastify-websocket'), {} )
+
         //
         // Listen for adding Web Socket channel
         //
-        rxbus.lookupRequestReplyTopic<string,boolean>(this.name,Subjects.WSAdd)
-            .evt.attach( event => {
-                console.log( 'request add channel ', event.data )
-                event.reply.done( true )
-            })
+        rxbus.reply<string,boolean>(this.name,Subjects.WSAdd)
+                .subscribe( ({data,replySubject}) => {
+                    console.log( 'request add channel ', data )
+                    this.setupWebSocketChannel( data )
+                    replySubject.next( true )
+                    replySubject.complete()
+                })
         
     }
 
     onStart() {
         
-        this.server.listen( { port: this.config.port || 3000 }, (err, address) => {
+        this.server.listen( this.config.port || 3000, (err, address) => {
             if (err) {
                 console.error(err)
-                rxbus.lookupPubSubTopic(this.name, Subjects.ServerStart)
-                    .abort( err )
+                rxbus.subject(this.name, Subjects.ServerStart)
+                        .error( err )
             }
             else {
                 console.log(`Server listening at ${address}`)
-                rxbus.lookupPubSubTopic<ServerInfo>(this.name, Subjects.ServerStart)
-                    .post( { address:address } )
-                    .done()
-                        
+                rxbus.subject<ServerInfo>(this.name, Subjects.ServerStart)
+                        .next( { address:address })
             }
           })    
     }
@@ -160,8 +142,8 @@ class FastifyModule implements bus.Module<Config> {
     onStop() {
         this.server.close().then( v => { 
             console.log( 'server closed!');
-            rxbus.lookupPubSubTopic(this.name, Subjects.ServerClose)
-                    .done() 
+            rxbus.subject(this.name, Subjects.ServerClose)
+                    .complete() 
         })
     }
 }

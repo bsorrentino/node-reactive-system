@@ -1,13 +1,12 @@
 {
-  "name": "@bsorrentino/rxbus-fastify",
+  "name": "@bsorrentino/rxbus-trace",
   "version": "0.8.0",
   "description": "> TODO: description",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "license": "ISC",
-  "private": false,
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -22,8 +21,7 @@
   "scripts": {
     "clean": "rm -rf lib",
     "prepare": "tsc src/*.ts --declaration --outDir ./lib",
-    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
-    "test": "jest --config ../../jest.config.js"
+    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
   },
   "bugs": {
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
@@ -31,12 +29,7 @@
   "dependencies": {
     "@bsorrentino/bus-core": "^0.8.0",
     "@bsorrentino/rxbus": "^0.8.0",
-    "@bsorrentino/rxmq": "^0.8.0",
-    "fastify": "^3.15.0",
-    "fastify-websocket": "^3.2.0"
-  },
-  "engines": {
-    "node": ">=12.x"
+    "@bsorrentino/rxmq": "^0.8.0"
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }
