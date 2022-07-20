@@ -4,6 +4,7 @@
     "packages/evtbus",
     "packages/evtbus-timer",
     "packages/evtbus-trace",
+    "packages/evtbus-http",
     "packages/evtbus-sample"
   ],
   "useNx": true,
