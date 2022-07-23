@@ -104,18 +104,25 @@ export const lookupRequestReplyTopic = <T, R>( name:string, topic:string ) =>
  * @returns 
  */
 export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
-    const uniqueId = `WORKER${worker.threadId}`
-    const worker_message_out    = lookupPubSubTopic<OUT>( uniqueId, `WORKER_OUT`)
-    worker.on('message', value =>  worker_message_out.post( value ) )
-    worker.on('error', err =>  worker_message_out.abort( err ) )
-    worker.on('exit', () =>  worker_message_out.done() )
+    const uniqueId = `worker_${worker.threadId}`
+    const worker_observer    = lookupPubSubTopic<OUT>( uniqueId, `out`)
+    worker.on('message', value =>  {
+        console.log( 'worker.on.message', value )
+        worker_observer.post( value ) 
+    })
+    worker.on('error', err =>  worker_observer.abort( err ) )
+    worker.on('exit', () =>  worker_observer.done() )
 
-    const worker_message_in     = lookupPubSubTopic<IN>( uniqueId, `WORKER_IN` )
-    worker_message_in.evt.attach( value => worker.postMessage(value.data) )
+    const worker_publisher     = lookupPubSubTopic<IN>( uniqueId, `in` )
+    worker_publisher.evt.attach( value =>{
+
+        console.log( `worker.postMessage(${value.data})` )
+        worker.postMessage(value.data)
+    }) 
     
     return {
-        publisher: worker_message_in,
-        subscriber: worker_message_out
+        publisher: worker_publisher,
+        subscriber: worker_observer
     }
 
 }
