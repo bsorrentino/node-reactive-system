@@ -60,7 +60,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
     if( !worker ) return // GUARD
 
     // get worker related topics 
-    const { publisher, subscriber } = 
+    const { publisher, observable } = 
         evtbus.workerTopics<number,{input:any,waitTime:number}>( worker ) 
 
      // get topic handling the timer event
@@ -81,7 +81,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
     
      // observing for worker events
     const observe_worker = async () => {
-        for await ( const event of subscriber.observe() ) {
+        for await ( const event of observable.observe() ) {
 
             console.log('worker event', event)
         

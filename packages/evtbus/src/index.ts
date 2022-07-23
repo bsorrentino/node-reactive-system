@@ -14,13 +14,6 @@ import {
  */
 const broker = new Broker()
 
-/**
- * Worker Channel
- */
- export type WorkerTopics<IN,OUT> = { 
-    publisher:Publisher<IN>, 
-    subscriber:Observable<TopicEvent<OUT>> 
-}
 
 /**
  * Module information
@@ -101,6 +94,15 @@ export const lookupRequestReplyTopic = <T, R>( name:string, topic:string ) =>
         broker.lookupRequestReplyTopic<T, R>(`${name.toLocaleLowerCase()}_${topic}`)
 
 
+
+/**
+ * Worker topic
+ */
+ export type WorkerTopics<IN,OUT> = { 
+    publisher:Publisher<IN>, 
+    observable:Observable<TopicEvent<OUT>> 
+}
+
 /**
  * get or create a Channel conneted to a Worker Thread
  * 
@@ -128,7 +130,7 @@ export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
     
     return {
         publisher: worker_publisher,
-        subscriber: worker_observer
+        observable: worker_observer
     }
 
 }
