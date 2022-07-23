@@ -2,7 +2,7 @@
 
 > Proof of Concept for using [Web Workers] module allowing to create a new **Web Worker** connecting it with a bidirection event channel
 
-## Usage
+## Sample
 
 ```typescript
 
@@ -36,7 +36,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
     if( !worker ) return // GUARD
 
     // get worker related topics 
-    const { publisher, subscriber } = 
+    const { publisher, observable } = 
         evtbus.workerTopics<number,{input:any,waitTime:number}>( worker ) 
 
      // get topic handling the timer event
@@ -46,6 +46,9 @@ async function route_timer_to_worker( worker:Worker|null ) {
     const observe_timer = async () => {
         // Request register a new WS route  
         for await ( const tick of timerTopic.observe() ) {
+
+            if( tick.data%10 === 0 ) {
+                console.log( 'send tick to worker', tick.data )
                 publisher.post( tick.data )
             }
         }
@@ -53,7 +56,8 @@ async function route_timer_to_worker( worker:Worker|null ) {
     
      // observing for worker events
     const observe_worker = async () => {
-        for await ( const event of subscriber.observe() ) {
+        for await ( const event of observable.observe() ) {
+
             console.log('worker event', event)
         }
     }
