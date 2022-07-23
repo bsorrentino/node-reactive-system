@@ -6,11 +6,6 @@ import { parse } from 'url';
 import { Server as StaticServer } from 'node-static'
 import path from 'node:path';
 
-type RequestData = any  
-type ResponseData = any
-type ServerInfo = {
-    address:string
-}
 
 /**
  * Configuration parameters
@@ -96,7 +91,7 @@ class HTTPModule implements bus.Module<Config> {
             messagePublisher$.post( message ) 
         })
 
-        messageObserver$.evt.attach( event => {
+        messageObserver$.asNonPostable().attach( event => {
                 console.log( 'ws send', event.data )
                 ws.send( event.data )
             })

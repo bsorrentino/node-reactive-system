@@ -1,4 +1,4 @@
-import { Ctx, Evt } from "evt"
+import { Ctx, Evt, NonPostableEvt, Postable } from "evt"
 import { AsyncIterableEvt } from "evt/lib/types/AsyncIterableEvt";
 
 export type RequestOptions<Data, Result> = {
@@ -19,15 +19,15 @@ export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> {
 
 export type  EventIterator<Event> = AsyncIterableEvt<Event> 
 
-export interface Publisher<Data> {
-    post( data:Data ): this
+export type Publisher<Data> = Postable<Data> 
+
+export interface Observable<Event> {
+    observe( timeout?: number ): EventIterator<Event>
+
+    asNonPostable(): NonPostableEvt<Event>
 }
 
-export interface Observable<Data> {
-    observe( timeout?: number ): EventIterator<TopicEvent<Data>>
-}
-
-export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
+export class BaseTopic<Data, Event extends TopicEvent<Data>> implements Observable<Event> {
 
     #name: string
 
@@ -45,6 +45,10 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
         this.#ctx = Evt.newCtx()
     }
 
+    asNonPostable(): NonPostableEvt<Event> {
+       return this.#evt
+    }
+
     /**
      * 
      */
@@ -53,7 +57,7 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     /**
      * 
      */
-     get evt() { return this.#evt }
+     protected get evt() { return this.#evt }
 
 
      get completionStatus() { return this.#ctx?.completionStatus }
@@ -89,7 +93,7 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
 
         return this.#evt.iter( this.#ctx, timeout)
     }
-
+ 
 }
 
 /**
@@ -97,20 +101,24 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
  */
 export  class PubSubTopic<Data> 
         extends BaseTopic<Data, TopicEvent<Data>> 
-        implements Publisher<Data>, Observable<Data> {
+        implements Publisher<Data> {
 
-    /**
-     * 
-     * @param data 
-     */
-    post( data:Data  ) {
-        this.evt.post( { topic$: this.name, data: data })
-        return this
+    postAsyncOnceHandled(data: Data): number | Promise<number> {
+        return this.evt.postAsyncOnceHandled( { topic$: this.name, data } )
     }
 
-    // async postAndWait( data:Data ) {
-    //     this.emitter.postAndWait( { topic$: this.name, data: data })
-    // }
+    post(data: Data): number {
+        return this.evt.post( { topic$: this.name, data } )
+    }
+
+    postAndWait(data: Data): Promise<void> {
+        return this.evt.postAndWait( { topic$: this.name, data } )
+    }
+
+
+    asNonPostable(): NonPostableEvt<TopicEvent<Data>> {
+       return this.evt
+    }
 
 
 }

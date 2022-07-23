@@ -4,7 +4,8 @@ import assert = require('assert')
 import {
     Broker, 
     Observable, 
-    Publisher
+    Publisher,
+    TopicEvent
 } from './broker'
 
 
@@ -16,7 +17,10 @@ const broker = new Broker()
 /**
  * Worker Channel
  */
- export type WorkerTopics<IN,OUT> = { publisher:Publisher<IN>, subscriber:Observable<OUT> }
+ export type WorkerTopics<IN,OUT> = { 
+    publisher:Publisher<IN>, 
+    subscriber:Observable<TopicEvent<OUT>> 
+}
 
 /**
  * Module information
@@ -106,17 +110,19 @@ export const lookupRequestReplyTopic = <T, R>( name:string, topic:string ) =>
 export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
     const uniqueId = `worker_${worker.threadId}`
     const worker_observer    = lookupPubSubTopic<OUT>( uniqueId, `out`)
-    worker.on('message', value =>  {
-        console.log( 'worker.on.message', value )
+
+    worker.on('message', value =>  
         worker_observer.post( value ) 
-    })
-    worker.on('error', err =>  worker_observer.abort( err ) )
-    worker.on('exit', () =>  worker_observer.done() )
+    )
+    worker.on('error', err =>  
+        worker_observer.abort( err ) )
+    worker.on('exit', () =>  
+        worker_observer.done() )
 
     const worker_publisher     = lookupPubSubTopic<IN>( uniqueId, `in` )
-    worker_publisher.evt.attach( value =>{
 
-        console.log( `worker.postMessage(${value.data})` )
+    worker_publisher.asNonPostable().attach( value =>{
+        // console.log( `worker.postMessage(${value.data})` )
         worker.postMessage(value.data)
     }) 
     

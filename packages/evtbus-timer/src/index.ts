@@ -44,7 +44,7 @@ class TimerModule implements bus.Module<Config> {
 
         let tick = 0
         this.#interval = 
-            setInterval( () => this.topic?.post( ++tick ), this.config.period)
+            setInterval( () => this.topic?.post(  ++tick ), this.config.period)
 
     }
 

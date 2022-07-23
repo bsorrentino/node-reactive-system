@@ -50,7 +50,7 @@ class TraceModule implements bus.Module {
             const trace:TraceFunction = ( { topic$, data } ) => 
                 console.log( Reverse, `trace: got message on topic '${topic$}' ==> `, data, Reset)
 
-            topic.evt.attach( this.#ctx, trace )
+            topic.asNonPostable().attach( this.#ctx, trace )
  
         }
     }
