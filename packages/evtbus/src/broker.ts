@@ -34,8 +34,6 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     #evt = Evt.create<Event>()
 
     #ctx:Ctx<void>|null
-    
-    #waitForCall = 0
 
     /**
      * 
@@ -61,17 +59,11 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      get completionStatus() { return this.#ctx?.completionStatus }
 
     /**
-     * 'waitFor' in progess calls
-     */
-    get waitForCall() { return this.#waitForCall }
-
-    /**
      * 
      */
     done() { 
         if( this.#ctx !== null ) {
             this.#ctx.done()
-            --this.#waitForCall
             this.#ctx = null
         }        
     }
@@ -83,7 +75,6 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
     abort( error: Error  ) { 
         if( this.#ctx !== null ) {
             this.#ctx.abort( error )
-            --this.#waitForCall
             this.#ctx = null
         }        
     } 
@@ -95,8 +86,6 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>>  {
      */
     observe( timeout?: number ): EventIterator<Event> {
         if( this.#ctx === null ) throw new Error( 'context is no longer valid!')
-
-        ++this.#waitForCall
 
         return this.#evt.iter( this.#ctx, timeout)
     }
@@ -161,8 +150,9 @@ export  class RequestReplyTopic<Data, Result>
     } 
 
     observe( timeout?: number ): EventIterator<ReplyTopicEvent<Data,Result>> {
-        // console.log( `RequestReplyTopic.Observe( ${this.name} )  = ${this.waitForCall}`)
-        if( this.waitForCall > 0 ) {
+        const handlers = this.evt.getHandlers()
+        
+        if( handlers && handlers.length > 0 ) {
             throw 'it is forbidden invoke waitFor more than one time on a RequestReplyTopic'
         }
     

@@ -75,7 +75,7 @@ describe('evtbus test pub sub', () => {
             let step = 0
 
             for await ( const  e of topic1.observe() ) {
-                console.log( e )
+                // console.log( e )
 
                 expect( e.topic$ ).toEqual( topic_name )
     
@@ -204,11 +204,15 @@ describe('evtbus test request reply topic', () => {
 
         try {
             await Promise.all( [waitFor(2), waitFor(1) ] )
+            throw new Error('failed!')
         }
         catch( e ) {
+
             expect(e).toEqual('it is forbidden invoke waitFor more than one time on a RequestReplyTopic')
 
-            await topic.abort( new Error('abort by user' ) )
+            topic.abort( new Error('abort by user' ) )
+
+            await sleep(POST_TIMEOUT)
         }
 
     })
