@@ -89,7 +89,7 @@ export const topics = () => broker.topics
  * @returns 
  */
 export const lookupPubSubTopic = <T>( name:string, topic:string )  => 
-                    broker.lookupPubSubTopic<T>( `${name}_${topic}` )
+                    broker.lookupPubSubTopic<T>( `${name.toLowerCase()}_${topic}` )
 
 /**
  * get or create a Request/Response Channel 
@@ -98,7 +98,7 @@ export const lookupPubSubTopic = <T>( name:string, topic:string )  =>
  * @returns 
  */
 export const lookupRequestReplyTopic = <T, R>( name:string, topic:string ) =>
-        broker.lookupRequestReplyTopic<T, R>(`${name}_${topic}`)
+        broker.lookupRequestReplyTopic<T, R>(`${name.toLocaleLowerCase()}_${topic}`)
 
 
 /**
