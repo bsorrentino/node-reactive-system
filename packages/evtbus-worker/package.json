@@ -1,0 +1,35 @@
+{
+  "name": "@bsorrentino/evtbus-worker",
+  "version": "0.8.0",
+  "description": "",
+  "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
+  "private": true,
+  "main": "./lib/worker.js",
+  "types": "./lib/worker.d.ts",
+  "license": "MIT",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "prepare": "rm -rf lib && tsc",
+    "test": "jest --silent --detectOpenHandles --roots=packages/evtbus-worker --config ../../jest.config.js",
+    "test#verbose": "jest --detectOpenHandles --roots=packages/evtbus-worker --config ../../jest.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
+  },
+  "dependencies": {
+    "@bsorrentino/bus-core": "^0.8.0",
+    "@bsorrentino/evtbus": "^0.8.0"
+  }
+}

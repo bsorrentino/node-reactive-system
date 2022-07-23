@@ -1,0 +1,45 @@
+{
+  "name": "@bsorrentino/evtbus-http",
+  "version": "0.8.0",
+  "description": "",
+  "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
+  "license": "ISC",
+  "private": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "prepare": "rm -rf lib && tsc && cp *.html lib",
+    "test": "jest --silent --detectOpenHandles --roots=packages/evtbus-http --config ../../jest.config.js",
+    "test#verbose": "jest --detectOpenHandles --roots=packages/evtbus-http --config ../../jest.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
+  },
+  "dependencies": {
+    "@bsorrentino/bus-core": "^0.8.0",
+    "@bsorrentino/evtbus": "^0.8.0",
+    "node-static": "^0.7.11",
+    "ws": "^8.8.1"
+  },
+  "engines": {
+    "node": ">=16.x"
+  },
+  "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c",
+  "devDependencies": {
+    "@types/node-static": "^0.7.7",
+    "@types/ws": "^8.5.3"
+  }
+}

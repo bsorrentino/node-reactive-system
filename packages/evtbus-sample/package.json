@@ -1,0 +1,42 @@
+{
+  "name": "evtbus-sample",
+  "version": "0.8.0",
+  "description": "> TODO: description",
+  "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
+  "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
+  "private": true,
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "prepare": "rm -rf lib && tsc",
+    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
+    "build:worker": "tsc src/worker.ts --outDir lib",
+    "start": "node ./lib/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/bsorrentino/node-reactive-system/issues"
+  },
+  "dependencies": {
+    "@bsorrentino/bus-core": "^0.8.0",
+    "@bsorrentino/evtbus": "^0.8.0",
+    "@bsorrentino/evtbus-timer": "^0.8.0",
+    "@bsorrentino/evtbus-trace": "^0.8.0",
+    "@bsorrentino/evtbus-worker": "^0.8.0",
+    "@bsorrentino/evtbus-http": "^0.8.0"
+  },
+  "engines": {
+    "node": ">=16.x"
+  }
+}

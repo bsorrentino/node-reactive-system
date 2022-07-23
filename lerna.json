@@ -1,6 +1,12 @@
 {
   "packages": [
-    "packages/*"
+    "packages/bus-core",
+    "packages/evtbus",
+    "packages/evtbus-timer",
+    "packages/evtbus-trace",
+    "packages/evtbus-http",
+    "packages/evtbus-worker",
+    "packages/evtbus-sample"
   ],
   "useNx": true,
   "version": "0.8.0"

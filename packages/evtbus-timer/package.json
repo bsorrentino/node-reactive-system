@@ -1,25 +1,35 @@
 {
-  "name": "@bsorrentino/bus-core",
+  "name": "@bsorrentino/evtbus-timer",
   "version": "0.8.0",
   "description": "",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
-  "types": "./src/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "license": "MIT",
   "directories": {
-    "lib": "src",
+    "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "src"
+    "lib"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
-  "scripts": {},
+  "scripts": {
+    "clean": "rm -rf lib",
+    "prepare": "rm -rf lib && tsc",
+    "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
+  },
   "bugs": {
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
+  },
+  "dependencies": {
+    "@bsorrentino/bus-core": "^0.8.0",
+    "@bsorrentino/evtbus": "^0.8.0"
+
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }
