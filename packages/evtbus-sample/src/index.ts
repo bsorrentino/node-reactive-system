@@ -16,6 +16,10 @@ import {
     Module as WorkerModule, 
 } from '@bsorrentino/evtbus-worker'
 
+import { getLogger, style } from '@bsorrentino/bus-logger'
+
+const log = getLogger( 'EVTBUS-SAMPLE')
+
 /**
  * 
  */
@@ -26,7 +30,7 @@ async function print_timer_ticks() {
     for await ( const tick of timerTopic.observe() ) {
         
         if( tick.data%10 === 0 ) 
-            console.log( 'tick', tick.data )
+            log.info( 'tick', tick.data )
     
     }
 
@@ -47,7 +51,7 @@ async function print_timer_ticks() {
     for await ( const tick of timerTopic.observe() ) {
         
         if( tick.data%10 === 0 ) {
-            console.log( 'main', `wsTopic.post( ${tick.data} )`)
+            log.info( `wsTopic.post( ${tick.data} )`)
             wsTopic.post( tick.data )
         }
     
@@ -72,7 +76,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
         for await ( const tick of timerTopic.observe() ) {
 
             if( tick.data%10 === 0 ) {
-                console.log( 'send tick to worker', tick.data )
+                log.info( 'send tick to worker', tick.data )
                 publisher.post( tick.data )
             }
         
@@ -83,7 +87,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
     const observe_worker = async () => {
         for await ( const event of observable.observe() ) {
 
-            console.log('worker event', event)
+            log.info('worker event', event)
         
         }
     }
@@ -94,7 +98,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
 
 async function main() {
 
-    console.log( 'start' )
+    log.info( 'start' )
 
     evtbus.modules.register( TimerModule )
     evtbus.modules.register<HTTPConfig>( HTTPModule, 
@@ -106,7 +110,7 @@ async function main() {
     evtbus.modules.register( TraceModule )
 
     for( let module of evtbus.modules.names ) {
-        console.log( `${module}`, 'registerd' )
+        log.info( `${module}`, 'registerd' )
     }
 
     evtbus.modules.start()

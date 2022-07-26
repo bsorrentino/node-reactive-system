@@ -2,6 +2,8 @@ import * as bus from '@bsorrentino/bus-core'
 import * as evtbus from '@bsorrentino/evtbus'
 import {Worker, isMainThread, parentPort} from 'worker_threads'
 import { PerformanceObserver, performance } from 'node:perf_hooks'
+import * as logger from '@bsorrentino/bus-logger'
+import { style } from '@bsorrentino/bus-logger'
 
 /**
  * Configuration parameters
@@ -10,6 +12,7 @@ export interface Config extends bus.ModuleConfiguration {
 
 }
 
+const log = logger.getLogger( 'WORKER' )
 
 class WorkerModule implements bus.Module<Config> {
 
@@ -27,13 +30,13 @@ class WorkerModule implements bus.Module<Config> {
     onStart() {
         if( isMainThread ) {
             // Load Worker
-            console.log( 'Thread Worker file:', __filename)
+            log.info( 'Thread Worker file:', __filename)
 
             this.#worker = new Worker( __filename, {})            
 
         }
         else {
-            // console.log( '====> START WORKER <===')
+            log.trace( 'START WORKER')
 
             const noop = () => {} 
 
@@ -41,11 +44,11 @@ class WorkerModule implements bus.Module<Config> {
 
             parentPort?.on( 'message', input => {
                 
-                // console.log( 'worker', `message: ${input}`)
+                log.trace( `message: ${input}`)
                 
                 const obs = new PerformanceObserver( entries => {
 
-                    // console.log( 'worker', `post message: `, entries)
+                    log.trace( `post message: `, entries)
 
                     const entry = entries.getEntriesByName(entryName)
 
@@ -78,11 +81,11 @@ class WorkerModule implements bus.Module<Config> {
 
             parentPort?.on( 'error', ( error ) => {
                 // send close message
-                console.error( 'worker', error)
+                log.error( 'worker', error)
             })
             parentPort?.on( 'close', () => {
                 // send close message
-                console.log( 'worker close')
+                log.info( 'worker close')
             })
 
         }
@@ -105,6 +108,6 @@ if( !isMainThread ) {
         _module.onStart()
     }
     catch( e ) {
-        console.error( 'error invoking worker thread', e)
+        log.error( 'error invoking worker thread', e)
     }
 }

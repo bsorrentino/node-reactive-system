@@ -6,7 +6,8 @@ import { parse } from 'url';
 import { Server as StaticServer } from 'node-static'
 import path from 'node:path';
 
-
+import * as logger from '@bsorrentino/bus-logger'
+import { style } from '@bsorrentino/bus-logger'
 /**
  * Configuration parameters
  */
@@ -58,6 +59,8 @@ const parseChannel = ( req: IncomingMessage ) => {
 
 }
 
+const log = logger.getLogger( 'HTTP' )
+
 /**
  * Module to manage HTTP and WebSocket channels
  */
@@ -84,7 +87,7 @@ class HTTPModule implements bus.Module<Config> {
         ws.on( 'message', (message:IN, isBinary:boolean) => {
             
             if( isBinary ) {
-                console.warn( this.name, 'ws message is binary. skipped!')
+                log.warn( 'ws message is binary. skipped!')
                 return
             }
 
@@ -92,7 +95,7 @@ class HTTPModule implements bus.Module<Config> {
         })
 
         messageObserver$.asNonPostable().attach( event => {
-                console.log( 'ws send', event.data )
+                console.trace( 'ws send', event.data )
                 ws.send( event.data )
             })
     }
@@ -104,7 +107,7 @@ class HTTPModule implements bus.Module<Config> {
 
         wss1.on('connection', (ws:WebSocket, req:IncomingMessage, channel:string) => {
 
-            console.log( this.name, `ws connect on channel ${channel}`)
+            log.info( `ws connect on channel ${channel}`)
 
             this.#setupWebSocketChannel( ws, channel )
 

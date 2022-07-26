@@ -1,6 +1,7 @@
 {
   "packages": [
     "packages/bus-core",
+    "packages/bus-logger",
     "packages/evtbus",
     "packages/evtbus-timer",
     "packages/evtbus-trace",

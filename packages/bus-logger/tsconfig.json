@@ -1,0 +1,32 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    // "target": "ESNext",
+    // "lib": [
+    //   "DOM",
+    //   "DOM.Iterable",
+    //   "ESNext"
+    // ],
+    // "types": [],
+    // "allowJs": false,
+    // "skipLibCheck": false,
+    // "esModuleInterop": false,
+    // "allowSyntheticDefaultImports": true,
+    // "strict": true,
+    // "forceConsistentCasingInFileNames": true,
+    // "module": "ESNext",
+    // "moduleResolution": "Node",
+    // "resolveJsonModule": true,
+    // "isolatedModules": true,
+    // "noFallthroughCasesInSwitch": true,
+    "outDir": "./lib",         /* Redirect output structure to the directory. */
+    "rootDir": "./src",        /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    // "declaration": true     /* Generates corresponding '.d.ts' file. */
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "./__tests__"
+  ]
+}
