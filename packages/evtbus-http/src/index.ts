@@ -81,8 +81,8 @@ class HTTPModule implements bus.Module<Config> {
      */
     #setupWebSocketChannel = <IN,OUT>( ws:WebSocket, channel:string ) => {
         
-        const messagePublisher$ = evtbus.lookupPubSubTopic<IN>( channel, Subjects.WSMessageIn )
-        const messageObserver$  = evtbus.lookupPubSubTopic<OUT>( channel, Subjects.WSMessage )
+        const messagePublisher$ = evtbus.createPubSubTopic<IN>( channel, Subjects.WSMessageIn )
+        const messageObserver$  = evtbus.createPubSubTopic<OUT>( channel, Subjects.WSMessage )
 
         ws.on( 'message', (message:IN, isBinary:boolean) => {
             

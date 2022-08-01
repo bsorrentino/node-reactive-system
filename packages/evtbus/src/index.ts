@@ -76,22 +76,42 @@ export const topicNames = () => broker.topicNames
 export const topics = () => broker.topics
 
 /**
- * get or create a standard Channel 
  * 
- * @param - Channel Id 
+ * @param channel 
+ * @param topic 
  * @returns 
  */
-export const lookupPubSubTopic = <T>( name:string, topic:string )  => 
-                    broker.lookupPubSubTopic<T>( `${name.toLowerCase()}_${topic}` )
+export const getPubSubTopic = <T>( channel:string, topic:string )  => 
+                    broker.getPubSubTopic<T>( `${channel.toLowerCase()}_${topic}` )
 
 /**
- * get or create a Request/Response Channel 
+ * get or create a pub sub topic Channel 
  * 
- * @param name - Channel Id
+ * @param channel 
+ * @param topic 
  * @returns 
  */
-export const lookupRequestReplyTopic = <T, R>( name:string, topic:string ) =>
-        broker.lookupRequestReplyTopic<T, R>(`${name.toLocaleLowerCase()}_${topic}`)
+export const createPubSubTopic = <T>( channel:string, topic:string )  => 
+                    broker.createPubSubTopic<T>( `${channel.toLowerCase()}_${topic}` )
+
+/**
+ * 
+ * @param channel 
+ * @param topic 
+ * @returns 
+ */
+export const getRequestReplyTopic = <T, R>( channel:string, topic:string ) =>
+                    broker.getRequestReplyTopic<T, R>(`${channel.toLowerCase()}_${topic}`)
+            
+/**
+ *  get or create a Request/Response Channel 
+ * 
+ * @param channel 
+ * @param topic 
+ * @returns 
+ */
+export const createRequestReplyTopic = <T, R>( channel:string, topic:string ) =>
+        broker.createRequestReplyTopic<T, R>(`${channel.toLowerCase()}_${topic}`)
 
 
 
@@ -109,9 +129,9 @@ export const lookupRequestReplyTopic = <T, R>( name:string, topic:string ) =>
  * @param worker - Worker Thread
  * @returns 
  */
-export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
+export const createWorkerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
     const uniqueId = `worker_${worker.threadId}`
-    const worker_observer    = lookupPubSubTopic<OUT>( uniqueId, `out`)
+    const worker_observer    = createPubSubTopic<OUT>( uniqueId, `out`)
 
     worker.on('message', value =>  
         worker_observer.post( value ) 
@@ -121,7 +141,7 @@ export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
     worker.on('exit', () =>  
         worker_observer.done() )
 
-    const worker_publisher     = lookupPubSubTopic<IN>( uniqueId, `in` )
+    const worker_publisher     = createPubSubTopic<IN>( uniqueId, `in` )
 
     worker_publisher.asNonPostable().attach( value =>{
         // console.log( `worker.postMessage(${value.data})` )
@@ -137,4 +157,7 @@ export const workerTopics = <IN,OUT>( worker:Worker ):WorkerTopics<IN,OUT> => {
 
 
 export * from 'evt'
-export * from './broker' 
+export { 
+    TopicEvent, 
+    PubSubTopic 
+} from './broker' 

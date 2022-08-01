@@ -25,7 +25,7 @@ const log = getLogger( 'EVTBUS-SAMPLE')
  */
 async function print_timer_ticks() {
 
-    const timerTopic = evtbus.lookupPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick)
+    const timerTopic = evtbus.createPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick)
 
     for await ( const tick of timerTopic.observe() ) {
         
@@ -43,9 +43,9 @@ async function print_timer_ticks() {
  */
  async function route_timer_to_ws_channel(channel:string) {
 
-    const timerTopic = evtbus.lookupPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick )
+    const timerTopic = evtbus.createPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick )
 
-    const wsTopic = evtbus.lookupPubSubTopic<number>( channel, HTTPSubjects.WSMessage )
+    const wsTopic = evtbus.createPubSubTopic<number>( channel, HTTPSubjects.WSMessage )
 
     // Request register a new WS route  
     for await ( const tick of timerTopic.observe() ) {
@@ -65,10 +65,10 @@ async function route_timer_to_worker( worker:Worker|null ) {
 
     // get worker related topics 
     const { publisher, observable } = 
-        evtbus.workerTopics<number,{input:any,waitTime:number}>( worker ) 
+        evtbus.createWorkerTopics<number,{input:any,waitTime:number}>( worker ) 
 
      // get topic handling the timer event
-    const timerTopic = evtbus.lookupPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick )
+    const timerTopic = evtbus.createPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick )
 
     // observing for timer events
     const observe_timer = async () => {

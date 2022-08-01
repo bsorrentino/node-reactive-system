@@ -193,20 +193,35 @@ export class Broker  {
     }
     
     /**
-     * return (and eventually create) a topic
+     * 
+     * @param name 
+     * @returns 
+     */
+    getPubSubTopic<Data>( name: string ): PubSubTopic<Data>|undefined {
+        const topic =  this.#topics[ name ] as any
+
+        if( topic && typeof topic.post !== 'function' ) 
+            throw `topic '${name}' is not a PubSubTopic` 
+
+        return topic as PubSubTopic<Data>
+    }
+
+
+    /**
+     * create if doesn't exist
      * 
      * @param name topic name
      * @returns topic
      */
-    lookupPubSubTopic<Data>( name: string ): PubSubTopic<Data> {
+    createPubSubTopic<Data>( name: string ): PubSubTopic<Data> {
 
-        let topic = this.#topics[ name ] as PubSubTopic<Data>
+        let topic = this.getPubSubTopic<Data>( name ) 
         if( !topic ) {
 
             topic = new PubSubTopic<Data>( name )
             this.#topics[name] = topic as GenericTopic<unknown,unknown>
         }
-        if( typeof (<any>topic).post !== 'function' ) throw `topic '${name}' is not a PubSubTopic` 
+
         return topic 
     }
 
@@ -215,15 +230,30 @@ export class Broker  {
      * @param name 
      * @returns 
      */
-    lookupRequestReplyTopic<Data, Result>( name: string ):RequestReplyTopic<Data,Result> {
+    getRequestReplyTopic<Data,Result>( name: string ): RequestReplyTopic<Data,Result>|undefined {
+        const topic =  this.#topics[ name ] as any
 
-        let topic = this.#topics[ name ] as RequestReplyTopic<Data,Result>
+        if( topic && typeof topic.request !== 'function' ) 
+            throw  `topic '${name}' is not a RequestReplyTopic` 
+
+        return topic as RequestReplyTopic<Data,Result>
+    }
+    
+    /**
+     * create if doesn't exist
+     * 
+     * @param name 
+     * @returns 
+     */
+    createRequestReplyTopic<Data, Result>( name: string ):RequestReplyTopic<Data,Result> {
+
+        let topic = this.getRequestReplyTopic<Data,Result>( name )
         if( !topic ) {
 
             topic = new RequestReplyTopic<Data,Result>( name )
             this.#topics[name] = topic as GenericTopic<unknown,unknown>
         }
-        if( typeof (<any>topic).request !== 'function' ) throw  `topic '${name}' is not a RequestReplyTopic`
+
         return topic 
     }
 
