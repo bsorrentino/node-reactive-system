@@ -15,53 +15,6 @@ const rxmq = new Rxmq()
  export type WorkerChannel<IN,OUT> = { subject:Subject<IN>, observable:Observable<OUT> }
 
 /**
- * Module information
- */
- export type ModuleInfo = { module:bus.Module, status:bus.ModuleStatus }
-
-/**
- * Module Management
- */
-export class Modules {
-
-    private _modules = new Map<string,ModuleInfo>()
-
-    register<C extends bus.ModuleConfiguration>( module:bus.Module<C>, config?:C  ) {
-        assert.ok( !this._modules.has( module.name ), `Module ${module.name} already exists!` )
-
-        let result:ModuleInfo = {
-            module:module,
-            status:{ started:false, paused:false} 
-        }
-        this._modules.set( module.name, result )
-        if( module.onRegister ) {
-            module.onRegister( config )
-        }
-    }
-    
-    get names():IterableIterator<string> {
-        return this._modules.keys()
-    }
-
-    start() {
-        this._modules.forEach( m => {
-
-            if( !m.status.started ) {
-                if( m.module.onStart ) {
-                    m.module.onStart()
-                }
-                m.status.started = true
-            }
-        })
-    }
-}
-
-/**
- * global modules instance
- */
-export const modules = new Modules()
-
-/**
  * get all names of the instantiated channels
  * 
  * @returns 

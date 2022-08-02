@@ -1,18 +1,17 @@
+import * as bus from '@bsorrentino/bus-core'
 import * as evtbus from '@bsorrentino/evtbus'
-import {Worker} from 'worker_threads'
-import { 
-    Module as TimerModule, 
-    Subjects as TimerSubjects
+import  { 
+    Name as TimerChannel, 
+    Topics as TimerTopics
 } from '@bsorrentino/evtbus-timer'
 
-import { Module as TraceModule } from '@bsorrentino/evtbus-trace'
 import { 
-    Module as HTTPModule, 
     Config as HTTPConfig,
-    Subjects as HTTPSubjects
+    Topics as HTTPTopics
 } from '@bsorrentino/evtbus-http'
 
 import { 
+    Worker,
     Module as WorkerModule, 
 } from '@bsorrentino/evtbus-worker'
 
@@ -25,7 +24,7 @@ const log = getLogger( 'EVTBUS-SAMPLE')
  */
 async function print_timer_ticks() {
 
-    const timerTopic = evtbus.createPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick)
+    const timerTopic = evtbus.createPubSubTopic<number>( TimerChannel, TimerTopics.Tick)
 
     for await ( const tick of timerTopic.observe() ) {
         
@@ -43,9 +42,9 @@ async function print_timer_ticks() {
  */
  async function route_timer_to_ws_channel(channel:string) {
 
-    const timerTopic = evtbus.createPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick )
+    const timerTopic = evtbus.createPubSubTopic<number>( TimerChannel, TimerTopics.Tick )
 
-    const wsTopic = evtbus.createPubSubTopic<number>( channel, HTTPSubjects.WSMessage )
+    const wsTopic = evtbus.createPubSubTopic<number>( channel, HTTPTopics.WSMessage )
 
     // Request register a new WS route  
     for await ( const tick of timerTopic.observe() ) {
@@ -68,7 +67,7 @@ async function route_timer_to_worker( worker:Worker|null ) {
         evtbus.createWorkerTopics<number,{input:any,waitTime:number}>( worker ) 
 
      // get topic handling the timer event
-    const timerTopic = evtbus.createPubSubTopic<number>( TimerModule.name, TimerSubjects.Tick )
+    const timerTopic = evtbus.createPubSubTopic<number>( TimerChannel, TimerTopics.Tick )
 
     // observing for timer events
     const observe_timer = async () => {
@@ -96,24 +95,36 @@ async function route_timer_to_worker( worker:Worker|null ) {
     Promise.all( [observe_timer(),observe_worker() ])
 }
 
+/**
+ * 
+ */
+async function importAndRegister<CONF extends bus.ModuleConfiguration>( path: string, config?:CONF) {
+
+    const module = await import( path ) 
+
+    if( !module )  throw `module '${path}' not found!`
+    if( !module.default )  throw `module '${path}' does not not export default!`
+
+    bus.modules.register( module.default, config )
+
+}
+
+
 async function main() {
 
     log.info( 'start' )
 
-    evtbus.modules.register( TimerModule )
-    evtbus.modules.register<HTTPConfig>( HTTPModule, 
+    await importAndRegister( '@bsorrentino/evtbus-timer' ) 
+    await importAndRegister<HTTPConfig>( '@bsorrentino/evtbus-http',
         { 
             port:8888, 
             requestTimeout:5000
         }) 
-    evtbus.modules.register( WorkerModule )
-    evtbus.modules.register( TraceModule )
+    await importAndRegister( '@bsorrentino/evtbus-trace' ) 
+    
+    bus.modules.register( WorkerModule )
 
-    for( let module of evtbus.modules.names ) {
-        log.info( `${module}`, 'registerd' )
-    }
-
-    evtbus.modules.start()
+    bus.modules.start()
 
     return Promise.all([
         print_timer_ticks(),

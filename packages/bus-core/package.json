@@ -4,22 +4,29 @@
   "description": "",
   "author": "bsorrentino <bartolomeo.sorrentinogmail.com>",
   "homepage": "https://github.com/bsorrentino/node-reactive-system#readme",
-  "types": "./src/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "license": "MIT",
   "directories": {
-    "lib": "src",
+    "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "src"
+    "lib"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/node-reactive-system.git"
   },
-  "scripts": {},
+  "scripts": {
+    "clean": "rm -rf lib",
+    "prepare": "rm -rf lib && tsc",
+    "test": "jest --silent --detectOpenHandles --roots=packages/evtbus --config ../../jest.config.js",
+    "test#verbose": "jest --detectOpenHandles --roots=packages/evtbus --config ../../jest.config.js"
+  },
   "bugs": {
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
+ 
 }

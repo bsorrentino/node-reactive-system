@@ -35,7 +35,7 @@ export interface Config extends bus.ModuleConfiguration {
  *  ServerStart = 'server_start'
  *  ServerClose = 'server_close'
  */
-export const Subjects = { 
+export const Topics = { 
     WSSend:'WS_SEND',
     WSMessage:'WS_MESSAGE_OUT',
     WSMessageIn:'WS_MESSAGE_IN',
@@ -59,13 +59,15 @@ const parseChannel = ( req: IncomingMessage ) => {
 
 }
 
-const log = logger.getLogger( 'HTTP' )
+export const Name = 'HTTP'
+
+const log = logger.getLogger( Name )
 
 /**
  * Module to manage HTTP and WebSocket channels
  */
 class HTTPModule implements bus.Module<Config> {
-    name = 'HTTP'
+    name = Name
 
     #server = createServer();
 
@@ -81,8 +83,8 @@ class HTTPModule implements bus.Module<Config> {
      */
     #setupWebSocketChannel = <IN,OUT>( ws:WebSocket, channel:string ) => {
         
-        const messagePublisher$ = evtbus.createPubSubTopic<IN>( channel, Subjects.WSMessageIn )
-        const messageObserver$  = evtbus.createPubSubTopic<OUT>( channel, Subjects.WSMessage )
+        const messagePublisher$ = evtbus.createPubSubTopic<IN>( channel, Topics.WSMessageIn )
+        const messageObserver$  = evtbus.createPubSubTopic<OUT>( channel, Topics.WSMessage )
 
         ws.on( 'message', (message:IN, isBinary:boolean) => {
             
@@ -166,4 +168,4 @@ class HTTPModule implements bus.Module<Config> {
         
 }
 
-export const Module = new HTTPModule()
+export default new HTTPModule()
