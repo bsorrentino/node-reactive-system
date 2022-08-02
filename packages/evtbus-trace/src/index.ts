@@ -44,5 +44,6 @@ class TraceModule implements bus.Module {
 
 
 
-export const Module = new TraceModule()
+//const Module = new TraceModule()
 
+export default new TraceModule()

@@ -18,13 +18,15 @@ export interface Config extends bus.ModuleConfiguration {
 /**
  *  Tick    = 'TICK'
  */
-export const Subjects = {
+export const Topics = {
     Tick: 'TICK'
 }
 
+export const Name = 'TIMER'
+
 class TimerModule implements bus.Module<Config> {
 
-    readonly name = 'TIMER'
+    readonly name = Name
 
     private config: Config = {
         period: 1000
@@ -40,7 +42,7 @@ class TimerModule implements bus.Module<Config> {
 
     onStart() {
 
-        this.topic = evtbus.createPubSubTopic<number>(this.name, Subjects.Tick)
+        this.topic = evtbus.createPubSubTopic<number>(this.name, Topics.Tick)
 
         let tick = 0
         this.#interval = 
@@ -57,5 +59,5 @@ class TimerModule implements bus.Module<Config> {
 }
 
 
-export const Module = new TimerModule()
+export default new TimerModule()
 

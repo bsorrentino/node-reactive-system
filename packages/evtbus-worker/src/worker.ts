@@ -1,9 +1,7 @@
 import * as bus from '@bsorrentino/bus-core'
-import * as evtbus from '@bsorrentino/evtbus'
 import {Worker, isMainThread, parentPort} from 'worker_threads'
 import { PerformanceObserver, performance } from 'node:perf_hooks'
 import * as logger from '@bsorrentino/bus-logger'
-import { style } from '@bsorrentino/bus-logger'
 
 /**
  * Configuration parameters
@@ -111,3 +109,5 @@ if( !isMainThread ) {
         log.error( 'error invoking worker thread', e)
     }
 }
+
+export { Worker }
