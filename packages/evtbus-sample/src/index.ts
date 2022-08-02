@@ -1,3 +1,4 @@
+import * as bus from '@bsorrentino/bus-core'
 import * as evtbus from '@bsorrentino/evtbus'
 import {Worker} from 'worker_threads'
 import { 
@@ -100,20 +101,20 @@ async function main() {
 
     log.info( 'start' )
 
-    evtbus.modules.register( TimerModule )
-    evtbus.modules.register<HTTPConfig>( HTTPModule, 
+    bus.modules.register( TimerModule )
+    bus.modules.register<HTTPConfig>( HTTPModule, 
         { 
             port:8888, 
             requestTimeout:5000
         }) 
-    evtbus.modules.register( WorkerModule )
-    evtbus.modules.register( TraceModule )
+    bus.modules.register( WorkerModule )
+    bus.modules.register( TraceModule )
 
-    for( let module of evtbus.modules.names ) {
+    for( let module of bus.modules.names ) {
         log.info( `${module}`, 'registerd' )
     }
 
-    evtbus.modules.start()
+    bus.modules.start()
 
     return Promise.all([
         print_timer_ticks(),
