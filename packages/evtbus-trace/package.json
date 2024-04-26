@@ -20,16 +20,16 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "prepare": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps"
   },
   "bugs": {
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
-    "@bsorrentino/bus-core": "^0.8.0",
-    "@bsorrentino/bus-logger": "^0.8.0",
-    "@bsorrentino/evtbus": "^0.8.0"
+    "@bsorrentino/bus-core": "*",
+    "@bsorrentino/bus-logger": "*",
+    "@bsorrentino/evtbus": "*"
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c"
 }

@@ -8,6 +8,25 @@ import path from 'node:path';
 
 import * as logger from '@bsorrentino/bus-logger'
 import { style } from '@bsorrentino/bus-logger'
+
+// copied by ws BufferLike dclaration 
+type BufferLike =
+    | string
+    | Buffer
+    | DataView
+    | number
+    | ArrayBufferView
+    | Uint8Array
+    | ArrayBuffer
+    | SharedArrayBuffer
+    | readonly any[]
+    | readonly number[]
+    | { valueOf(): ArrayBuffer }
+    | { valueOf(): SharedArrayBuffer }
+    | { valueOf(): Uint8Array }
+    | { valueOf(): readonly number[] }
+    | { valueOf(): string }
+    | { [Symbol.toPrimitive](hint: string): string };
 /**
  * Configuration parameters
  */
@@ -81,7 +100,7 @@ class HTTPModule implements bus.Module<Config> {
      * @param channel 
      * @param ws 
      */
-    #setupWebSocketChannel = <IN,OUT>( ws:WebSocket, channel:string ) => {
+    #setupWebSocketChannel = <IN,OUT extends BufferLike>( ws:WebSocket, channel:string ) => {
         
         const messagePublisher$ = evtbus.createPubSubTopic<IN>( channel, Topics.WSMessageIn )
         const messageObserver$  = evtbus.createPubSubTopic<OUT>( channel, Topics.WSMessage )

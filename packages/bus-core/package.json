@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "prepare": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc",
     "test": "jest --silent --detectOpenHandles --roots=packages/evtbus --config ../../jest.config.js",
     "test#verbose": "jest --detectOpenHandles --roots=packages/evtbus --config ../../jest.config.js"
   },

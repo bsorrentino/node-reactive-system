@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "prepare": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc",
     "build:parcel": "parcel build src/index.ts --dist-dir lib --no-source-maps",
     "build:worker": "tsc src/worker.ts --outDir lib",
     "start": "node ./lib/index.js"
@@ -29,15 +29,15 @@
     "url": "https://github.com/bsorrentino/node-reactive-system/issues"
   },
   "dependencies": {
-    "@bsorrentino/bus-core": "^0.8.0",
-    "@bsorrentino/bus-logger": "^0.8.0",
-    "@bsorrentino/evtbus": "^0.8.0",
-    "@bsorrentino/evtbus-timer": "^0.8.0",
-    "@bsorrentino/evtbus-trace": "^0.8.0",
-    "@bsorrentino/evtbus-worker": "^0.8.0",
-    "@bsorrentino/evtbus-http": "^0.8.0"
+    "@bsorrentino/bus-core": "*",
+    "@bsorrentino/bus-logger": "*",
+    "@bsorrentino/evtbus": "*",
+    "@bsorrentino/evtbus-timer": "*",
+    "@bsorrentino/evtbus-trace": "*",
+    "@bsorrentino/evtbus-worker": "*",
+    "@bsorrentino/evtbus-http": "*"
   },
   "engines": {
-    "node": ">=16.x"
+    "node": ">=18.x"
   }
 }
