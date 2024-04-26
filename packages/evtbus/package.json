@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "@bsorrentino/bus-core": "*",
-    "evt": "^2.2.1"
+    "evt": "^2.5.7"
   }
 }

@@ -32,14 +32,14 @@
     "@bsorrentino/bus-logger": "*",
     "@bsorrentino/evtbus": "*",
     "node-static": "^0.7.11",
-    "ws": "^8.8.1"
+    "ws": "^8.16.0"
   },
   "engines": {
     "node": ">=18.x"
   },
   "gitHead": "10e99fea6b6ca863fd313845e3b786ad6991527c",
   "devDependencies": {
-    "@types/node-static": "^0.7.7",
-    "@types/ws": "^8.5.3"
+    "@types/node-static": "^0.7.11",
+    "@types/ws": "^8.5.10"
   }
 }
