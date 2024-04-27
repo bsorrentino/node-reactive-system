@@ -4,10 +4,8 @@ import { createServer, IncomingMessage } from 'http'
 import { WebSocketServer, WebSocket } from 'ws'
 import { parse } from 'url';
 import { Server as StaticServer } from 'node-static'
-import path from 'node:path';
 
 import * as logger from '@bsorrentino/bus-logger'
-import { style } from '@bsorrentino/bus-logger'
 
 // copied by ws BufferLike dclaration 
 type BufferLike =
