@@ -1,5 +1,3 @@
-import assert = require('assert')
-
 export interface ModuleConfiguration extends Record<string,any> {
 }
 
@@ -32,7 +30,7 @@ export type Module<CFG extends ModuleConfiguration = ModuleConfiguration> =
 /**
  * Module information
  */
- export type ModuleInfo = { module:Module } & {
+ export type ModuleInfo = { object:Module } & {
     started:boolean
     paused:boolean
 }
@@ -45,33 +43,54 @@ export type Module<CFG extends ModuleConfiguration = ModuleConfiguration> =
      #modules = new Map<string,ModuleInfo>()
 
      register<C extends ModuleConfiguration>( module:Module<C>, config?:C  ) {
-         assert.ok( !this.#modules.has( module.name ), `Module ${module.name} already exists!` )
- 
-         let result:ModuleInfo = {
-             module:module,
+        if( this.#modules.has( module.name ) ) {
+            console.warn( `Module ${module.name} already registered!` )
+            // throw new Error(`Module ${module.name} already registerd!`) 
+            return;
+        }
+
+        const info:ModuleInfo = {
+             object:module,
              started:false, 
              paused:false
          }
-         this.#modules.set( module.name, result )
+         this.#modules.set( module.name, info )
          if( module.onRegister ) {
              module.onRegister( config )
          }
+         return info
      }
      
      get names():IterableIterator<string> {
          return this.#modules.keys()
      }
+
+     #startModule( module: ModuleInfo ) {
+        if( !module.started  ) {
+            module.started = true
+            if( module.object.onStart ) {
+                try {
+                    module.object.onStart()
+                }
+                catch( e ) {
+                    console.warn( `error starting module '${module.object.name}`, e)
+                    module.started = false
+                }
+            }
+        }
+
+     }
  
      start() {
-         this.#modules.forEach( m => {
- 
-             if( !m.started ) {
-                 if( m.module.onStart ) {
-                     m.module.onStart()
-                 }
-                 m.started = true
-             }
-         })
+         this.#modules.forEach( m => this.#startModule(m) )
+     }
+
+     registerAndStart<C extends ModuleConfiguration>( module:Module<C>, config?:C  ) {
+        const m = this.register(module, config)
+        if( m ) {
+            this.#startModule(m)
+        }
+        return m
      }
  }
  
