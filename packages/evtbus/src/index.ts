@@ -1,5 +1,4 @@
 import { Worker } from 'worker_threads'
-import assert = require('assert')
 import {
     Broker, 
     Observable, 
