@@ -1,5 +1,5 @@
 import { Ctx, Evt, NonPostableEvt, Postable } from "evt"
-import { AsyncIterableEvt } from "evt/lib/types/AsyncIterableEvt";
+import type { AsyncIterableEvt } from "evt/lib/types/AsyncIterableEvt";
 
 export type RequestOptions<Data, Result> = {
     data: Data
@@ -17,12 +17,12 @@ export interface ReplyTopicEvent<Data, Result>extends TopicEvent<Data> {
 }
   
 
-export type  EventIterator<Event> = AsyncIterableEvt<Event> 
+export type  AsyncEventIterator<Event> = AsyncIterableEvt<Event> 
 
 export type Publisher<Data> = Postable<Data> 
 
 export interface Observable<Event> {
-    observe( timeout?: number ): EventIterator<Event>
+    observe( timeout?: number ): AsyncEventIterator<Event>
 
     asNonPostable(): NonPostableEvt<Event>
 }
@@ -88,7 +88,7 @@ export class BaseTopic<Data, Event extends TopicEvent<Data>> implements Observab
      * @param timeout 
      * @returns 
      */
-    observe( timeout?: number ): EventIterator<Event> {
+    observe( timeout?: number ): AsyncEventIterator<Event> {
         if( this.#ctx === null ) throw new Error( 'context is no longer valid!')
 
         return this.#evt.iter( this.#ctx, timeout)
@@ -157,7 +157,7 @@ export  class RequestReplyTopic<Data, Result>
         })
     } 
 
-    observe( timeout?: number ): EventIterator<ReplyTopicEvent<Data,Result>> {
+    observe( timeout?: number ): AsyncEventIterator<ReplyTopicEvent<Data,Result>> {
         const handlers = this.evt.getHandlers()
         
         if( handlers && handlers.length > 0 ) {
