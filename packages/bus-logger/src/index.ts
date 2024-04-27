@@ -146,7 +146,7 @@ self.loggers[_default] = new Logger(LogLevel.debug, '_default')
  * @param initLoggers 
  */
 export function initLoggers( defaultLevel:LogLevel, loggersInitializer: Array<{ name: string, level?:LogLevel }> ) {
-    console.log( ">> initLoggers" )
+    console.debug( ">> initLoggers" )
 
     const defaultLogger = self.loggers[_default] as Logger
     defaultLogger.logLevel = defaultLevel
